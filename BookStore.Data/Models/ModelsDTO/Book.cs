@@ -6,10 +6,8 @@ using System.Text;
 
 namespace BookStore.Data.Models.ModelsDTO
 {
-    public class Book
-    {
-        public int Id { get; set; }
-
+    public class Book : BaseEntity
+    {        
         [Required]
         [MaxLength(50), MinLength(2)]
         public string Title { get; set; }
