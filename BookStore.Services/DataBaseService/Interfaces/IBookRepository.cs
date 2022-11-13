@@ -8,6 +8,6 @@ namespace BookStore.Data.Models.Interfaces
 {
     public interface IBookRepository:IAsyncRepository<Book>
     {
-        Task<Book> GetByFirstName(string firstName);
+        Task<Book> GetByTitle(string title);
     }
 }
