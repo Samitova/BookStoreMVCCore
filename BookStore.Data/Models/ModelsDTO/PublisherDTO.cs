@@ -9,8 +9,12 @@ namespace BookStore.Data.Models.ModelsDTO
     {        
         [Required]
         [MaxLength(50), MinLength(2)]
-        public string Name { get; set; }
+        public string PublisherName { get; set; }
+
+        [MaxLength(50)]
         public string City { get; set; }
+
+        [MaxLength(50)]
         public string Phone { get; set; }
 
     }

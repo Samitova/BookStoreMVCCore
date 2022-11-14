@@ -16,22 +16,45 @@ namespace BookStore.Services.DataBaseService.Context
                 context.Publishers.AddRange(
                   new PublisherDTO
                   {
-                      Name = "Penguin Random House",
+                      PublisherName = "Penguin Random House",
                       City = "New York",
                       Phone = "2325235234"
                   },
                   new PublisherDTO
                   {
-                      Name = "HarperCollins",
+                      PublisherName = "HarperCollins",
                       City = "Praha",
                       Phone = "4534634"
                   },
                   new PublisherDTO
                   {
-                      Name = "Simon & Schuster",
+                      PublisherName = "Simon & Schuster",
                       City = "Berlin",
                       Phone = "453463242334"
                   });
+                context.SaveChanges();
+            }
+
+            if (!context.Categories.Any())
+            {
+                context.Categories.AddRange(
+                  new CategoryDTO
+                  {
+                      CategoryName = "Adult Books",                     
+                  },
+                  new CategoryDTO
+                  {
+                      CategoryName = "Love",
+                  },
+                  new CategoryDTO
+                  {
+                      CategoryName = "Children Books",
+                  },
+                   new CategoryDTO
+                   {
+                       CategoryName = "Studing",
+                   });
+
                 context.SaveChanges();
             }
 
@@ -40,22 +63,19 @@ namespace BookStore.Services.DataBaseService.Context
                 context.Authors.AddRange(
                   new AuthorDTO
                   {
-                      FirstName = "Dick",
-                      LastName = "Blou",
+                      FullName = "Dick Blou",                     
                       Biography = "sfsedgerhdthgdfhdfg",
                       PhotoPath = "avatar1.png"
                   },
                   new AuthorDTO
                   {
-                      FirstName = "Rita",
-                      LastName = "Small",
+                      FullName = "Rita Small",                     
                       Biography = "sfgjfjvhbjnmghjsedgerhdthgdfhdfg",
                       PhotoPath = "avatar2.png"
                   },
                   new AuthorDTO
                   {
-                      FirstName = "Ben",
-                      LastName = "Glow",
+                      FullName = "Ben Glow",                      
                       Biography = "sfsedgerhddfgfddfhgdfhdfg",
                       PhotoPath = "avatar3.png"
                   });
@@ -74,7 +94,7 @@ namespace BookStore.Services.DataBaseService.Context
                        YearOfIssue = 2001,
                        Price = 23.34m,
                        PublisherId = 7,
-                       AmountOfCopies = 2,
+                       AvaliableQuantaty = 2,
                        NumberOfPage = 204,
                        Annotation = "sfkjsafkjdsfjvsdklfvcj",
                        CoverType = CoverType.HardBack,
@@ -88,7 +108,7 @@ namespace BookStore.Services.DataBaseService.Context
                        YearOfIssue = 2021,
                        Price = 13.34m,
                        PublisherId = 7,
-                       AmountOfCopies = 3,
+                       AvaliableQuantaty = 3,
                        NumberOfPage = 204,
                        Annotation = "gfjgfjghfjghfvsdklfvcj",
                        CoverType = CoverType.HardBack,
@@ -102,7 +122,7 @@ namespace BookStore.Services.DataBaseService.Context
                        YearOfIssue = 2017,
                        Price = 43.34m,
                        PublisherId = 8,
-                       AmountOfCopies = 4,
+                       AvaliableQuantaty = 4,
                        NumberOfPage = 304,
                        Annotation = "trjugfkhgkhgfjvsdgfsegsdgsdgsdgklfvcj",
                        CoverType = CoverType.HardBack,
@@ -116,7 +136,7 @@ namespace BookStore.Services.DataBaseService.Context
                        YearOfIssue = 2011,
                        Price = 25.34m,
                        PublisherId = 8,
-                       AmountOfCopies = 2,
+                       AvaliableQuantaty = 2,
                        NumberOfPage = 104,
                        Annotation = "sfkjsafkjdsfjvsfhgdhdhdfhdklfvcj",
                        CoverType = CoverType.SoftBack,
@@ -130,7 +150,7 @@ namespace BookStore.Services.DataBaseService.Context
                         YearOfIssue = 2001,
                         Price = 23.34m,
                         PublisherId = 9,
-                        AmountOfCopies = 2,
+                        AvaliableQuantaty = 2,
                         NumberOfPage = 244,
                         Annotation = "trutrujhgfjhsdklfvcj",
                         CoverType = CoverType.HardBack,

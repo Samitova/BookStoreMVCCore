@@ -9,11 +9,12 @@ namespace BookStore.Data.Models.ModelsDTO
     {       
         [Required]
         [MaxLength(50), MinLength(2)]
-        public string FullName { get; set; }       
+        public string FullName { get; set; }
+        [MaxLength(50)]
         public string PhotoPath { get; set; }
         public string Biography { get; set; }
 
-        public float RateValue { get; set; } = 0;
+        public double RateValue { get; set; } = 0;
         public int RateCount { get; set; } = 0;
 
         public List<BookDTO>  Books { get; set; }
