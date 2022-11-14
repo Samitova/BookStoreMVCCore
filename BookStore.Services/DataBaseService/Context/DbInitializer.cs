@@ -14,19 +14,19 @@ namespace BookStore.Services.DataBaseService.Context
             if (!context.Publishers.Any())
             {
                 context.Publishers.AddRange(
-                  new Publisher
+                  new PublisherDTO
                   {
                       Name = "Penguin Random House",
                       City = "New York",
                       Phone = "2325235234"
                   },
-                  new Publisher
+                  new PublisherDTO
                   {
                       Name = "HarperCollins",
                       City = "Praha",
                       Phone = "4534634"
                   },
-                  new Publisher
+                  new PublisherDTO
                   {
                       Name = "Simon & Schuster",
                       City = "Berlin",
@@ -38,21 +38,21 @@ namespace BookStore.Services.DataBaseService.Context
             if (!context.Authors.Any())
             {
                 context.Authors.AddRange(
-                  new Author
+                  new AuthorDTO
                   {
                       FirstName = "Dick",
                       LastName = "Blou",
                       Biography = "sfsedgerhdthgdfhdfg",
                       PhotoPath = "avatar1.png"
                   },
-                  new Author
+                  new AuthorDTO
                   {
                       FirstName = "Rita",
                       LastName = "Small",
                       Biography = "sfgjfjvhbjnmghjsedgerhdthgdfhdfg",
                       PhotoPath = "avatar2.png"
                   },
-                  new Author
+                  new AuthorDTO
                   {
                       FirstName = "Ben",
                       LastName = "Glow",
@@ -66,7 +66,7 @@ namespace BookStore.Services.DataBaseService.Context
             if (!context.Books.Any())
             {
                 context.Books.AddRange(
-                   new Book
+                   new BookDTO
                    {
                        Title = "Programming",
                        AuthorId = 7,
@@ -80,7 +80,7 @@ namespace BookStore.Services.DataBaseService.Context
                        CoverType = CoverType.HardBack,
                        PhotoPath = "avatar1.png"
                    },
-                   new Book
+                   new BookDTO
                    {
                        Title = "In love",
                        AuthorId = 9,
@@ -94,7 +94,7 @@ namespace BookStore.Services.DataBaseService.Context
                        CoverType = CoverType.HardBack,
                        PhotoPath = "avatar2.png"
                    },
-                   new Book
+                   new BookDTO
                    {
                        Title = "Wild world",
                        AuthorId = 7,
@@ -108,7 +108,7 @@ namespace BookStore.Services.DataBaseService.Context
                        CoverType = CoverType.HardBack,
                        PhotoPath = "avatar2.png"
                    },
-                   new Book
+                   new BookDTO
                    {
                        Title = "Scary day",
                        AuthorId = 8,
@@ -122,7 +122,7 @@ namespace BookStore.Services.DataBaseService.Context
                        CoverType = CoverType.SoftBack,
                        PhotoPath = "avatar1.png"
                    },
-                    new Book
+                    new BookDTO
                     {
                         Title = "In dark",
                         AuthorId = 8,

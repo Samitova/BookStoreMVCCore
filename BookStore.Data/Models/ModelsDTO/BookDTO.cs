@@ -6,11 +6,16 @@ using System.Text;
 
 namespace BookStore.Data.Models.ModelsDTO
 {
-    public class Book : BaseEntity
+    public class BookDTO : BaseEntity
     {        
         [Required]
         [MaxLength(50), MinLength(2)]
         public string Title { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string ISBN { get; set; }
+
         [Required]
         public int AuthorId { get; set; }        
         public Genre Genre { get; set; }
@@ -32,10 +37,10 @@ namespace BookStore.Data.Models.ModelsDTO
         public string PhotoPath { get; set; }
 
         [ForeignKey(nameof(PublisherId))]
-        public Publisher Publisher { get; set; }
+        public PublisherDTO Publisher { get; set; }
 
         [ForeignKey(nameof(AuthorId))]
-        public Author Author { get; set; }
+        public AuthorDTO Author { get; set; }
     }
    
 }

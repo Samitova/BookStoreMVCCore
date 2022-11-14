@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BookStore.Data.Models.ModelsDTO
 {
-    public class Publisher : BaseEntity
+    public class PublisherDTO : BaseEntity
     {        
         [Required]
         [MaxLength(50), MinLength(2)]
