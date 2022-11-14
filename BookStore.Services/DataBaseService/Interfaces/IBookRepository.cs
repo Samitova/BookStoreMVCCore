@@ -8,6 +8,6 @@ namespace BookStore.Data.Models.Interfaces
 {
     public interface IBookRepository:IRepositoryBase<BookDTO>
     {
-        Task<BookDTO> GetByTitle(string title);
+        Task<BookDTO> GetByTitleAsync(string title);
     }
 }

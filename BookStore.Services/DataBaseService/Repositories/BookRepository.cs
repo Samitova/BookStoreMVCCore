@@ -14,9 +14,9 @@ namespace BookStore.Services.DataBaseService.Repositories
         public BookRepository(BookStoreContext context) : base(context)
         { }
 
-        public  Task<BookDTO> GetByTitle(string title)
+        public  Task<BookDTO> GetByTitleAsync(string title)
         {
-            return  FirstOrDefault(w => w.Title  == title);
+            return  FirstOrDefaultAsync(w => w.Title  == title);
         }
     }
 }

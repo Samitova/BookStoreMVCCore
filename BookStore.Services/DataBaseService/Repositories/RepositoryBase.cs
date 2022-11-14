@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BookStore.Services.DataBaseService.Repositories
 {
-    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
 
         #region Fields
@@ -25,26 +25,25 @@ namespace BookStore.Services.DataBaseService.Repositories
             Context = context;
         }
 
-        #region Public methods
-        public async Task Add(T entity)
+        #region Async Methods
+     
+        public void Add(T entity)
         {
-            await Context.Set<T>().AddAsync(entity);
-            await Context.SaveChangesAsync();
+            Context.Set<T>().Add(entity);
         }
 
-        public async Task Update(T entity)
+        public void Update(T entity)
         {
             // In case AsNoTracking is used
-            Context.Entry(entity).State = EntityState.Modified;
-            await Context.SaveChangesAsync();
-        }
-        public async Task Remove(T entity)
-        {
-            Context.Set<T>().Remove(entity);
-            await Context.SaveChangesAsync();
+            Context.Entry(entity).State = EntityState.Modified;            
         }
 
-        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter = null,
+        public void Delete(T entity)
+        {
+            Context.Set<T>().Remove(entity);            
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
              Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "")
         {
             IQueryable<T> query = Context.Set<T>();
@@ -68,30 +67,33 @@ namespace BookStore.Services.DataBaseService.Repositories
             {
                 return await query.ToListAsync();
             }
-        }
+        }     
 
-        public async Task<T> GetById(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
             return await Context.Set<T>().FindAsync(id);
         }
-
-        public async Task<T> FirstOrDefault(Expression<Func<T, bool>> filter)
+        public T GetById(int id)
         {
-            return await Context.Set<T>().FirstOrDefaultAsync(filter);
+            return  Context.Set<T>().Find(id);
         }
 
-        public async Task<bool> Any(Expression<Func<T, bool>> filter)
+        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter)
+        {
+            return await Context.Set<T>().FirstOrDefaultAsync(filter);
+        }      
+
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> filter)
         {
             return await Context.Set<T>().AnyAsync(filter);
         }
 
-        public async Task<int> CountAll()
+        public async Task<int> CountAsync(Expression<Func<T, bool>> filter = null)
         {
-            return await Context.Set<T>().CountAsync();
-        }
-
-        public async Task<int> CountWhere(Expression<Func<T, bool>> filter)
-        {
+            if (filter == null)
+            {
+                return await Context.Set<T>().CountAsync();
+            }          
             return await Context.Set<T>().CountAsync(filter);
         }
 

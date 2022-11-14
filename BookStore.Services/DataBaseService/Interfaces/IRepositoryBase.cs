@@ -9,15 +9,26 @@ namespace BookStore.Data.Models.Interfaces
 {
     public interface IRepositoryBase<T> 
     {
-        Task<T> GetById(int id);
-        Task<T> FirstOrDefault(Expression<Func<T, bool>> filter);
-        Task Add(T entity);
-        Task Update(T entity);
-        Task Remove(T entity);        
-        Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter,
-           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, string includeProperties);
-        Task<int> CountAll();
-        Task<int> CountWhere(Expression<Func<T, bool>> filter);
-        Task<bool> Any(Expression<Func<T, bool>> filter);
+        #region Async Methods
+
+        T GetById(int id);
+        Task<T> GetByIdAsync(int id);       
+        Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter);
+        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "");  
+        Task<int> CountAsync(Expression<Func<T, bool>> filter = null);       
+        Task<bool> AnyAsync(Expression<Func<T, bool>> filter);
+       
+
+        #endregion
+
+        #region Changing Methods      
+
+        void Add(T entity);
+        void Update(T entity);
+        void Delete(T entity);
+
+        #endregion
+
     }
 }
