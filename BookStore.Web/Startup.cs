@@ -1,6 +1,6 @@
 using BookStore.Data.Models.Interfaces;
-using BookStore.Services.DataBaseService;
 using BookStore.Services.DataBaseService.Context;
+using BookStore.Services.DataBaseService.Interfaces;
 using BookStore.Services.DataBaseService.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,9 +31,9 @@ namespace BookStore.Web
             services.AddDbContext<BookStoreContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
 
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
-            services.AddScoped<DbUnitOfWork>();
-
+            services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
         }
 
