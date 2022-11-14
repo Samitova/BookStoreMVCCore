@@ -18,6 +18,8 @@ namespace BookStore.Services.DataBaseService
         private BookRepository _booksRepository;
         private EfRepository<AuthorDTO> _authorsRepository;
         private EfRepository<PublisherDTO> _publishersRepository;
+        private EfRepository<CategoryDTO> _categoriesRepository;
+
 
         public BookRepository BooksRepository
         {
@@ -52,6 +54,18 @@ namespace BookStore.Services.DataBaseService
                     _publishersRepository = new EfRepository<PublisherDTO>(_context);
                 }
                 return _publishersRepository;
+            }
+        }
+
+        public EfRepository<CategoryDTO> CategoriesRepository
+        {
+            get
+            {
+                if (_categoriesRepository == null)
+                {
+                    _categoriesRepository = new EfRepository<CategoryDTO>(_context);
+                }
+                return _categoriesRepository;
             }
         }
 

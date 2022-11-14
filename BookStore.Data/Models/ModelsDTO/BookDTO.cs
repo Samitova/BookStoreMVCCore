@@ -17,29 +17,55 @@ namespace BookStore.Data.Models.ModelsDTO
         public string ISBN { get; set; }
 
         [Required]
-        public int AuthorId { get; set; }        
-        public Genre Genre { get; set; }
+        public int AuthorId { get; set; }
+
+        public string AuthorFullName { get; set; }
+
         [Required]
-        public int YearOfIssue { get; set; }
-        [Required]
-        public decimal Price { get; set; }
+        public int CategoryId { get; set; }
+
+        public string CategoryName { get; set;}
+
         [Required]
         public int PublisherId { get; set; }
+
+        public string PublisherName { get; set; }      
+
+        public Genre Genre { get; set; }
+
         [Required]
-        public int AmountOfCopies { get; set; } = 1;
+        public int YearOfIssue { get; set; }
+
+        [Required]
+        public decimal Price { get; set; }
+       
+        [Required]
+        public int AvaliableQuantaty { get; set; } = 1;
+
         [Required]
         public int NumberOfPage { get; set; }
+
         [Required]
         public string Annotation { get; set; }
+
         [MaxLength(50), MinLength(2)]
         public CoverType CoverType { get; set; }
+
         [MaxLength(50)]
         public string PhotoPath { get; set; }
+        public int SoldCopies { get; set; } = 0;
+        public float RateValue { get; set; } = 0;
 
-        [ForeignKey(nameof(PublisherId))]
+        public int RateCount { get; set; } = 0;       
+
+
+        [ForeignKey("CategoryId")]
+        public virtual CategoryDTO Category { get; set; }
+
+        [ForeignKey("PublisherId")]
         public PublisherDTO Publisher { get; set; }
 
-        [ForeignKey(nameof(AuthorId))]
+        [ForeignKey("AuthorId")]
         public AuthorDTO Author { get; set; }
     }
    

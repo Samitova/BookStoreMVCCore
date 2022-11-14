@@ -11,10 +11,11 @@ namespace BookStore.Services.DataBaseService.Context
         public DbSet<BookDTO> Books { get; set; }
         public DbSet<AuthorDTO> Authors { get; set; }
         public DbSet<PublisherDTO> Publishers { get; set; }
+        public DbSet<CategoryDTO> Categories { get; set; }
         public BookStoreContext(DbContextOptions<BookStoreContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
     }
 }
