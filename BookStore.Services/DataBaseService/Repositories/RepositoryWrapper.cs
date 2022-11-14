@@ -1,27 +1,28 @@
-﻿using BookStore.Data.Models.ModelsDTO;
+﻿using BookStore.Data.Models.Interfaces;
+using BookStore.Data.Models.ModelsDTO;
 using BookStore.Services.DataBaseService.Context;
-using BookStore.Services.DataBaseService.Repositories;
+using BookStore.Services.DataBaseService.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BookStore.Services.DataBaseService
+namespace BookStore.Services.DataBaseService.Repositories
 {
-    public class DbUnitOfWork : IDisposable
+    public class RepositoryWrapper : IDisposable, IRepositoryWrapper
+
     {
         private BookStoreContext _context;
-        public DbUnitOfWork(BookStoreContext context)
+        public RepositoryWrapper(BookStoreContext context)
         {
             _context = context;
         }
 
-        private BookRepository _booksRepository;
-        private EfRepository<AuthorDTO> _authorsRepository;
-        private EfRepository<PublisherDTO> _publishersRepository;
-        private EfRepository<CategoryDTO> _categoriesRepository;
-
-
-        public BookRepository BooksRepository
+        private bool _disposed = false;     
+        private IBookRepository _booksRepository;
+        private IAuthorRepository _authorsRepository;
+        private IPublisherRepository _publishersRepository;
+        private ICategoryRepository _categoriesRepository;
+        public IBookRepository Books
         {
             get
             {
@@ -33,43 +34,41 @@ namespace BookStore.Services.DataBaseService
             }
         }
 
-        public EfRepository<AuthorDTO> AuthorsRepository
+        public IAuthorRepository Authors
         {
             get
             {
                 if (_authorsRepository == null)
                 {
-                    _authorsRepository = new EfRepository<AuthorDTO>(_context);
+                    _authorsRepository = new AuthorRepository(_context);
                 }
                 return _authorsRepository;
             }
         }
 
-        public EfRepository<PublisherDTO> PublishersRepository
+        public IPublisherRepository Publishers
         {
             get
             {
                 if (_publishersRepository == null)
                 {
-                    _publishersRepository = new EfRepository<PublisherDTO>(_context);
+                    _publishersRepository = new PublisherRepository(_context);
                 }
                 return _publishersRepository;
             }
         }
 
-        public EfRepository<CategoryDTO> CategoriesRepository
+        public ICategoryRepository Categories
         {
             get
             {
                 if (_categoriesRepository == null)
                 {
-                    _categoriesRepository = new EfRepository<CategoryDTO>(_context);
+                    _categoriesRepository = new CategoryRepository(_context);
                 }
                 return _categoriesRepository;
             }
-        }
-
-        private bool _disposed = false;
+        }       
 
         protected virtual void Dispose(bool disposing)
         {
@@ -87,6 +86,11 @@ namespace BookStore.Services.DataBaseService
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
         }
     }
 }

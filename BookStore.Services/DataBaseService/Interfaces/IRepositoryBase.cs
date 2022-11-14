@@ -7,7 +7,7 @@ using BookStore.Data.Models.ModelsDTO;
 
 namespace BookStore.Data.Models.Interfaces
 {
-    public interface IAsyncRepository<T> where T : BaseEntity
+    public interface IRepositoryBase<T> 
     {
         Task<T> GetById(int id);
         Task<T> FirstOrDefault(Expression<Func<T, bool>> filter);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookStore.Data.Models.Interfaces
 {
-    public interface IBookRepository:IAsyncRepository<BookDTO>
+    public interface IBookRepository:IRepositoryBase<BookDTO>
     {
         Task<BookDTO> GetByTitle(string title);
     }

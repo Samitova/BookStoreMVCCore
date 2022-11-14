@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BookStore.Services.DataBaseService.Repositories
 {
-    public class EfRepository<T> : IAsyncRepository<T> where T : BaseEntity
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
 
         #region Fields
@@ -20,7 +20,7 @@ namespace BookStore.Services.DataBaseService.Repositories
 
         #endregion
 
-        public EfRepository(BookStoreContext context)
+        public RepositoryBase(BookStoreContext context)
         {
             Context = context;
         }
@@ -44,7 +44,8 @@ namespace BookStore.Services.DataBaseService.Repositories
             await Context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, string includeProperties)
+        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter = null,
+             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "")
         {
             IQueryable<T> query = Context.Set<T>();
 

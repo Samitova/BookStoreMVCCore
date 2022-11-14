@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BookStore.Services.DataBaseService.Repositories
 {
-    public class BookRepository : EfRepository<BookDTO>, IBookRepository
+    public class BookRepository : RepositoryBase<BookDTO>, IBookRepository
     {
 
         public BookRepository(BookStoreContext context) : base(context)
