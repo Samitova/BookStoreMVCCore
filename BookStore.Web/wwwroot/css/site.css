@@ -1,15 +1,30 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
+}
 
 a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
+  font-size:20px;
 }
 
-/* Provide sufficient contrast against white background */
+.navbar-header {
+    background-color: #1b6ec2;    
+    height: 100px;
+    text-align:center;
+}
+
+.nav-item {
+    font-size:20px;
+}
+
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 .btn-primary {
@@ -24,11 +39,7 @@ a {
   border-color: #1861ac;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -51,21 +62,243 @@ button.accept-policy {
   line-height: inherit;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
 html {
+  font-size: 14px;
   position: relative;
   min-height: 100%;
 }
 
-body {
-  /* Margin bottom by footer height */
+body {  
   margin-bottom: 60px;
+  background:#fff;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+  line-height: 60px;   
 }
+
+
+.main-conrainer {
+    background:#fff;    
+}
+
+#side-nav {
+    background: #fff;
+    min-width: 250px;
+    max-width: 250px;
+    transition: all 0.3s;
+    border-right: 2px solid #eee;
+    display: block;
+    overflow-y: auto;
+}
+
+
+.sidebar-filter {
+    margin-top:10px;
+    padding-left:25px
+}
+
+.sidebar-filter ul {
+    font-size: 18px;
+    padding-left: 6px;
+    list-style-type: none;
+}
+
+
+.filter-item-capture a,
+.filter-capture-label {
+    font-size: 20px;
+    font-weight: bold;
+    display: block;
+    cursor: pointer;
+}
+
+.filter-item-capture a.filter-link {
+    display: none;
+}
+
+.hidden {
+    display: none;
+ }
+
+.filter-subitem-wrapper {
+    position: static;
+    opacity: 1;
+    visibility: visible;    
+    max-height: 0px;
+    overflow: hidden;
+}
+
+#show-productType:checked ~ ul,
+#show-only:checked ~ ul,
+#show-author:checked ~ ul {
+    max-height: 100vh;
+}
+
+
+.fa-chevron-down {
+    float: right;
+    margin-right: 15px;
+    margin-top: 8px;
+}
+
+hr.a-color {
+    background: #eee;
+    margin-left: 3px;
+    margin-right: 10px;
+}
+
+.main-content {
+    min-height: 100vh;
+    width: 100%;
+}
+
+.sidebar-filter li.active {
+    background: #eee;
+    border-radius: 8px;
+}
+
+.sidebar-filter li.active a, .sidebar li.active a:hover {
+    color: #fff;
+}
+
+.sidebar-filter li a {
+    color: #000;
+}
+
+@media(max-width:767px) {
+    #side-nav {
+        margin-left: -250px;
+        position: fixed;
+        min-height:100vh;
+        z-index:1;
+    }
+    #side-nav.active {
+        margin-left: 0px;           
+    }
+}
+
+.subcategories-item {
+    background: #fff;
+    border-radius: 15px 15px 15px 15px;
+    padding: 15px;
+    margin: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #000;
+    text-align: center;
+    border: 3px solid #fff;
+}
+
+
+.subcategories-item:hover {
+    border: 3px solid #31b9b5;
+    text-decoration: none;
+    color:#000;
+}
+
+.breadcrumb-a {
+    text-decoration: none;    
+    color: #445554;
+}
+
+.breadcrumb-a:hover {
+    text-decoration: none;
+    color: #2ba19e;
+}
+
+
+.breadcrumb {
+    font-size: 18px;    
+    padding-top: 5px;
+    padding-left: 15px;
+    background: #faf7ef;
+    
+}
+
+
+.category-header {
+    background: #faf7ef;
+    padding-bottom: 10px;  
+    width:100%;
+}
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.category-name {    
+    padding-left: 15px;
+}
+
+.search-wrapper {
+    display: flex;
+    justify-content: space-between;   
+}
+
+.search-wrapper .search-item{
+    margin-right: 20px;
+    height:45px;
+    position:relative;
+    width:100%;
+}
+
+.search-wrapper .search-item .search-box {
+    width:100%;
+    height:100%;
+}
+
+
+.search-wrapper .search-item .search-box .input-search {
+    width: 100%;
+    height: 100%;
+    border: 0px;
+    border-radius: 25px;
+    padding: 12px 55px 12px 25px;     
+}
+
+.search-wrapper .search-item .search-box .input-search:focus {
+    outline: 3px solid #31b9b5;
+}
+
+.search-wrapper .search-item .search-icon {    
+    position: absolute;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px;
+    width: 45px;
+    height: 45px;
+    top: 0px;
+    right: 0px;
+    background: #1ea4a0;
+    border-radius: 50%;
+    color: #fff;
+}
+
+.search-wrapper .search-item .search-icon:hover {
+    background: #23beb9;
+}
+
+#search-btn {
+    border: 2px solid #31b9b5;
+    color: #31b9b5;
+}
+
+#search-btn:hover {
+    background: #31b9b5;
+    color: #fff;
+}
+
+
+
+
+

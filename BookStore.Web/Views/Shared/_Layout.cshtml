@@ -2,50 +2,111 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 , shrink-to-fit=no" />
     <title>@ViewData["Title"] - BookStore.Web</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" />   
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BookStore.Web</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Shop" asp-action="Index">Books</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <main role="main" >       
+
+        <header>
+            <div class="container-fluid">
+                <div class="row" style="background:#1d2020; height:20px;">
+                </div>
+
+                <div class="row navbar-dark bg-dark">
+                    <div class="col-lg-2 p-md-2 p-lg-4">
+                        <div class="d-flex justify-content-center justify-content-lg-start">
+                            <a class="navbar-brand mr-0 mr-md-3" href="/" aria-label="BookShop">
+                                <img src="\pictures\shoplogo.png" width="40" height="40" class="d-inline-block align-top" alt="logo" />
+                                BookShop
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col pl-md-4 p-md-2 p-lg-4 d-flex justify-content-md-start justify-content-center  justify-content-lg-center">
+                        <div class="search-wrapper w-75">
+                            <div class="search-item">
+                                <form class="input-group">
+                                    <div class="search-box">
+                                        <input class="mr-sm-2 input-search" type="search" placeholder="Search..." aria-label="Search">
+                                    </div>
+                                    <div class="search-icon">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>                  
+                    </div>
+
+                    <div class="col-md-auto bg-dark  p-md-2 pr-md-4  p-lg-4 d-flex justify-content-center">
+                        <ul class="navbar-nav flex-row">
+                            <li class="nav-item ml-3">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                            <li class="nav-item ml-3">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>                       
+                            <li class="nav-item d-md-none ml-3 mt-2">
+                                <button class="btn" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                    aria-expanded="false" aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>      
+            </div>      
+
+            <nav class="navbar navbar-expand-md navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow">
+                <div class="container-fluid">               
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse border-top">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Shop" asp-action="Index">Books</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>    
+        
+        @RenderBody()
+    </main>
+
+    <footer class="border-top footer text-muted bg-dark">
+        <div class="container text-white">
             &copy; 2022 - BookStore.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $('.sidebar ul li').on('click', function(){
+            $('.sidebar ul li.active').removeClass('active');
+            $(this).addClass('active');
+        });
+
+        $('.open-btn').on('click', function(){
+            $('.sidebar').addClass('active');
+        });
+
+        $('.close-btn').on('click', function(){
+            $('.sidebar').removeClass('active');
+        });
+
+
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
