@@ -24,7 +24,7 @@ namespace BookStore.Web.Controllers
             {
                 var booksDTO = await _repositoryWrapper.Books.GetAllAsync(); 
                
-                var result = _mapper.Map<IEnumerable<BookVM>>(owners);
+                var result = _mapper.Map<IEnumerable<BookVM>>(booksDTO);
                 return View(result);
             }
             catch (Exception ex)

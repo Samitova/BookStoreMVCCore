@@ -10,10 +10,10 @@
 </head>
 <body>
 
-    <main role="main" >       
+    <main role="main">
 
         <header>
-            <div class="container-fluid">
+            <div class="container-fluid ">
                 <div class="row" style="background:#1d2020; height:20px;">
                 </div>
 
@@ -45,7 +45,7 @@
                     <div class="col-md-auto bg-dark  p-md-2 pr-md-4  p-lg-4 d-flex justify-content-center">
                         <ul class="navbar-nav flex-row">
                             <li class="nav-item ml-3">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link" asp-area="" asp-controller="Shop" asp-action="Index">Books</a>
                             </li>
                             <li class="nav-item ml-3">
                                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -90,23 +90,7 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        $('.sidebar ul li').on('click', function(){
-            $('.sidebar ul li.active').removeClass('active');
-            $(this).addClass('active');
-        });
-
-        $('.open-btn').on('click', function(){
-            $('.sidebar').addClass('active');
-        });
-
-        $('.close-btn').on('click', function(){
-            $('.sidebar').removeClass('active');
-        });
-
-
-    </script>
+    <script src="~/js/site.js" asp-append-version="true"></script>   
     @RenderSection("Scripts", required: false)
 </body>
 </html>
