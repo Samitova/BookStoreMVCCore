@@ -5,6 +5,7 @@ using BookStore.Services.DataBaseService.Interfaces;
 using BookStore.Services.ShopService;
 using BookStore.Web.Views.Shared.Components.SearchBar;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,54 @@ namespace BookStore.Web.Controllers
             _bookService = bookService; 
         }
 
-        public async Task<IActionResult> Index(string SearchText="")
+        public async Task<IActionResult> Index(string sortExpression="", string SearchText="")
         {
+            ViewData["SortParametrName"] = "";
+            SortOrder sortOrder;
+            string sortKey = string.Empty;
+
+            switch (sortExpression.ToLower())
+            {
+                case "name_desc":
+                    sortOrder = SortOrder.Descending;
+                    sortKey = "name";
+                    break;
+
+                case "price":
+                    sortOrder = SortOrder.Ascending;
+                    sortKey = "price";
+                    break;
+                case "price_desc":
+                    sortOrder = SortOrder.Descending;
+                    sortKey = "price";
+                    break;
+                case "rating":
+                    sortOrder = SortOrder.Ascending;
+                    sortKey = "rating";
+                    break;
+                case "rating_desc":
+                    sortOrder = SortOrder.Descending;
+                    sortKey = "rating";
+                    break;
+                case "year":
+                    sortOrder = SortOrder.Ascending;
+                    sortKey = "year";
+                    break;
+                case "year_desc":
+                    sortOrder = SortOrder.Descending;
+                    sortKey = "year";
+                    break;
+                case "bestseller":
+                    sortOrder = SortOrder.Ascending;
+                    sortKey = "bestseller";
+                    break;
+                case "bestseller_desc":
+                    sortOrder = SortOrder.Descending;
+                    sortKey = "bestseller";
+                    break;
+            }
+
+
             List <BookVM> result = new List<BookVM>();
             if (!String.IsNullOrWhiteSpace(SearchText))
             {  
