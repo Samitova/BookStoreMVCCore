@@ -1,6 +1,7 @@
 ﻿using BookStore.Data.Models.ModelsDTO;
 using BookStore.Data.Models.ViewModels;
 using BookStore.Services.DataBaseService.Interfaces;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,23 @@ namespace BookStore.Services.ShopService
             {
                 return books = (await _repository.Books.SearchByTitleAndAuthorAsync(quary)).ToList();
             }
+        }
+
+        IEnumerable<BookDTO> GetAllSorted(SortOrder sortOrder, string sortKey)
+        {
+            List<BookDTO> books = new List<BookDTO>();
+            if (sortKey.ToLower() == "title")
+            {
+                if (sortOrder == SortOrder.Ascending)
+                {
+                    books = _repository.Books.GetAll().ToList();
+                }
+            }
+
+
+
+
+
         }
 
     }
