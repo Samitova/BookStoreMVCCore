@@ -3,6 +3,7 @@ using BookStore.Data.Models.ModelsDTO;
 using BookStore.Data.Models.ViewModels;
 using BookStore.Services.DataBaseService.Interfaces;
 using BookStore.Services.ShopService;
+using BookStore.Web.Views.Shared.Components.SearchBar;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -52,6 +53,8 @@ namespace BookStore.Web.Controllers
                 }
             }
 
+            SearchPager SearchPager = new SearchPager() { Action="Index", Controler="Shop", SearchText=SearchText};
+            ViewBag.SearchPager= SearchPager;
            
             return View(result);
         }      
