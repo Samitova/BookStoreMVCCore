@@ -44,7 +44,7 @@ namespace BookStore.Services.DataBaseService.Repositories
         }
 
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
-             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "")
+             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,  string includeProperties = "")
         {
             IQueryable<T> query = Context.Set<T>();
 
@@ -67,7 +67,33 @@ namespace BookStore.Services.DataBaseService.Repositories
             {
                 return await query.ToListAsync();
             }
-        }     
+        }
+
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null,
+           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "")
+        {
+            IQueryable<T> query = Context.Set<T>();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).ToList();
+            }
+            else
+            {
+                return query.ToList();
+            }
+        }
 
         public async Task<T> GetByIdAsync(int id)
         {
@@ -81,11 +107,20 @@ namespace BookStore.Services.DataBaseService.Repositories
         public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter)
         {
             return await Context.Set<T>().FirstOrDefaultAsync(filter);
-        }      
+        }
+
+        public T FirstOrDefault(Expression<Func<T, bool>> filter)
+        {
+            return  Context.Set<T>().FirstOrDefault(filter);
+        }
 
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> filter)
         {
             return await Context.Set<T>().AnyAsync(filter);
+        }
+        public bool Any(Expression<Func<T, bool>> filter)
+        {
+            return Context.Set<T>().Any(filter);
         }
 
         public async Task<int> CountAsync(Expression<Func<T, bool>> filter = null)
@@ -95,6 +130,15 @@ namespace BookStore.Services.DataBaseService.Repositories
                 return await Context.Set<T>().CountAsync();
             }          
             return await Context.Set<T>().CountAsync(filter);
+        }
+
+        public int Count(Expression<Func<T, bool>> filter = null)
+        {
+            if (filter == null)
+            {
+                return Context.Set<T>().Count();
+            }
+            return Context.Set<T>().Count(filter);
         }
 
         #endregion

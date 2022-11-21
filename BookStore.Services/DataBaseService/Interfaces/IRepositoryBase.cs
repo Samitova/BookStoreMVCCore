@@ -18,7 +18,13 @@ namespace BookStore.Data.Models.Interfaces
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "");  
         Task<int> CountAsync(Expression<Func<T, bool>> filter = null);       
         Task<bool> AnyAsync(Expression<Func<T, bool>> filter);
-       
+
+        T FirstOrDefault(Expression<Func<T, bool>> filter);
+        IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "");
+        int Count(Expression<Func<T, bool>> filter = null);
+        bool Any(Expression<Func<T, bool>> filter);
+
 
         #endregion
 
