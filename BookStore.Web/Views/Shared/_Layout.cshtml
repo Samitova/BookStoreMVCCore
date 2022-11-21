@@ -28,17 +28,13 @@
                     </div>
 
                     <div class="col pl-md-4 p-md-2 p-lg-4 d-flex justify-content-md-start justify-content-center  justify-content-lg-center">
-                        <div class="search-wrapper w-75">
-                            <div class="search-item">
-                                <form class="input-group">
-                                    <div class="search-box">
-                                        <input class="mr-sm-2 input-search" type="search" placeholder="Search..." aria-label="Search">
-                                    </div>
-                                    <div class="search-icon">
-                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                    </div>
-                                </form>
-                            </div>
+                        <div class="search-container">
+                            <form method="get" class="search-bar " asp-controller="Shop" asp-action="Index">
+                                <input class="input-search" type="search" name="SearchText" placeholder="Search..." aria-label="Search">
+                                <button type="submit"> 
+                                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i> </span>
+                                </button>
+                            </form>                            
                         </div>                  
                     </div>
 

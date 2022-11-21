@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BookStore.Data.Models.ModelsDTO
 {
     public class BookDTO : BaseEntity
     {
+        #region Properties
         [Required]
         [MaxLength(50), MinLength(2)]
         public string Title { get; set; }
@@ -70,6 +72,13 @@ namespace BookStore.Data.Models.ModelsDTO
 
         [ForeignKey("AuthorId")]
         public AuthorDTO Author { get; set; }
+
+        public List<BookDTO> ToList()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
     }
-   
+
 }

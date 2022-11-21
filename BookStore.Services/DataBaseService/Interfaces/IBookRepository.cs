@@ -9,5 +9,8 @@ namespace BookStore.Data.Models.Interfaces
     public interface IBookRepository:IRepositoryBase<BookDTO>
     {
         Task<BookDTO> GetByTitleAsync(string title);
+        Task<BookDTO> GetByAuthorAsync(string author);
+        Task<IEnumerable<BookDTO>> SearchByIsbnAsync(string isbn);
+        Task<IEnumerable<BookDTO>> SearchByTitleAndAuthorAsync(string query);
     }
 }
