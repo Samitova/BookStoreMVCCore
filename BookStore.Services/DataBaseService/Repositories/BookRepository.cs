@@ -28,12 +28,25 @@ namespace BookStore.Services.DataBaseService.Repositories
         public Task<IEnumerable<BookDTO>> SearchByIsbnAsync(string isbn)
         {            
             return GetAllAsync(filter: x => x.ISBN==isbn);
+            
         }       
 
         public  Task<IEnumerable<BookDTO>> SearchByTitleAndAuthorAsync(string query)
         {
             return  GetAllAsync(filter: x => x.Title.ToLower().Contains(query.ToLower()) 
                                         || x.AuthorFullName.ToLower().Contains(query.ToLower()));
+        }
+
+        public IEnumerable<BookDTO> SearchByIsbn(string isbn)
+        {
+            return GetAll(filter: x => x.ISBN == isbn);
+
+        }
+
+        public IEnumerable<BookDTO> SearchByTitleAndAuthor(string query)
+        {
+            return GetAll(filter: x => x.Title.ToLower().Contains(query.ToLower())
+                                 || x.AuthorFullName.ToLower().Contains(query.ToLower()));
         }
 
     }
