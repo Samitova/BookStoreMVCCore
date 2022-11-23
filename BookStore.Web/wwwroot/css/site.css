@@ -234,13 +234,13 @@ hr.a-color {
 }
 
 #categories-show-btn a {
-    color: #94782e;
+    color: #c39d1d;
     font-size: 18px;
     font-weight: bold;
     text-decoration: none;
     border: 0;
     cursor: pointer;
-}
+ }
 
 /*----------------------------------------------------------------------------------*/
 
@@ -421,4 +421,98 @@ hr.a-color {
     cursor: pointer;
 }
 
+/*_____________________________________________________________________________________________*/
 
+.sort-table-wrapper {
+    padding: 20px;
+    padding-bottom: 30px;
+}
+
+#sort-dropdown {
+    width: 200px;
+    height: 40px;
+    border-radius: 5px 5px 5px 5px;
+    font-size: 16px;
+    color: #fff;
+    list-style-type: none;
+    background: #343a40;
+    right: 0;
+}
+
+.dropdown-item {
+    text-align: left;
+    font-size: 16px;
+    color: #fff;
+    align-content:space-between;
+}
+
+.dropdown-toggle {
+    color: #fff;
+    text-align: center;
+}
+
+.dropdown-toggle:hover {
+    color: #fff;
+    text-decoration:none;
+}
+
+#sort-dropdown div {
+    color: #fff;
+    background: #343a40;
+    width: 200px;
+    border-radius: 5px 5px 5px 5px;
+    text-align: left;        
+}
+
+.dropdown-menu a:hover {
+    color: #fff;
+    background: #40474f;
+    text-decoration: none;
+    width: 100%;
+}
+
+.sort-item {   
+    background: #fff;
+    border-radius: 5px 5px 5px 5px;   
+    width: 150px;
+    height: 40px;
+    border: 2px solid #343a40;
+    margin-right: 10px;    
+    text-align:center;    
+}
+
+.sort-item a {
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;        
+    padding-top: 5px;
+}
+
+.sort-item a:hover {
+    color: #fff;
+    background: #343a40;
+    cursor: pointer;
+    color: #fff;
+}
+
+.sort-item-main {
+    border: 2px solid #c39d1d;
+    background: #c39d1d;
+}
+
+.sort-item-main a{  
+    color: #fff;
+}
+
+.sort-item-main a:hover {
+    background: #c39d1d;
+}
+
+.dropdown-icon {
+    float: right;
+    margin-right: 5px;
+}

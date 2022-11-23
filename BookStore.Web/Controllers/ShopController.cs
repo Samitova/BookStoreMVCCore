@@ -3,13 +3,21 @@ using BookStore.Data.Models.ModelsDTO;
 using BookStore.Data.Models.ViewModels;
 using BookStore.Services.DataBaseService.Interfaces;
 using BookStore.Services.ShopService;
+using BookStore.Services.ShopService.SotrOrderingService;
+using BookStore.Web.Models;
 using BookStore.Web.Views.Shared.Components.SearchBar;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
+using static System.Reflection.Metadata.BlobBuilder;
+
 
 namespace BookStore.Web.Controllers
 {
@@ -24,86 +32,59 @@ namespace BookStore.Web.Controllers
             _repositoryWrapper = repositoryWrapper;  
             _mapper = mapper;   
             _bookService = bookService; 
+        }      
+
+        public IActionResult Index(string SortExpression="", string SearchText = "")
+        {
+            SortModel sortModel = SetSortModel(SortExpression);
+            SearchPager searchPager = new SearchPager() { Action = "Index", Controler = "Shop", SearchText = SearchText};
+
+            SetIndexViewParametrs(searchPager, sortModel);
+
+            try
+            {
+                var booksDTO = _bookService.GetAll(SearchText:SearchText).ToList();  
+                var result = _mapper.Map<IEnumerable<BookVM>>(booksDTO).ToList();
+                HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(result));
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        public async Task<IActionResult> Index(string sortExpression="", string SearchText="")
+        public IActionResult Order(string SortExpression = "")
+        {    
+            var sortModel = JsonConvert.DeserializeObject<SortModel>(HttpContext.Session.GetString("SortModel"));
+            sortModel.ApplySort(SortExpression);
+            ViewData["SortModel"] = sortModel;
+            ViewData["SearchPager"] = JsonConvert.DeserializeObject<SearchPager>(HttpContext.Session.GetString("SearchPager"));
+
+            var books = JsonConvert.DeserializeObject<List<BookVM>>(HttpContext.Session.GetString("Books"));
+            books = _bookService.DoSort(books, sortModel.SortedProperty, sortModel.SortedOrder);
+
+            return View("Index", books);           
+        }
+
+        private SortModel SetSortModel(string SortExpression)
         {
-            ViewData["SortParametrName"] = "";
-            SortOrder sortOrder;
-            string sortKey = string.Empty;
+            SortModel sortModel = new SortModel();
+            sortModel.AddColumn("title");
+            sortModel.AddColumn("price");
+            sortModel.AddColumn("authorfullname");
+            sortModel.AddColumn("rating");
+            sortModel.ApplySort(SortExpression);
+            return sortModel;
+        }
 
-            switch (sortExpression.ToLower())
-            {
-                case "name_desc":
-                    sortOrder = SortOrder.Descending;
-                    sortKey = "name";
-                    break;
+        private void SetIndexViewParametrs(SearchPager SearchPager, SortModel SortModel)
+        {
+            ViewData["SortModel"] = SortModel;
+            HttpContext.Session.SetString("SortModel", JsonConvert.SerializeObject(SortModel));
 
-                case "price":
-                    sortOrder = SortOrder.Ascending;
-                    sortKey = "price";
-                    break;
-                case "price_desc":
-                    sortOrder = SortOrder.Descending;
-                    sortKey = "price";
-                    break;
-                case "rating":
-                    sortOrder = SortOrder.Ascending;
-                    sortKey = "rating";
-                    break;
-                case "rating_desc":
-                    sortOrder = SortOrder.Descending;
-                    sortKey = "rating";
-                    break;
-                case "year":
-                    sortOrder = SortOrder.Ascending;
-                    sortKey = "year";
-                    break;
-                case "year_desc":
-                    sortOrder = SortOrder.Descending;
-                    sortKey = "year";
-                    break;
-                case "bestseller":
-                    sortOrder = SortOrder.Ascending;
-                    sortKey = "bestseller";
-                    break;
-                case "bestseller_desc":
-                    sortOrder = SortOrder.Descending;
-                    sortKey = "bestseller";
-                    break;
-            }
-
-
-            List <BookVM> result = new List<BookVM>();
-            if (!String.IsNullOrWhiteSpace(SearchText))
-            {  
-                try
-                {
-                    var booksDTO = await _bookService.GetAllByQuaryAsync(SearchText);
-                    result = _mapper.Map<IEnumerable<BookVM>>(booksDTO).ToList();
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, "Internal server error");
-                }
-            }
-            else
-            {
-                try
-                {
-                    var booksDTO = await _repositoryWrapper.Books.GetAllAsync();
-                    result = _mapper.Map<IEnumerable<BookVM>>(booksDTO).ToList();
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, "Internal server error");
-                }
-            }
-
-            SearchPager SearchPager = new SearchPager() { Action="Index", Controler="Shop", SearchText=SearchText};
-            ViewBag.SearchPager= SearchPager;
-           
-            return View(result);
-        }      
+            ViewData["SearchPager"] = SearchPager;
+            HttpContext.Session.SetString("SearchPager", JsonConvert.SerializeObject(SearchPager));
+        }
     }
 }
