@@ -12,5 +12,8 @@ namespace BookStore.Data.Models.Interfaces
         Task<BookDTO> GetByAuthorAsync(string author);
         Task<IEnumerable<BookDTO>> SearchByIsbnAsync(string isbn);
         Task<IEnumerable<BookDTO>> SearchByTitleAndAuthorAsync(string query);
+        IEnumerable<BookDTO> SearchByIsbn(string isbn);
+        IEnumerable<BookDTO> SearchByTitleAndAuthor(string query);
+
     }
 }
