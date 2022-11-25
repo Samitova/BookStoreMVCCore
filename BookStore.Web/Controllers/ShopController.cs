@@ -17,36 +17,34 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using static System.Reflection.Metadata.BlobBuilder;
-
+using SortOrder = BookStore.Services.ShopService.SotrOrderingService.SortOrder;
 
 namespace BookStore.Web.Controllers
 {
     public class ShopController : Controller
     {
-        private readonly IRepositoryWrapper _repositoryWrapper;
-        private readonly IMapper _mapper;
+        private readonly IRepositoryWrapper _repositoryWrapper;        
         private readonly BookService _bookService;
+        private readonly SortModel _sortModel;        
 
-        public ShopController( IRepositoryWrapper repositoryWrapper, IMapper mapper, BookService bookService)
+        public ShopController( IRepositoryWrapper repositoryWrapper, BookService bookService, SortModel sortModel)
         {
-            _repositoryWrapper = repositoryWrapper;  
-            _mapper = mapper;   
+            _repositoryWrapper = repositoryWrapper;              
             _bookService = bookService; 
+            _sortModel = sortModel;
+            InitSortModel();
         }      
 
         public IActionResult Index(string SortExpression="", string SearchText = "")
         {
-            SortModel sortModel = SetSortModel(SortExpression);
-            SearchPager searchPager = new SearchPager() { Action = "Index", Controler = "Shop", SearchText = SearchText};
-
-            SetIndexViewParametrs(searchPager, sortModel);
+            SetSortModel(SortExpression);           
+            SetSearchPager("Index", "Shop", SearchText);
 
             try
             {
-                var booksDTO = _bookService.GetAll(SearchText:SearchText).ToList();  
-                var result = _mapper.Map<IEnumerable<BookVM>>(booksDTO).ToList();
-                HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(result));
-                return View(result);
+                var books = _bookService.GetAll(_sortModel.SortedProperty, _sortModel.SortedOrder, SearchText).ToList();                  
+                HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(books));
+                return View(books);
             }
             catch (Exception ex)
             {
@@ -55,36 +53,39 @@ namespace BookStore.Web.Controllers
         }
 
         public IActionResult Order(string SortExpression = "")
-        {    
-            var sortModel = JsonConvert.DeserializeObject<SortModel>(HttpContext.Session.GetString("SortModel"));
-            sortModel.ApplySort(SortExpression);
-            ViewData["SortModel"] = sortModel;
+        {
+            SetSortModel(SortExpression);
+
             ViewData["SearchPager"] = JsonConvert.DeserializeObject<SearchPager>(HttpContext.Session.GetString("SearchPager"));
 
             var books = JsonConvert.DeserializeObject<List<BookVM>>(HttpContext.Session.GetString("Books"));
-            books = _bookService.DoSort(books, sortModel.SortedProperty, sortModel.SortedOrder);
+
+            books = _bookService.DoSort(books, _sortModel.SortedProperty, _sortModel.SortedOrder);
 
             return View("Index", books);           
         }
 
-        private SortModel SetSortModel(string SortExpression)
+        private void InitSortModel()
         {
-            SortModel sortModel = new SortModel();
-            sortModel.AddColumn("title");
-            sortModel.AddColumn("price");
-            sortModel.AddColumn("authorfullname");
-            sortModel.AddColumn("rating");
-            sortModel.ApplySort(SortExpression);
-            return sortModel;
+            _sortModel.AddColumn("title", "title");
+            _sortModel.AddColumn("price", "price_desc");
+            _sortModel.AddColumn("authorfullname", "authorfullname");
+            _sortModel.AddColumn("rating", "rating_desc");
+            _sortModel.AddColumn("bestsellers", "bestsellers_desc");
+            _sortModel.AddColumn("novelties", "novelties_desc");
         }
 
-        private void SetIndexViewParametrs(SearchPager SearchPager, SortModel SortModel)
+        private void SetSortModel(string SortExpression)
         {
-            ViewData["SortModel"] = SortModel;
-            HttpContext.Session.SetString("SortModel", JsonConvert.SerializeObject(SortModel));
+            _sortModel.ApplySort(SortExpression);
+            ViewData["SortModel"] = _sortModel;
+        }
 
-            ViewData["SearchPager"] = SearchPager;
-            HttpContext.Session.SetString("SearchPager", JsonConvert.SerializeObject(SearchPager));
+        private void SetSearchPager(string action, string controler, string searchText)
+        {            
+            SearchPager searchPager = new SearchPager() { Action = action, Controler = controler, SearchText = searchText};
+            ViewData["SearchPager"] = searchPager;
+            HttpContext.Session.SetString("SearchPager", JsonConvert.SerializeObject(searchPager));
         }
     }
 }

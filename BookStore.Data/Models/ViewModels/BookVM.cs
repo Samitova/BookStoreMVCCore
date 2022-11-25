@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using BookStore.Data.Models.Attributes;
 
 namespace BookStore.Data.Models.ViewModels
 {
@@ -40,6 +41,7 @@ namespace BookStore.Data.Models.ViewModels
 
         [Required]
         [MaxLength(50), MinLength(2)]
+        [OrderKeyAttribute("title")]
         public string Title { get; set; }
 
         [Required]
@@ -51,14 +53,17 @@ namespace BookStore.Data.Models.ViewModels
         [DisplayName("Author")]
         [MaxLength(50)]
         [Required]
+        [OrderKey("authorfullname")]
         public string AuthorFullName { get; set; }
 
         public Genre Genre { get; set; }
 
         [Required]
+        [OrderKey("novelties")]
         public int YearOfIssue { get; set; }
 
         [Required]
+        [OrderKey("price")]
         public decimal Price { get; set; }
 
         [Required]
@@ -89,9 +94,12 @@ namespace BookStore.Data.Models.ViewModels
 
         [Required]
         [DisplayName("Quantaty")]
-        public int AvaliableQuantaty { get; set; } = 1;        
+        public int AvaliableQuantaty { get; set; } = 1;
+
+        [OrderKey("bestsellers")]
         public int SoldCopies { get; set; } = 0;
 
+        [OrderKey("rating")]
         public double RateValue { get; set; } = 0;
         public int RateCount { get; set; } = 0;
 

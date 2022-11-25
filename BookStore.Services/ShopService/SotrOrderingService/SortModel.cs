@@ -11,22 +11,27 @@ namespace BookStore.Services.ShopService.SotrOrderingService
     {
         [DataMember]
         public string SortedProperty { get; set; }
-
+ 
         [DataMember]
         public SortOrder SortedOrder { get; set; }
         
         [DataMember]
         private List<SortableColumn> SortableColumns = new List<SortableColumn>();
 
+        public SortModel()
+        {
+
+        }
+
         private string _upIcon = "fa-solid fa-caret-up";
         private string _downIcon = "fa-solid fa-caret-down";
 
-        public void AddColumn(string columnName, bool isDefaultColumn = false) 
+        public void AddColumn(string columnName, string sortOrderExpression, bool isDefaultColumn = false) 
         {
             SortableColumn checkColumn = this.SortableColumns.Where(c => c.ColumnName.ToLower() == columnName.ToLower()).SingleOrDefault();
             if (checkColumn == null)
             { 
-                SortableColumns.Add(new SortableColumn() { ColumnName = columnName });
+                SortableColumns.Add(new SortableColumn() { ColumnName = columnName, SortExpression = sortOrderExpression});
             }
 
             if (isDefaultColumn == true || SortableColumns.Count == 1)
@@ -55,18 +60,16 @@ namespace BookStore.Services.ShopService.SotrOrderingService
 
             foreach (SortableColumn sortableColumn in this.SortableColumns)
             {
-                sortableColumn.SortIcon = "";
-                sortableColumn.SortExpression = sortableColumn.ColumnName;
+                sortableColumn.SortIcon = "";                
 
                 if (sortExpression == sortableColumn.ColumnName.ToLower())
                 {
                     this.SortedOrder = SortOrder.Ascending;
-                    this.SortedProperty = sortableColumn.ColumnName;
+                    this.SortedProperty = sortableColumn.ColumnName;                    
                     sortableColumn.SortIcon = _downIcon;
                     sortableColumn.SortExpression = sortableColumn.ColumnName + "_desc";
                 }
-
-                if (sortExpression == sortableColumn.ColumnName.ToLower() + "_desc")
+                else if (sortExpression == sortableColumn.ColumnName.ToLower() + "_desc")
                 {
                     this.SortedOrder = SortOrder.Descending;
                     this.SortedProperty = sortableColumn.ColumnName;
@@ -81,6 +84,7 @@ namespace BookStore.Services.ShopService.SotrOrderingService
     {        
         public string ColumnName { get; set; }
         public string SortExpression { get; set; }
+
         public string SortIcon { get; set; }
     }
 }

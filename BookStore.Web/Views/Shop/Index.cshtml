@@ -144,11 +144,11 @@
                             <a asp-action="Index" asp-route-sortExpression="">ALL</a>
                         </li>
                         <li class="sort-item">
-                            <a asp-action="Filter" asp-route-sortExpression="bestsellers">BESTSELLERS</a>                            
+                            <a asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("bestsellers").SortExpression">BESTSELLERS</a>
                         </li>
                        
                         <li class="sort-item">
-                            <a asp-action="Filter" asp-route-sortExpression="novelties">NOVELTIES</a>
+                            <a asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("novelties").SortExpression">NOVELTIES</a>
                         </li>
 
                         <li class="sort-item">                            
@@ -176,10 +176,14 @@
                             Rating<i class="dropdown-icon @sortModel.GetColumn("rating").SortIcon" aria-hidden="true"></i>
                                 </a>
 
-                                <div class="dropdown-divider"></div>
-                                <a class=" dropdown-item" href="#">All</a>
-                                <a class=" dropdown-item" href="#">Bestsellers</a>
-                                <a class=" dropdown-item" href="#">Novelties</a>
+                                <div class="dropdown-divider"></div>                                
+                                <a class=" dropdown-item" asp-action="Index" asp-route-sortExpression="">All</a>
+                                <a class="dropdown-item" asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("bestsellers").SortExpression">
+                                    Bestsellers<i class="dropdown-icon @sortModel.GetColumn("bestsellers").SortIcon" aria-hidden="true"></i>
+                                </a>
+                                <a class="dropdown-item" asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("novelties").SortExpression">
+                                    Novelties<i class="dropdown-icon @sortModel.GetColumn("novelties").SortIcon" aria-hidden="true"></i>
+                                </a>                                
                                 <a class=" dropdown-item" href="#">Sales</a>
                             </div>
                     </div>
