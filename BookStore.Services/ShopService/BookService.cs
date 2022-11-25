@@ -1,4 +1,6 @@
-﻿using BookStore.Data.Models.ModelsDTO;
+﻿using AutoMapper;
+using BookStore.Data.Models.Attributes;
+using BookStore.Data.Models.ModelsDTO;
 using BookStore.Data.Models.ViewModels;
 using BookStore.Services.DataBaseService.Interfaces;
 using BookStore.Services.ShopService.SotrOrderingService;
@@ -7,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SortOrder = BookStore.Services.ShopService.SotrOrderingService.SortOrder;
@@ -16,9 +19,11 @@ namespace BookStore.Services.ShopService
     public class BookService
     {
         private readonly IRepositoryWrapper _repository;
-        public BookService(IRepositoryWrapper repositoryWrapper)
+        private readonly IMapper _mapper;
+        public BookService(IRepositoryWrapper repositoryWrapper, IMapper mapper)
         {
             _repository = repositoryWrapper;
+            _mapper = mapper;
         }
 
         internal bool IsIsbn(string isbn)
@@ -61,67 +66,36 @@ namespace BookStore.Services.ShopService
             }           
         }
 
-        public IEnumerable<BookDTO> GetAll(Expression<Func<BookDTO, bool>> filter = null,
-           Func<IQueryable<BookDTO>, IOrderedQueryable<BookDTO>> orderBy = null, string SearchText = "")
-        {
+        public IEnumerable<BookVM> GetAll(string sortProperty, SortOrder sortOrder, string SearchText = "")
+            {
+            List<BookDTO> books = new List<BookDTO>();
+
             if (string.IsNullOrEmpty(SearchText))
             {
-                return  _repository.Books.GetAll(filter, orderBy).ToList();
+                books = _repository.Books.GetAll().ToList();
             }
             else
             {
-                return GetAllBySearchText(SearchText).ToList();
-            }  
+                books = GetAllBySearchText(SearchText).ToList();
+            }
+
+            var result = _mapper.Map<IEnumerable<BookVM>>(books).ToList();
+            return DoSort(result, sortProperty, sortOrder).ToList();
         }
 
         public List<BookVM> DoSort(List<BookVM> books, string sortProperty, SortOrder sortOrder)
         {
-            if (sortProperty.ToLower() == "title")
+            Type type = typeof(BookVM);
+            foreach (PropertyInfo prop in type.GetProperties())
             {
-                if (sortOrder == SortOrder.Ascending)
+                if (prop.GetCustomAttribute<OrderKeyAttribute>()?.Key == sortProperty)
                 {
-                    books = books.OrderBy(y => y.Title).ToList();
-                }
-                else
-                {
-                    books = books.OrderByDescending(y => y.Title).ToList();
+                    return sortOrder == SortOrder.Ascending ? books.OrderBy(prop.GetValue).ToList() 
+                                                            : books.OrderByDescending(prop.GetValue).ToList();
                 }
             }
-            if (sortProperty.ToLower() == "authorfullname")
-            {
-                if (sortOrder == SortOrder.Ascending)
-                {
-                    books = books.OrderBy(y => y.AuthorFullName).ToList();
-                }
-                else
-                {
-                    books = books.OrderByDescending(y => y.AuthorFullName).ToList();
-                }
-            }
-            if (sortProperty.ToLower() == "rating")
-            {
-                if (sortOrder == SortOrder.Ascending)
-                {
-                    books = books.OrderBy(y => y.RateValue).ToList();
-                }
-                else
-                {
-                    books = books.OrderByDescending(y => y.RateValue).ToList();
-                }
-            }
-            if (sortProperty.ToLower() == "price")
-            {
-                if (sortOrder == SortOrder.Ascending)
-                {
-                    books = books.OrderBy(y => y.Price).ToList();
-                }
-                else
-                {
-                    books = books.OrderByDescending(y => y.Price).ToList();
-                }
-            }
-            return books;
-        }
 
+            return books;           
+        }
     }
 }

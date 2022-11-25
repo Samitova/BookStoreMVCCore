@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookStore.Data.Models.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,7 +12,7 @@ namespace BookStore.Data.Models.ModelsDTO
     {
         #region Properties
         [Required]
-        [MaxLength(50), MinLength(2)]
+        [MaxLength(50), MinLength(2)]       
         public string Title { get; set; }
 
         [Required]
@@ -41,7 +42,7 @@ namespace BookStore.Data.Models.ModelsDTO
         [Required]
         public int YearOfIssue { get; set; }
 
-        [Required]
+        [Required]        
         public decimal Price { get; set; }
        
         [Required]
