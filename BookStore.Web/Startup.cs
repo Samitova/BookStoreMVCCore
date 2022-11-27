@@ -35,8 +35,8 @@ namespace BookStore.Web
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();            
-            services.AddScoped<BookService>();
-            services.AddScoped<SortModel>();
+            services.AddScoped<BookService>();          
+            services.AddScoped<NavigationService>();
 
 
             services.AddAutoMapper(typeof(Startup));

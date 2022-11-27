@@ -1,7 +1,7 @@
-﻿@using BookStore.Web.Views.Shared.Components.SearchBar
+﻿@using BookStore.Services.ShopService
 
-@{
-    SearchPager searchBar = (SearchPager)ViewData["SearchBar"];
+@{    
+    NavigationService navigationService = (NavigationService)ViewData["NavigationService"];
 }
 
 <!DOCTYPE html>
@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="col pl-md-4 p-md-2 p-lg-4 d-flex justify-content-md-start justify-content-center  justify-content-lg-center">
-                        <vc:search-bar search-pager="@searchBar"></vc:search-bar>
+                        <partial name="_SearchBarPartial" model="@navigationService" />
                     </div>
 
                     <div class="col-md-auto bg-dark  p-md-2 pr-md-4  p-lg-4 d-flex justify-content-center">
