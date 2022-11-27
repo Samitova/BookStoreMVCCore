@@ -103,7 +103,8 @@ body {
 }
 
 .main-content {
-    min-height: 100vh;  
+    min-height: 100vh; 
+    width:100%;
 }
 
 .sidebar-filter li.active {
@@ -515,4 +516,50 @@ hr.a-color {
 .dropdown-icon {
     float: right;
     margin-right: 5px;
+}
+/*_________________________________________________________________*/
+.paging-item-link,
+.paging-item li,
+.paging-item p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #343a40;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding-top: 3px;
+    padding-inline: 15px;
+}
+
+#pageSelector {
+    font-size: 20px;
+    color: #343a40;
+    width: 60px;
+    height: 100%;
+    background: #fff;
+    border: none;
+    padding-top: 1px;
+    padding-left: 5px;
+}
+
+.paging-item-link:hover {
+    background: #343a40;
+    color: #fff;
+    text-decoration: none;
+}
+
+.paging-item.active .paging-item-link {    
+    color: #fff;
+    background: #343a40;
+    color: #fff;   
+}
+
+.paging-item {
+    height: 40px;    
+    border-radius: 5px 5px 5px 5px;
+    border: 2px solid #343a40;  
+    text-align: center;    
+    margin-top:10px;
+    margin-right:2px;
 }

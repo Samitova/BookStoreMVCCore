@@ -29,7 +29,7 @@ namespace BookStore.Services.DataBaseService.Repositories
      
         public void Add(T entity)
         {
-            Context.Set<T>().Add(entity);
+            Context.Set<T>().Add(entity);            
         }
 
         public void Update(T entity)

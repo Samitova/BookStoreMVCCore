@@ -3,8 +3,11 @@ using BookStore.Data.Models.Attributes;
 using BookStore.Data.Models.ModelsDTO;
 using BookStore.Data.Models.ViewModels;
 using BookStore.Services.DataBaseService.Interfaces;
+using BookStore.Services.ShopService.PaginationService;
 using BookStore.Services.ShopService.SotrOrderingService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +15,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Reflection.Metadata.BlobBuilder;
 using SortOrder = BookStore.Services.ShopService.SotrOrderingService.SortOrder;
 
 namespace BookStore.Services.ShopService
@@ -66,21 +70,41 @@ namespace BookStore.Services.ShopService
             }           
         }
 
-        public IEnumerable<BookVM> GetAll(string sortProperty, SortOrder sortOrder, string SearchText = "")
-            {
-            List<BookDTO> books = new List<BookDTO>();
+        public List<BookVM> GetAllFromDb(string SearchText = "")
+        {
+            List<BookDTO> booksDto = new List<BookDTO>();
 
             if (string.IsNullOrEmpty(SearchText))
             {
-                books = _repository.Books.GetAll().ToList();
+                booksDto = _repository.Books.GetAll().ToList();
             }
             else
             {
-                books = GetAllBySearchText(SearchText).ToList();
+                booksDto = GetAllBySearchText(SearchText).ToList();
             }
 
-            var result = _mapper.Map<IEnumerable<BookVM>>(books).ToList();
-            return DoSort(result, sortProperty, sortOrder).ToList();
+            return _mapper.Map<IEnumerable<BookVM>>(booksDto).ToList();
+        }
+
+
+        public PaginatedList<BookVM> GetAll(string sortProperty, SortOrder sortOrder, string SearchText = "",
+                                          int pageIndex = 1, int pageSize = 3)
+        {
+            List<BookDTO> booksDto = new List<BookDTO>();
+
+            if (string.IsNullOrEmpty(SearchText))
+            {
+                booksDto = _repository.Books.GetAll().ToList();
+            }
+            else
+            {
+                booksDto = GetAllBySearchText(SearchText).ToList();
+            }
+
+            var booksVm = _mapper.Map<IEnumerable<BookVM>>(booksDto).ToList();
+            booksVm = DoSort(booksVm, sortProperty, sortOrder);
+
+            return new PaginatedList<BookVM>(booksVm, pageIndex, pageSize);
         }
 
         public List<BookVM> DoSort(List<BookVM> books, string sortProperty, SortOrder sortOrder)

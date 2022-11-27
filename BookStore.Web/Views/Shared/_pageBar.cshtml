@@ -1,0 +1,88 @@
+﻿@using BookStore.Services.ShopService.PaginationService
+@model PaginationModel
+
+<div class="paging-item ml-5 d-none d-lg-block">
+    <p class="">Showing @Model.StartRecord - @Model.EndRecord of @Model.TotalItems books</p>
+</div>
+
+<div class="d-none d-md-block"> 
+    <ul class="paging-item">
+        <li class="d-inline">
+            <span class="">Books Per Page</span>
+        </li>
+        <li class="d-inline">
+            <select class="" id="pageSelector" asp-items="@Model.GetPaginationSize()" onchange="ChangePageSize(this)"></select>
+        </li>
+    </ul>
+</div>
+
+<div class="ml-md-5">
+    <ul class="pagination mr-5">
+
+        @if (Model.CurrentPage > 1)
+        {
+            <li class="paging-item">
+                <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="1"
+               asp-route-pagesize="@Model.PageSize" asp-route-serchtext="@Model.SearchText"
+               asp-route-sortexpression="@Model.SortExpression" asp-route-searchtext="@Model.SearchText">
+                    First
+                </a>
+            </li>
+            <li class="paging-item">
+                <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@(Model.CurrentPage-1)"
+               asp-route-pagesize="@Model.PageSize" asp-route-serchtext="@Model.SearchText"
+               asp-route-sortexpression="@Model.SortExpression" asp-route-searchtext="@Model.SearchText">
+                    Previous
+                </a>
+            </li>
+        }
+
+        @for (var pg = Model.StartPage; pg <= Model.EndPage; pg++)
+        {
+            <li class="paging-item @(pg == Model.CurrentPage ? "active" : "")">
+                @if (pg != Model.CurrentPage)
+                {
+                    <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@pg"
+               asp-route-pagesize="@Model.PageSize" asp-route-serchtext="@Model.SearchText"
+               asp-route-sortexpression="@Model.SortExpression" asp-route-searchtext="@Model.SearchText">
+                        @pg
+                    </a>
+                }
+                else
+                {
+                    <span class="paging-item-link">@pg</span>
+                }
+            </li>
+        }
+
+        @if (Model.CurrentPage < Model.TotalPages)
+        {
+            <li class="paging-item">
+                <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@(Model.CurrentPage+1)"
+               asp-route-pagesize="@Model.PageSize" asp-route-serchtext="@Model.SearchText"
+               asp-route-sortexpression="@Model.SortExpression" asp-route-searchtext="@Model.SearchText">
+                    Next
+                </a>
+            </li>
+            <li class="paging-item">
+                <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@Model.TotalPages"
+               asp-route-pagesize="@Model.PageSize" asp-route-serchtext="@Model.SearchText"
+               asp-route-sortexpression="@Model.SortExpression" asp-route-searchtext="@Model.SearchText">
+                    Last
+                </a>
+            </li>
+        }
+    </ul>
+</div>
+
+
+<script>
+    function ChangePageSize(obj)
+    {
+        var controllerName = '@this.ViewContext.RouteData.Values["controller"].ToString()';
+        window.location.href = "/" + controllerName + "/@Model.Action" + "?pageSize=" + obj.value 
+                               + "&SerchText=" + "@Model.SearchText"+"&SortExpression=" + "@Model.SortExpression";
+    }
+</script>
+
+

@@ -9,22 +9,25 @@ namespace BookStore.Services.ShopService.SotrOrderingService
     [DataContract]
     public class SortModel
     {
+        private string _upIcon = "fa-solid fa-caret-up";
+        private string _downIcon = "fa-solid fa-caret-down";
+
         [DataMember]
         public string SortedProperty { get; set; }
  
         [DataMember]
         public SortOrder SortedOrder { get; set; }
-        
+
+        [DataMember]
+        public string SortExpression { get; set; }
+
         [DataMember]
         private List<SortableColumn> SortableColumns = new List<SortableColumn>();
 
         public SortModel()
         {
 
-        }
-
-        private string _upIcon = "fa-solid fa-caret-up";
-        private string _downIcon = "fa-solid fa-caret-down";
+        }      
 
         public void AddColumn(string columnName, string sortOrderExpression, bool isDefaultColumn = false) 
         {
@@ -53,10 +56,12 @@ namespace BookStore.Services.ShopService.SotrOrderingService
 
         public void ApplySort(string sortExpression)
         {
-            if (sortExpression == "")
+            if (string.IsNullOrEmpty(sortExpression))
             {
                 sortExpression = this.SortedProperty.ToLower();
             }
+
+            SortExpression = sortExpression;
 
             foreach (SortableColumn sortableColumn in this.SortableColumns)
             {
@@ -84,7 +89,6 @@ namespace BookStore.Services.ShopService.SotrOrderingService
     {        
         public string ColumnName { get; set; }
         public string SortExpression { get; set; }
-
         public string SortIcon { get; set; }
     }
 }
