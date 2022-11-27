@@ -1,9 +1,11 @@
 ﻿@using BookStore.Services.ShopService.SotrOrderingService
+@using BookStore.Services.ShopService.PaginationService
 @model IEnumerable<BookStore.Data.Models.ViewModels.BookVM>
 
 @{
     ViewData["Title"] = "Books";
-    SortModel sortModel = (SortModel)ViewData["SortModel"];   
+    SortModel sortModel = (SortModel)ViewData["SortModel"];
+    PaginationModel paginationModel = ViewBag.Pagination;
 }
 
 <div class="container-fluid">
@@ -134,7 +136,7 @@
         </ul>
     </div>
 
-    <div class="main-content">
+    <div class="main-content ">
 
        <div class="sort-table-wrapper ml-1">
             <nav class="navbar navbar-expand-lg  justify-content-end">        
@@ -156,81 +158,53 @@
                         </li>
                     </ul>
 
-                    </div>   
-                    <div class="dropdown my-2 my-lg-0" id="sort-dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                </div>   
+                <div class="dropdown my-2 my-lg-0" id="sort-dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 SORTING
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                                <a class="dropdown-item" asp-action="Order" asp-route-sortExpression="@sortModel.GetColumn("title").SortExpression">
-                                    Title<i class="dropdown-icon @sortModel.GetColumn("title").SortIcon" aria-hidden="true"></i>
-                                </a>
-                                <a class="dropdown-item" asp-action="Order" asp-route-sortExpression="@sortModel.GetColumn("price").SortExpression">
-                                    Price <i class="dropdown-icon @sortModel.GetColumn("price").SortIcon" aria-hidden="true"></i>
-                                </a>
-                                <a class="dropdown-item" asp-action="Order" asp-route-sortExpression="@sortModel.GetColumn("authorfullname").SortExpression">
-                                    Author<i class="dropdown-icon @sortModel.GetColumn("authorfullname").SortIcon" aria-hidden="true"></i>
-                                </a>
-                                <a class="dropdown-item" asp-action="Order" asp-route-sortExpression="@sortModel.GetColumn("rating").SortExpression">
-                            Rating<i class="dropdown-icon @sortModel.GetColumn("rating").SortIcon" aria-hidden="true"></i>
-                                </a>
-
-                                <div class="dropdown-divider"></div>                                
-                                <a class=" dropdown-item" asp-action="Index" asp-route-sortExpression="">All</a>
-                                <a class="dropdown-item" asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("bestsellers").SortExpression">
-                                    Bestsellers<i class="dropdown-icon @sortModel.GetColumn("bestsellers").SortIcon" aria-hidden="true"></i>
-                                </a>
-                                <a class="dropdown-item" asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("novelties").SortExpression">
-                                    Novelties<i class="dropdown-icon @sortModel.GetColumn("novelties").SortIcon" aria-hidden="true"></i>
-                                </a>                                
-                                <a class=" dropdown-item" href="#">Sales</a>
-                            </div>
+                          <a class="dropdown-item" asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("title").SortExpression"
+                                                   asp-route-searchtext="@paginationModel.SearchText">
+                               Title<i class="dropdown-icon @sortModel.GetColumn("title").SortIcon" aria-hidden="true"></i>
+                          </a>
+                        <a class="dropdown-item" asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("price").SortExpression"
+                                                 asp-route-searchtext="@paginationModel.SearchText">
+                               Price <i class="dropdown-icon @sortModel.GetColumn("price").SortIcon" aria-hidden="true"></i>
+                          </a>
+                        <a class="dropdown-item" asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("authorfullname").SortExpression"
+                                                 asp-route-searchtext="@paginationModel.SearchText">
+                               Author<i class="dropdown-icon @sortModel.GetColumn("authorfullname").SortIcon" aria-hidden="true"></i>
+                          </a>
+                        <a class="dropdown-item" asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("rating").SortExpression"
+                                                 asp-route-searchtext="@paginationModel.SearchText">
+                               Rating<i class="dropdown-icon @sortModel.GetColumn("rating").SortIcon" aria-hidden="true"></i>
+                          </a>
+                          <div class="dropdown-divider"></div>                                
+                          <a class=" dropdown-item" asp-action="Index" asp-route-sortExpression="">All</a>
+                          <a class="dropdown-item" asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("bestsellers").SortExpression">
+                               Bestsellers<i class="dropdown-icon @sortModel.GetColumn("bestsellers").SortIcon" aria-hidden="true"></i>
+                          </a>
+                          <a class="dropdown-item" asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("novelties").SortExpression">
+                               Novelties<i class="dropdown-icon @sortModel.GetColumn("novelties").SortIcon" aria-hidden="true"></i>
+                          </a>                                
+                          <a class=" dropdown-item" href="#">Sales</a>
                     </div>
+                </div>
             </nav>
         </div>
-          @* <div class="col-9 d-none d-lg-block navbar-expand-md bg-success">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col d-flex justify-content-end">               
-                 <ul class="">
-                     <li class="nav-item dropdown" id="sort-dropdown">
-                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Sorting
-                         </a>
-                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                             <div>
-                                <i class="@sortModel.GetColumn("title").SortIcon" aria-hidden="true"></i>
-                                <a asp-action="Order" asp-route-sortExpression="@sortModel.GetColumn("title").SortExpression">Title</a>
-                             </div>
-                             <div>
-                                 <i class="@sortModel.GetColumn("price").SortIcon" aria-hidden="true"></i>
-                                 <a asp-action="Order" asp-route-sortExpression="@sortModel.GetColumn("price").SortExpression">Price</a>
-                             </div>
-                             <div>
-                                 <i class="@sortModel.GetColumn("authorfullname").SortIcon" aria-hidden="true"></i>
-                                 <a asp-action="Order" asp-route-sortExpression="@sortModel.GetColumn("authorfullname").SortExpression">Author</a>
-                             </div>
-                         </div>
-                     </li>
-                 </ul>
-               
-            </div>*@
-       
-
+                
         <div class="row  ml-1">
             @foreach (var item in Model)
             {              
                 <partial name="_DisplayBooksPartial" model="item" />
             }
         </div>
-    </div>
+
+        <div class="row ml-1 justify-content-lg-between justify-content-center">
+            <partial name="_PageBar" model="@paginationModel"/>
+        </div>
+    </div>    
 </div>
 

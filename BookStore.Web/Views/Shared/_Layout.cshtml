@@ -1,7 +1,7 @@
 ﻿@using BookStore.Web.Views.Shared.Components.SearchBar
 
 @{
-    SearchPager searchPager = (SearchPager)ViewData["SearchPager"];
+    SearchPager searchBar = (SearchPager)ViewData["SearchBar"];
 }
 
 <!DOCTYPE html>
@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="col pl-md-4 p-md-2 p-lg-4 d-flex justify-content-md-start justify-content-center  justify-content-lg-center">
-                        <vc:search-bar search-pager="@searchPager"></vc:search-bar>
+                        <vc:search-bar search-pager="@searchBar"></vc:search-bar>
                     </div>
 
                     <div class="col-md-auto bg-dark  p-md-2 pr-md-4  p-lg-4 d-flex justify-content-center">
