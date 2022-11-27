@@ -86,27 +86,6 @@ namespace BookStore.Services.ShopService
             return _mapper.Map<IEnumerable<BookVM>>(booksDto).ToList();
         }
 
-
-        public PaginatedList<BookVM> GetAll(string sortProperty, SortOrder sortOrder, string SearchText = "",
-                                          int pageIndex = 1, int pageSize = 3)
-        {
-            List<BookDTO> booksDto = new List<BookDTO>();
-
-            if (string.IsNullOrEmpty(SearchText))
-            {
-                booksDto = _repository.Books.GetAll().ToList();
-            }
-            else
-            {
-                booksDto = GetAllBySearchText(SearchText).ToList();
-            }
-
-            var booksVm = _mapper.Map<IEnumerable<BookVM>>(booksDto).ToList();
-            booksVm = DoSort(booksVm, sortProperty, sortOrder);
-
-            return new PaginatedList<BookVM>(booksVm, pageIndex, pageSize);
-        }
-
         public List<BookVM> DoSort(List<BookVM> books, string sortProperty, SortOrder sortOrder)
         {
             Type type = typeof(BookVM);

@@ -10,6 +10,7 @@ namespace BookStore.Services.ShopService.PaginationService
         public int TotalItems { get; private set; }
         public int TotalPages { get; private set; }
         public int PageSize { get; private set; }
+        public int PageStep { get; private set; } = 5;
         public int CurrentPage { get; private set; }
         public int StartPage { get; private set; }
         public int EndPage { get; private set; }
@@ -64,15 +65,15 @@ namespace BookStore.Services.ShopService.PaginationService
 
         public List<SelectListItem> GetPaginationSize()
         {
-            List<SelectListItem> pageSize = new List<SelectListItem>();
-            for (int lp = 2; lp < 20; lp += 2)
+            List<SelectListItem> pageSizeItem = new List<SelectListItem>();
+            for (int lp = PageStep; lp < 20; lp += PageStep)
             {
                 if (lp == this.PageSize)                 
-                    pageSize.Add(new SelectListItem(lp.ToString(), lp.ToString(), true));                
+                    pageSizeItem.Add(new SelectListItem(lp.ToString(), lp.ToString(), true));                
                 else
-                    pageSize.Add(new SelectListItem(lp.ToString(), lp.ToString()));
+                    pageSizeItem.Add(new SelectListItem(lp.ToString(), lp.ToString()));
             }
-            return pageSize;
+            return pageSizeItem;
         }
     }
 }
