@@ -100,5 +100,11 @@ namespace BookStore.Services.ShopService
 
             return books;           
         }
+
+        public BookVM GetBookById(int id) 
+        {
+            BookDTO book = _repository.Books.GetById(id);
+            return _mapper.Map<BookVM>(book);
+        }
     }
 }

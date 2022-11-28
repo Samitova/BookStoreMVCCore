@@ -1,5 +1,7 @@
-﻿using BookStore.Data.Models.ViewModels;
+﻿using BookStore.Data.Models.ModelsDTO;
+using BookStore.Data.Models.ViewModels;
 using BookStore.Services.DataBaseService.Interfaces;
+using BookStore.Services.DataBaseService.Repositories;
 using BookStore.Services.ShopService;
 using BookStore.Services.ShopService.PaginationService;
 using Microsoft.AspNetCore.Http;
@@ -12,11 +14,11 @@ namespace BookStore.Web.Controllers
 {
     public class ShopController : Controller
     {              
-        private readonly BookService _bookService;
+        private readonly BookService _bookService;        
         private readonly NavigationService _navigationService;
 
-        public ShopController( BookService bookService, NavigationService navigationService)
-        {                        
+        public ShopController(BookService bookService, NavigationService navigationService)
+        {   
             _bookService = bookService;
             _navigationService = navigationService;
         }      
@@ -57,6 +59,16 @@ namespace BookStore.Web.Controllers
            
             ViewData["NavigationService"] = _navigationService;
             return View(_navigationService.PagedBooks);
-        }  
+        }
+
+
+        public IActionResult BookDetails(int id) 
+        {
+            _navigationService.SetSearchBar("");
+            ViewData["NavigationService"] = _navigationService;
+
+            BookVM book = _bookService.GetBookById(id);
+            return View(book);
+        }
     }
 }
