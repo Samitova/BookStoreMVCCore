@@ -340,28 +340,28 @@ hr.a-color {
 .card-author {
     text-decoration-line: underline;
     color: #000;
-    font-size: 18px;
+    font-size: 20px;
     padding-bottom: 40px;
 }
 
 .price-item-base {
     text-decoration: line-through;
-    font-size: 16px;
-    color: #94782e;
-    padding-right: 15px;    
+    font-size: 26px;
+    color: #c39d1d;
+    padding-right: 15px;
 }
 
 .price-item-main {
     text-decoration: none;
     font-size: 28px;
-    font-weight:bold;   
-    margin-bottom:20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    
 }
 
-.price-item-main div {
-    display: inline;
+.prices-box {
+    display: inline;    
 }
-
 
 .card-body a:hover {
     color: #94782e;
@@ -380,8 +380,8 @@ hr.a-color {
 }
 
 .rating-box {
-    padding-top: 40px;
-    font-size:18px;    
+    padding-top: 20px;    
+    font-size: 20px;
 }
 
 .rating-box div{
@@ -389,13 +389,13 @@ hr.a-color {
 }
 
 .availiable-quantaty {
-    margin-top:10px;
-    margin-bottom:10px;
+    margin-top:20px;
+    margin-bottom:20px;
     padding-top:7px;
     color: #fff;       
     width:200px;
     height:40px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     background: #375c5c;
     border-radius: 25px 25px 25px 25px;
@@ -404,7 +404,7 @@ hr.a-color {
 }
 
 .add-to-cart-btn {
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 30px;
     padding-top: 15px;
     color: #fff;
@@ -562,4 +562,32 @@ hr.a-color {
     text-align: center;    
     margin-top:10px;
     margin-right:2px;
+}
+/*--------------------------------------------------------------*/
+.book-wrapper {
+   padding-top:60px;
+}
+.book-deteils-title {
+    font-size: 40px;
+    font-weight:bold;
+    display:block;
+    width:100%;
+    text-align:center;  
+    
+}
+
+.book-deteils-link {    
+    font-size: 22px;
+    font-weight: bold;
+    color: #c39d1d;
+}
+
+.book-deteils-link:hover {
+    color: #e2c76f;
+    text-decoration: none;
+}
+
+.book-deteils-item {
+    font-size:22px;
+    font-weight:bold;
 }

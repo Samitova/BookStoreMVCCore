@@ -4,16 +4,16 @@
     var photoPath = $"/pictures/uploads/books/{Model.Id}/thumbs/{Model.PhotoPath ?? "noimage.png"}";
  }
 
-<div class="col card-wrapper">
+<div class="col card-wrapper">    
     <div class="card">
         <img src="@photoPath" class="card-img-top imageThumbnail" alt="" asp-append-version="true">
 
         <div class="card-body">
             <div>
-                <a class="card-title" href="#">@Model.Title</a><br />
+                <a class="card-title" asp-action="BookDetails" asp-route-id="@Model.Id">@Model.Title</a><br />
             </div>
             <div>
-                <a class="card-author " href="#">@Model.AuthorFullName</a>
+                <a class="card-author" asp-action="AuthorDetails" asp-route-id="@Model.AuthorId">@Model.AuthorFullName</a>                
             </div>
             <div class="rating-box">
                 <div class="rating-value">@Model.RateValue</div>
@@ -28,6 +28,6 @@
             </div>
 
             <div class="add-to-cart-btn">ADD TO CART</div>
-        </div>
+        </div>       
     </div>
 </div>

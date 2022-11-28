@@ -2,7 +2,7 @@
 
 <div class="search-container">
     <form method="get" class="search-bar " asp-controller="@Model.SearchBar.Controler" asp-action="@Model.SearchBar.Action">
-        <input type="hidden" name="PageSize" value="@Model.PaginationModel.PageSize" />                                           
+        <input type="hidden" name="PageSize" value="@Model.PaginationModel?.PageSize" />                                           
         <input class="input-search" type="search" name="SearchText" value="@Model.SearchBar.SearchText" placeholder="Search..." aria-label="Search">
         <button type="submit">
             <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i> </span>
