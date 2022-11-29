@@ -9,6 +9,9 @@ namespace BookStore.Web.Services
         public MappingProfile()
         {
             CreateMap<BookDTO, BookVM>();
+            CreateMap<BookVM, BookDTO>();
+            CreateMap<AuthorDTO, AuthorVM>();
+            CreateMap<AuthorVM, AuthorDTO>();
         }
     }
 }

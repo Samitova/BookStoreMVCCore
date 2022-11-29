@@ -13,32 +13,7 @@ namespace BookStore.Data.Models.ViewModels
     {
         public BookVM()
         { }
-        public BookVM(BookDTO book)
-        {
-            Id = book.Id;
-            Title = book.Title;
-            ISBN = book.ISBN;
-            AuthorId = book.AuthorId;
-            AuthorFullName = book.AuthorFullName;
-            Genre = book.Genre; 
-            YearOfIssue = book.YearOfIssue; 
-            Price = book.Price; 
-            PublisherId = book.PublisherId; 
-            PublisherName = book.PublisherName; 
-            AvaliableQuantaty = book.AvaliableQuantaty;
-            NumberOfPage = book.NumberOfPage;   
-            Annotation = book.Annotation;   
-            CoverType = book.CoverType; 
-            PhotoPath = book.PhotoPath;
-            CategoryId = book.CategoryId;
-            CategoryName = book.CategoryName;
-            SoldCopies = book.SoldCopies;
-            RateCount = book.RateCount;
-            RateValue = book.RateValue;
-            Timestamp = book.Timestamp;
-        }
-
-
+      
         [Required]
         [MaxLength(50), MinLength(2)]
         [OrderKeyAttribute("title")]

@@ -3,28 +3,23 @@ using BookStore.Data.Models.Attributes;
 using BookStore.Data.Models.ModelsDTO;
 using BookStore.Data.Models.ViewModels;
 using BookStore.Services.DataBaseService.Interfaces;
-using BookStore.Services.ShopService.PaginationService;
-using BookStore.Services.ShopService.SotrOrderingService;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Data.SqlClient;
-using Newtonsoft.Json;
+using BookStore.Services.ShopService.SortingService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Reflection.Metadata.BlobBuilder;
-using SortOrder = BookStore.Services.ShopService.SotrOrderingService.SortOrder;
+using SortOrder = BookStore.Services.ShopService.SortingService.SortOrder;
 
 namespace BookStore.Services.ShopService
 {
-    public class BookService
+    public class ShopService
     {
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
-        public BookService(IRepositoryWrapper repositoryWrapper, IMapper mapper)
+        public ShopService(IRepositoryWrapper repositoryWrapper, IMapper mapper)
         {
             _repository = repositoryWrapper;
             _mapper = mapper;
@@ -70,9 +65,9 @@ namespace BookStore.Services.ShopService
             }           
         }
 
-        public List<BookVM> GetAllFromDb(string SearchText = "")
+        public List<BookVM> GetAllBooksFromDb(string SearchText = "")
         {
-            List<BookDTO> booksDto = new List<BookDTO>();
+            List<BookDTO> booksDto = new List<BookDTO>();            
 
             if (string.IsNullOrEmpty(SearchText))
             {
@@ -81,8 +76,7 @@ namespace BookStore.Services.ShopService
             else
             {
                 booksDto = GetAllBySearchText(SearchText).ToList();
-            }
-
+            }           
             return _mapper.Map<IEnumerable<BookVM>>(booksDto).ToList();
         }
 
@@ -97,7 +91,6 @@ namespace BookStore.Services.ShopService
                                                             : books.OrderByDescending(prop.GetValue).ToList();
                 }
             }
-
             return books;           
         }
 
@@ -105,6 +98,14 @@ namespace BookStore.Services.ShopService
         {
             BookDTO book = _repository.Books.GetById(id);
             return _mapper.Map<BookVM>(book);
+        }
+
+        public AuthorVM GetAuthor(int id, SortModel sortModel)
+        {
+            AuthorDTO authorDto = _repository.Authors.GetAuthorById(id);
+            AuthorVM author = _mapper.Map<AuthorVM>(authorDto);
+            author.Books = DoSort(author.Books, sortModel.SortedProperty, sortModel.SortedOrder);
+            return author;
         }
     }
 }

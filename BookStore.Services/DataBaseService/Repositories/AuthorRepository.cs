@@ -4,6 +4,7 @@ using BookStore.Services.DataBaseService.Context;
 using BookStore.Services.DataBaseService.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BookStore.Services.DataBaseService.Repositories
@@ -14,5 +15,10 @@ namespace BookStore.Services.DataBaseService.Repositories
         public AuthorRepository(BookStoreContext context) : base(context)
         { }
 
+        public AuthorDTO GetAuthorById(int id)
+        {
+            AuthorDTO authorDTO = GetAll(filter: x => x.Id == id, includeProperties: "Books").FirstOrDefault();
+            return authorDTO;
+        }
     }
 }

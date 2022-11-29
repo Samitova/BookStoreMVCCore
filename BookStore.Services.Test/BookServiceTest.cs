@@ -12,7 +12,7 @@ namespace BookStore.Services.Test
 {
     public class BookServiceTest
     {
-        private readonly BookService _bookService;
+        private readonly ShopService.ShopService _bookService;
         private readonly Mock<IRepositoryWrapper> _bookRepositoryStub;
         public BookServiceTest()
         {
