@@ -13,10 +13,6 @@ namespace BookStore.Data.Models.ModelsDTO
         [MaxLength(50)]
         public string PhotoPath { get; set; }
         public string Biography { get; set; }
-
-        public double RateValue { get; set; } = 0;
-        public int RateCount { get; set; } = 0;
-
         public List<BookDTO>  Books { get; set; }
     }
 }

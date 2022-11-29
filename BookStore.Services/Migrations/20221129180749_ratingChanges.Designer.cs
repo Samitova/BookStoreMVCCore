@@ -4,14 +4,16 @@ using BookStore.Services.DataBaseService.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookStore.Services.Migrations
 {
     [DbContext(typeof(BookStoreContext))]
-    partial class BookStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20221129180749_ratingChanges")]
+    partial class ratingChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,6 +40,12 @@ namespace BookStore.Services.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("RateCount")
+                        .HasColumnType("int");
+
+                    b.Property<double>("RateValue")
+                        .HasColumnType("float");
+
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -46,38 +54,6 @@ namespace BookStore.Services.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
-                });
-
-            modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.BookCommentDTO", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PublishedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("BookComments");
                 });
 
             modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.BookDTO", b =>
@@ -136,6 +112,12 @@ namespace BookStore.Services.Migrations
                     b.Property<string>("PublisherName")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("RateCount")
+                        .HasColumnType("int");
+
+                    b.Property<double>("RateValue")
+                        .HasColumnType("float");
 
                     b.Property<int>("SoldCopies")
                         .HasColumnType("int");
@@ -214,17 +196,6 @@ namespace BookStore.Services.Migrations
                     b.ToTable("Publishers");
                 });
 
-            modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.BookCommentDTO", b =>
-                {
-                    b.HasOne("BookStore.Data.Models.ModelsDTO.BookDTO", "Book")
-                        .WithMany("Comments")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-                });
-
             modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.BookDTO", b =>
                 {
                     b.HasOne("BookStore.Data.Models.ModelsDTO.AuthorDTO", "Author")
@@ -255,11 +226,6 @@ namespace BookStore.Services.Migrations
             modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.AuthorDTO", b =>
                 {
                     b.Navigation("Books");
-                });
-
-            modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.BookDTO", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

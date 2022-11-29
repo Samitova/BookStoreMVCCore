@@ -33,7 +33,7 @@ namespace BookStore.Services.Test
             _bookRepositoryStub.Setup(x => x.Books.SearchByIsbnAsync(It.IsAny<string>())).ReturnsAsync(booksForIsbn);
             _bookRepositoryStub.Setup(x => x.Books.SearchByTitleAndAuthorAsync(It.IsAny<string>())).ReturnsAsync(booksForTitle);
 
-            _bookService = new BookService(_bookRepositoryStub.Object);
+            //_bookService = new ShopService(_bookRepositoryStub.Object);
         }
 
         [Fact]
