@@ -15,7 +15,7 @@
              
             <div class="row">
                 <div class="col-md">
-                    <p class="book-deteils-item">Author: <a class="book-deteils-link" asp-route-id="@Model.AuthorId">@Model.AuthorFullName </a></p>
+                    <p class="book-deteils-item">Author: <a class="book-deteils-link" asp-action="AuthorDetails" asp-route-id="@Model.AuthorId">@Model.AuthorFullName </a></p>
                     <p class="book-deteils-item">Publisher:<a class="book-deteils-link" asp-route-id="@Model.PublisherId"> @Model.PublisherName</a></p>
                     <p class="book-deteils-item">Year Of Issue: @Model.YearOfIssue</p>
                     <p class="book-deteils-item">ISBN: @Model.ISBN</p>

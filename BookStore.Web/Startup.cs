@@ -3,7 +3,6 @@ using BookStore.Services.DataBaseService.Context;
 using BookStore.Services.DataBaseService.Interfaces;
 using BookStore.Services.DataBaseService.Repositories;
 using BookStore.Services.ShopService;
-using BookStore.Services.ShopService.SotrOrderingService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,9 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BookStore.Web
 {
@@ -35,10 +31,7 @@ namespace BookStore.Web
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();            
-            services.AddScoped<BookService>();          
-            services.AddScoped<NavigationService>();
-
-
+            services.AddScoped<ShopService>();   
             services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
             services.AddDistributedMemoryCache();   

@@ -289,10 +289,10 @@ hr.a-color {
 }
 
 .search-bar button {        
-        background: transparent;
-        border: 0;       
-        cursor:pointer;
-        border-radius:50%
+    background: transparent;
+    border: 0;       
+    cursor:pointer;
+    border-radius:50%
 }
 
 .search-icon {   
@@ -321,13 +321,12 @@ hr.a-color {
     min-width: 250px;
     border: none;
     margin-left: auto;
-    margin-right: auto;
+    margin-right: auto;      
 }
 
-.card-wrapper {
-    border-top: none;
-    border-right: 2px solid #eee;
-    border-bottom: 2px solid #eee;
+.vl {
+    border-left: 3px solid #eee;
+    height: 600px;
 }
 
 .card-title {
@@ -564,16 +563,22 @@ hr.a-color {
     margin-right:2px;
 }
 /*--------------------------------------------------------------*/
-.book-wrapper {
-   padding-top:60px;
+.book-wrapper
+{
+    padding-top: 60px;    
 }
+
+.author-wrapper {
+    padding-top: 60px;
+    background: #faf7ef;
+}
+
 .book-deteils-title {
     font-size: 40px;
-    font-weight:bold;
-    display:block;
-    width:100%;
-    text-align:center;  
-    
+    font-weight: bold;
+    display: block;
+    width: 100%;
+    text-align: center;
 }
 
 .book-deteils-link {    

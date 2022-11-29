@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +7,7 @@ namespace BookStore.Services.ShopService.PaginationService
 {
     public class PaginatedList<T> : List<T>
     {
-        public int TotalRecord { get; private set; }
+        public int TotalRecord { get; private set; }       
 
         public PaginatedList()
         {                

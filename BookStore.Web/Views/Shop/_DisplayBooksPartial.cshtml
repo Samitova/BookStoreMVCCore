@@ -4,7 +4,7 @@
     var photoPath = $"/pictures/uploads/books/{Model.Id}/thumbs/{Model.PhotoPath ?? "noimage.png"}";
  }
 
-<div class="col card-wrapper">    
+<div class="col card-wrapper ">    
     <div class="card">
         <img src="@photoPath" class="card-img-top imageThumbnail" alt="" asp-append-version="true">
 
@@ -28,6 +28,6 @@
             </div>
 
             <div class="add-to-cart-btn">ADD TO CART</div>
-        </div>       
-    </div>
+        </div>          
+    </div>      
 </div>

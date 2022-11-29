@@ -10,7 +10,7 @@ namespace BookStore.Services.ShopService.PaginationService
         public int TotalItems { get; private set; }
         public int TotalPages { get; private set; }
         public int PageSize { get; private set; }
-        public int PageStep { get; private set; } = 5;
+        public int PageStep { get; private set; } = 2;
         public int CurrentPage { get; private set; }
         public int StartPage { get; private set; }
         public int EndPage { get; private set; }
@@ -18,12 +18,13 @@ namespace BookStore.Services.ShopService.PaginationService
         public int EndRecord { get; private set; }
 
         // public properties
-        public string Action { get; set; } = "Index";
+        public string Action { get; set; }
         public string SearchText { get; set; }
         public string SortExpression { get; set; }
 
-        public PaginationModel(int totalItems, int currentPage, string sortExpression, string searchText, int pageSize)
+        public PaginationModel(string action, int totalItems, int currentPage, string sortExpression, string searchText, int pageSize)
         {
+            Action = action;
             TotalItems = totalItems;
             CurrentPage = currentPage;
             PageSize = pageSize;

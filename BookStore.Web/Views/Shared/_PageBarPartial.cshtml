@@ -1,5 +1,4 @@
-﻿@using BookStore.Services.ShopService.PaginationService
-@model PaginationModel
+﻿@model BookStore.Services.ShopService.PaginationService.PaginationModel
 
 
 <div class="paging-item ml-5 d-none d-lg-block">
@@ -24,15 +23,15 @@
         {
             <li class="paging-item">
                 <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="1"
-               asp-route-pagesize="@Model.PageSize" asp-route-serchtext="@Model.SearchText"
-               asp-route-sortexpression="@Model.SortExpression" asp-route-searchtext="@Model.SearchText">
+                    asp-route-pagesize="@Model.PageSize" asp-route-searchtext="@Model.SearchText"
+                    asp-route-sortexpression="@Model.SortExpression">
                     First
                 </a>
             </li>
             <li class="paging-item">
                 <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@(Model.CurrentPage-1)"
-               asp-route-pagesize="@Model.PageSize" asp-route-serchtext="@Model.SearchText"
-               asp-route-sortexpression="@Model.SortExpression" asp-route-searchtext="@Model.SearchText">
+                    asp-route-pagesize="@Model.PageSize" asp-route-searchtext="@Model.SearchText"
+                    asp-route-sortexpression="@Model.SortExpression">
                     Previous
                 </a>
             </li>
@@ -44,8 +43,8 @@
                 @if (pg != Model.CurrentPage)
                 {
                     <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@pg"
-               asp-route-pagesize="@Model.PageSize" asp-route-serchtext="@Model.SearchText"
-               asp-route-sortexpression="@Model.SortExpression" asp-route-searchtext="@Model.SearchText">
+                        asp-route-pagesize="@Model.PageSize" asp-route-searchtext="@Model.SearchText"
+                        asp-route-sortexpression="@Model.SortExpression">
                         @pg
                     </a>
                 }
@@ -60,15 +59,15 @@
         {
             <li class="paging-item">
                 <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@(Model.CurrentPage+1)"
-               asp-route-pagesize="@Model.PageSize" asp-route-serchtext="@Model.SearchText"
-               asp-route-sortexpression="@Model.SortExpression" asp-route-searchtext="@Model.SearchText">
+               asp-route-pagesize="@Model.PageSize" asp-route-searchtext="@Model.SearchText"
+               asp-route-sortexpression="@Model.SortExpression">
                     Next
                 </a>
             </li>
             <li class="paging-item">
                 <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@Model.TotalPages"
-               asp-route-pagesize="@Model.PageSize" asp-route-serchtext="@Model.SearchText"
-               asp-route-sortexpression="@Model.SortExpression" asp-route-searchtext="@Model.SearchText">
+               asp-route-pagesize="@Model.PageSize" asp-route-searchtext="@Model.SearchText"
+               asp-route-sortexpression="@Model.SortExpression">
                     Last
                 </a>
             </li>

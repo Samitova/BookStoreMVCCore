@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace BookStore.Services.ShopService.SotrOrderingService
+namespace BookStore.Services.ShopService.SortingService
 {
     public enum SortOrder {Ascending=0, Descending =1};
 
@@ -14,7 +14,10 @@ namespace BookStore.Services.ShopService.SotrOrderingService
 
         [DataMember]
         public string SortedProperty { get; set; }
- 
+
+        [DataMember]
+        public string Action { get; set; }
+
         [DataMember]
         public SortOrder SortedOrder { get; set; }
 
@@ -25,8 +28,7 @@ namespace BookStore.Services.ShopService.SotrOrderingService
         private List<SortableColumn> SortableColumns = new List<SortableColumn>();
 
         public SortModel()
-        {
-
+        {          
         }      
 
         public void AddColumn(string columnName, string sortOrderExpression, bool isDefaultColumn = false) 
@@ -54,7 +56,7 @@ namespace BookStore.Services.ShopService.SotrOrderingService
             return checkColumn;
         }
 
-        public void ApplySort(string sortExpression)
+        public void ApplySort( string sortExpression)
         {
             if (string.IsNullOrEmpty(sortExpression))
             {
@@ -82,6 +84,15 @@ namespace BookStore.Services.ShopService.SotrOrderingService
                     sortableColumn.SortExpression = sortableColumn.ColumnName;
                 }
             }
+        }
+
+        public void InitSortModel(string action, Dictionary<string, string> properties)
+        {
+            Action = action;
+            foreach (var property in properties)
+            {
+                AddColumn(property.Key, property.Value);                
+            }  
         }
     }
 

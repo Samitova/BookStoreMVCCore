@@ -9,7 +9,7 @@ namespace BookStore.Data.Models.Interfaces
 {
     public interface IRepositoryBase<T> 
     {
-        #region Async Methods
+        #region Methods
 
         T GetById(int id);
         Task<T> GetByIdAsync(int id);       

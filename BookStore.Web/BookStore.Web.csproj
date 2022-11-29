@@ -20,6 +20,9 @@
 
   <ItemGroup>
     <Folder Include="Views\Shared\Components\" />
+    <Folder Include="wwwroot\pictures\uploads\authors\1\" />
+    <Folder Include="wwwroot\pictures\uploads\authors\2\" />
+    <Folder Include="wwwroot\pictures\uploads\authors\3\" />
     <Folder Include="wwwroot\pictures\uploads\books\3\gallery\thumbs\" />
     <Folder Include="wwwroot\pictures\uploads\books\3\thumbs\" />
     <Folder Include="wwwroot\pictures\uploads\books\4\gallery\thumbs\" />
