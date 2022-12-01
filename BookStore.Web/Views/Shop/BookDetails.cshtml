@@ -1,12 +1,14 @@
-﻿@model BookStore.Data.Models.ViewModels.BookVM
+﻿@using BookStore.Data.Models.ViewModels;
+@model BookStore.Data.Models.ViewModels.BookVM
 
 @{
     ViewData["Title"] = "Book Details";
     var photoPath = $"/pictures/uploads/books/{Model.Id}/{Model.PhotoPath ?? "noimage.png"}";
+    ProgressBarVM progressBar = new ProgressBarVM();
 }
 
-<div class="container-fluid book-wrapper d-flex justify-content-center">
-    <div class="row w-75">
+<div class="container-fluid book-wrapper ">
+    <div class="row w-75 mx-auto">
         <div class="col-md text-center">
             <img src="@photoPath" class="img-fluid" alt="..." asp-append-version="true">   
         </div>
@@ -33,8 +35,7 @@
 
             <hr/>
             <div class="rating-box">
-                <div class="rating-value">@Model.RateValue</div>
-                <div class="rating-count">@Model.RateCount</div>
+                <partial name="_RatingBarPartial" model="@Model.RateValue" />   
             </div>
 
             <div class="availiable-quantaty">In stock @Model.AvaliableQuantaty item(s)</div>
@@ -45,6 +46,76 @@
             </div>
 
             <div class="add-to-cart-btn">ADD TO CART</div>
-        </div>
+          
+        </div>               
+    </div>  
+    <div class="row w-75 mx-auto">
+        <p class="rating-header">Reviews</p>
     </div>
+    <div class="row w-75 mx-auto rating-container">
+        <div class="col-md text-center big-rate-box">
+            <div class="big-rate-item">
+                <span class="big-rate-value">@Model.RateValue</span>
+                <span class="big-rate-count">/@Model.RateCount</span>
+            </div>
+            <div class="big-rate-item">
+                <span class="big-rate-stars">
+                    <partial name="_RatingBarPartial" model="@Model.RateValue" />
+                </span>
+            </div>
+            <div class="big-rate-item">
+                <div class="rating-count">@Model.RateCount reviews</div>
+             </div>
+        </div>
+        <div class="col-md progress-box">
+            @foreach (var bar in Model.ProgressBar)
+            {
+                <partial name="_ProgressBarPartial" model="@bar" />
+            }                      
+        </div>
+
+        <div class="col-md">  
+            <div class="col-md">
+                <div class="star-header">Do you like this book?</div>
+            </div>
+            <div class="col-md">
+                <form method="post" asp-action="AddBookComment" asp-controller="Shop">
+                    <input type="hidden" name="bookComment.BookId" value="@Model.Id" />
+                    <input type="hidden" name="bookComment.PublishedDate" value="@DateTime.Now" />
+                    <div class="star-widgett">
+                        <input type="radio" name="bookComment.Rating" value="5" id="rate-5" />
+                        <label for="rate-5" class="fas fa-star"></label>
+                        <input type="radio" name="bookComment.Rating" value="4" id="rate-4" />
+                        <label for="rate-4" class="fas fa-star"></label>
+                        <input type="radio" name="bookComment.Rating" value="3" id="rate-3" />
+                        <label for="rate-3" class="fas fa-star"></label>
+                        <input type="radio" name="bookComment.Rating" value="2" id="rate-2" />
+                        <label for="rate-2" class="fas fa-star"></label>
+                        <input type="radio" name="bookComment.Rating" value="1" id="rate-1" />
+                        <label for="rate-1" class="fas fa-star"></label>
+                    </div>
+                
+                    <label for="publisherName">Name:</label><br>
+                    <input type="text" id="publisherName" name="bookComment.PublisherName" class="publisherName"><br><br>
+                    <div class="textarea">
+                        <textarea cols="30" name="bookComment.Comment" placeholder="Discribe your experience..."></textarea>
+                    </div>
+                    <div class="rate-btn">
+                        <button type="submit">Post</button>
+                    </div>
+                </form>
+            </div>            
+        </div>       
+    </div>
+
+    @foreach (var item in Model.Comments)
+    {
+        <partial name="_CommentPartitial" model="@item" />
+    }   
 </div>
+
+
+@section Scripts
+{
+    <script src="~/scripts/bookdetailsscripts.js"></script>   
+}

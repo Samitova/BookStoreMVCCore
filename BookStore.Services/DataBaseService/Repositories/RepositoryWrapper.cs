@@ -22,6 +22,7 @@ namespace BookStore.Services.DataBaseService.Repositories
         private IAuthorRepository _authorsRepository;
         private IPublisherRepository _publishersRepository;
         private ICategoryRepository _categoriesRepository;
+        private IBookCommentsRepository _bookCommentsRepository;
         public IBookRepository Books
         {
             get
@@ -31,6 +32,18 @@ namespace BookStore.Services.DataBaseService.Repositories
                     _booksRepository = new BookRepository(_context);
                 }
                 return _booksRepository;
+            }
+        }
+
+        public IBookCommentsRepository BookComments
+        {
+            get
+            {
+                if (_bookCommentsRepository == null)
+                {
+                    _bookCommentsRepository = new BookCommentsRepository(_context);
+                }
+                return _bookCommentsRepository;
             }
         }
 

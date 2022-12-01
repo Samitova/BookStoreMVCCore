@@ -16,7 +16,14 @@ namespace BookStore.Services.ShopService
 
         public void SetNavigationService(string action, List<BookVM>  books, int currentPage, int pageSize, string searchText, string sortExpression)
         {
-            PagedBooks = new PaginatedList<BookVM>(books, currentPage, pageSize);
+            PaginatedList<BookVM> booksTemp = new PaginatedList<BookVM>(books, currentPage, pageSize);
+            PagedBooks = new PaginatedList<BookVM>();
+            foreach (var book in booksTemp)
+            {
+                PagedBooks.Add(ShopService.CalculateRating(book));
+            }
+            PagedBooks.TotalRecord = books.Count;
+
             PaginationModel = new PaginationModel(action, PagedBooks.TotalRecord, currentPage, sortExpression, searchText, pageSize);
         }       
     }

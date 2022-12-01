@@ -16,8 +16,8 @@
                 <a class="card-author" asp-action="AuthorDetails" asp-route-id="@Model.AuthorId">@Model.AuthorFullName</a>                
             </div>
             <div class="rating-box">
-                <div class="rating-value">@Model.RateValue</div>
-                <div class="rating-count">@Model.RateCount</div>
+                <partial name="_RatingBarPartial" model="@Model.RateValue" />                
+                <div class="rating-count">/@Model.RateCount</div>
             </div>
 
             <div class="availiable-quantaty">In stock @Model.AvaliableQuantaty item(s)</div>

@@ -4,9 +4,11 @@ using BookStore.Data.Models.ModelsDTO;
 using BookStore.Data.Models.ViewModels;
 using BookStore.Services.DataBaseService.Interfaces;
 using BookStore.Services.ShopService.SortingService;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -52,7 +54,7 @@ namespace BookStore.Services.ShopService
             }
         }             
 
-        public IEnumerable<BookDTO> GetAllBySearchText(string SearchText)
+        private IEnumerable<BookDTO> GetAllBySearchText(string SearchText)
         {
             List<BookDTO> books = new List<BookDTO>();
             if (IsIsbn(SearchText))
@@ -71,13 +73,15 @@ namespace BookStore.Services.ShopService
 
             if (string.IsNullOrEmpty(SearchText))
             {
-                booksDto = _repository.Books.GetAll().ToList();
+                booksDto = _repository.Books.GetAll(includeProperties: "Comments").ToList();
             }
             else
             {
                 booksDto = GetAllBySearchText(SearchText).ToList();
-            }           
-            return _mapper.Map<IEnumerable<BookVM>>(booksDto).ToList();
+            }
+            List<BookVM> booksVM = _mapper.Map<IEnumerable<BookVM>>(booksDto).ToList();
+            
+            return booksVM;
         }
 
         public List<BookVM> DoSort(List<BookVM> books, string sortProperty, SortOrder sortOrder)
@@ -94,15 +98,60 @@ namespace BookStore.Services.ShopService
             return books;           
         }
 
-        public BookVM GetBookById(int id) 
+        public BookVM GetBookById(int id)
         {
             BookDTO book = _repository.Books.GetById(id);
-            return _mapper.Map<BookVM>(book);
+            BookVM resultBook = _mapper.Map<BookVM>(book);
+            return CalculateRating(resultBook, true);
+        }
+
+        public static BookVM CalculateRating(BookVM resultBook, bool makeProgressBar = false)
+        {            
+            int rateCount = resultBook.Comments.Count;
+            double avarageRate = 0;
+            resultBook.ProgressBar = new List<ProgressBarVM>();
+            int[] ratings = new int[6];
+
+            if (rateCount != 0)
+            {
+                foreach (var comment in resultBook.Comments)
+                {
+                    avarageRate += comment.Rating;
+                    ratings[(int)comment.Rating] += 1;
+                }
+                avarageRate= Math.Round(avarageRate/rateCount, 1) ;
+                if (makeProgressBar)
+                {
+                    for (int i = 5; i > 0; i--)
+                    {
+                        ProgressBarVM progressBar = new ProgressBarVM();
+                        progressBar.Number = i;
+                        progressBar.Count = ratings[i];
+                        progressBar.Prossents = ratings[i] * 100 / rateCount;
+                        resultBook.ProgressBar.Add(progressBar);
+                    }
+                }
+            }
+
+            resultBook.RateValue = avarageRate;
+            resultBook.RateCount = rateCount;
+
+            return resultBook;
+        }
+
+        public void AddBookComment(BookCommentDTO bookComment)
+        {
+           _repository.BookComments.Add(bookComment);
+            _repository.Save();
+            BookDTO book = _repository.Books.GetById(bookComment.BookId);
+            book.Comments.Add(bookComment);
+            _repository.Books.Update(book);
+            _repository.Save();          
         }
 
         public AuthorVM GetAuthor(int id, SortModel sortModel)
         {
-            AuthorDTO authorDto = _repository.Authors.GetAuthorById(id);
+            AuthorDTO authorDto = _repository.Authors.GetById(id);
             AuthorVM author = _mapper.Map<AuthorVM>(authorDto);
             author.Books = DoSort(author.Books, sortModel.SortedProperty, sortModel.SortedOrder);
             return author;

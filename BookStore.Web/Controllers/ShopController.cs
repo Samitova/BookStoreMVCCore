@@ -70,6 +70,16 @@ namespace BookStore.Web.Controllers
             return View(book);
         }
 
+        public IActionResult AddBookComment(BookCommentDTO bookComment)
+        {
+            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
+            if (string.IsNullOrEmpty(bookComment.PublisherName))
+                bookComment.PublisherName = "Anonimus";            
+            _bookService.AddBookComment(bookComment);
+            BookVM book = _bookService.GetBookById(bookComment.BookId);
+            return View("BookDetails", book);
+        }
+
         public IActionResult AuthorDetails(int id, int PageSize, string SortExpression = "", int CurrentPage = 1)
         {
             Dictionary<string, string> sortedProperties = new Dictionary<string, string>() { { "title", "title" }, { "price", "price_desc" }, { "authorfullname", "authorfullname" }, { "rating", "rating_desc" }, { "bestsellers", "bestsellers_desc" }, { "novelties", "novelties_desc" } };

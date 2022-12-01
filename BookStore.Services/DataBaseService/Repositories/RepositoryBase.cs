@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BookStore.Services.DataBaseService.Repositories
 {
@@ -99,7 +100,7 @@ namespace BookStore.Services.DataBaseService.Repositories
         {
             return await Context.Set<T>().FindAsync(id);
         }
-        public T GetById(int id)
+        public virtual T GetById(int id)
         {
             return  Context.Set<T>().Find(id);
         }
@@ -111,7 +112,7 @@ namespace BookStore.Services.DataBaseService.Repositories
 
         public T FirstOrDefault(Expression<Func<T, bool>> filter)
         {
-            return  Context.Set<T>().FirstOrDefault(filter);
+           return  Context.Set<T>().FirstOrDefault(filter);
         }
 
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> filter)

@@ -71,11 +71,7 @@ namespace BookStore.Data.Models.ModelsDTO
 
         [ForeignKey("AuthorId")]
         public AuthorDTO Author { get; set; }
-
-        public List<BookDTO> ToList()
-        {
-            throw new NotImplementedException();
-        }
+               
         #endregion
 
     }

@@ -331,7 +331,7 @@ hr.a-color {
 
 .card-title {
     color: #000;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: bold;
     text-decoration: none;
 }
@@ -339,7 +339,7 @@ hr.a-color {
 .card-author {
     text-decoration-line: underline;
     color: #000;
-    font-size: 20px;
+    font-size: 24px;
     padding-bottom: 40px;
 }
 
@@ -379,8 +379,11 @@ hr.a-color {
 }
 
 .rating-box {
-    padding-top: 20px;    
-    font-size: 20px;
+    padding: 5px;
+    width:250px;
+    border-radius: 25px;
+    /*border: 1px solid #a8811a;*/
+    font-size: 24px;
 }
 
 .rating-box div{
@@ -563,9 +566,8 @@ hr.a-color {
     margin-right:2px;
 }
 /*--------------------------------------------------------------*/
-.book-wrapper
-{
-    padding-top: 60px;    
+.book-wrapper {
+    padding-top: 60px; 
 }
 
 .author-wrapper {
@@ -573,8 +575,8 @@ hr.a-color {
     background: #faf7ef;
 }
 
-.book-deteils-title {
-    font-size: 40px;
+.book-deteils-title {    
+    font-size: 32px;
     font-weight: bold;
     display: block;
     width: 100%;
@@ -595,4 +597,198 @@ hr.a-color {
 .book-deteils-item {
     font-size:22px;
     font-weight:bold;
+}
+/*-------------------------------------------------*/
+
+.rating-container {
+    background: #faf7ef;
+    width: 100%;
+    padding: 50px 0 50px 0;
+    margin: 0 0 80px 100px;        
+    border: none;
+    border-radius: 10px;
+    font-size: 24px;
+}
+
+.comment-container {
+    width: 100%;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: none;
+    font-size: 24px;
+    border-bottom: 2px solid #eee;
+}
+
+
+.star-widgett input {
+    display: none;
+}
+
+.star-widgett {
+    display: flex;
+    justify-content: center;
+    flex-direction:row-reverse;
+}
+
+.star-widgett label {
+    font-size: 32px;
+    color: #444;
+    padding: 10px;
+    align-content: center;           
+    transition: all 0.2s ease;
+ }
+
+
+/*--------------------------------------------*/
+
+.star-widgett > input:checked ~ label {
+    color: #FFD700;
+}
+
+.star-widgett:not(:checked) > label:hover {
+    color: #FFD700;
+}
+
+.star-widgett:not(:checked) > label:hover ~ label {
+    color: #FFD700;
+}
+
+.star-widgett > input:checked + label:hover {
+    color: #FFED85;
+}
+
+.star-widgett > input:checked ~ label:hover {
+    color: #FFED85;
+}
+
+.star-widgett > label:hover ~ input:checked ~ label {
+    color: #FFED85;
+}
+
+.star-widgett > input:checked ~ label:hover ~ label {
+    color: #FFED85;
+}
+
+.star-widgett input#rate-5:checked ~ label {
+    color: #fe7;
+    text-shadow: 0 0 20px #952;
+}
+/*--------------------------------------------------*/
+
+form .textarea {
+    width:100%;
+    height:100%;   
+}
+
+form .textarea textarea,
+.publisherName {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border: 1px solid #a8811a;
+    padding: 10px;
+    font-size: 20px;   
+}
+
+form .rate-btn {
+    height:45px;
+    width:100%;
+    margin:15px 0;
+}
+
+form .rate-btn button {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    font-size: 24px;
+    font-weight:bold;
+    border: none;
+    border-radius:5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: #a8811a;
+    color:#fff;
+}
+
+ form .rate-btn button:hover {
+    background: #c49927;
+}
+
+.rating-header {   
+    font-size: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.star-header {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/*--------------------------------------------------*/
+
+
+.comment-pablisher {
+    font-size: 26px;
+    font-weight:bold;
+}
+
+.comment-date {
+    font-size: 20px;
+    color: #a8811a;
+}
+
+.comment-rate .fa-star,
+.progress-box-item .fa-star {
+    color: #FFD700;
+}
+
+.notchecked {
+    color: #454545 !important;
+}
+
+.big-rate-value {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.big-rate-count {
+    font-size: 40px;
+    font-weight: bold;
+    color: #a8811a;
+}
+
+.big-rate-box {
+    padding-top:130px;
+    padding-bottom:20px;
+}
+
+.big-rate-stars {
+    font-size: 32px;
+}
+
+.big-rate-item {
+    display:block;
+}
+
+.progress-box {
+    padding-top:100px;
+}
+
+.progress-box-item {
+    padding-bottom:20px;
+}
+
+.progress-bar {
+    background: #846615;
+}
+
+.fa-stack.small {
+    font-size: 18px;
+}
+
+.fa-stack.small i {
+    vertical-align: middle;
 }

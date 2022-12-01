@@ -15,7 +15,7 @@ namespace BookStore.Services.DataBaseService.Repositories
         public AuthorRepository(BookStoreContext context) : base(context)
         { }
 
-        public AuthorDTO GetAuthorById(int id)
+        public override AuthorDTO GetById(int id)
         {
             AuthorDTO authorDTO = GetAll(filter: x => x.Id == id, includeProperties: "Books").FirstOrDefault();
             return authorDTO;
