@@ -7,7 +7,7 @@ namespace BookStore.Services.ShopService.PaginationService
 {
     public class PaginatedList<T> : List<T>
     {
-        public int TotalRecord { get; private set; }       
+        public int TotalRecord { get; set; }       
 
         public PaginatedList()
         {                

@@ -72,11 +72,14 @@ namespace BookStore.Data.Models.ViewModels
         public int AvaliableQuantaty { get; set; } = 1;
 
         [OrderKey("bestsellers")]
-        public int SoldCopies { get; set; } = 0;
+        public int SoldCopies { get; set; } 
 
         [OrderKey("rating")]
-        public double RateValue { get; set; } = 0;
-        public int RateCount { get; set; } = 0;
+        public double RateValue { get; set; }
+        public int RateCount { get; set; }
+        public ICollection<BookCommentVM> Comments { get; set; }
+
+        public ICollection<ProgressBarVM> ProgressBar { get; set; }
 
         public IEnumerable<SelectListItem> Genres { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; }
