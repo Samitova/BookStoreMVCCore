@@ -61,6 +61,9 @@ namespace BookStore.Data.Models.ModelsDTO
         public string PhotoPath { get; set; }
         public int SoldCopies { get; set; } = 0;
 
+        public double RateValue { get; set; }
+
+        public int RateCount { get; set; }
         public ICollection<BookCommentDTO> Comments { get; set; }
 
         [ForeignKey("CategoryId")]

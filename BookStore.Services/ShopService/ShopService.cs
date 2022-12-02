@@ -12,6 +12,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static System.Reflection.Metadata.BlobBuilder;
 using SortOrder = BookStore.Services.ShopService.SortingService.SortOrder;
 
@@ -102,13 +103,13 @@ namespace BookStore.Services.ShopService
         {
             BookDTO book = _repository.Books.GetById(id);
             BookVM resultBook = _mapper.Map<BookVM>(book);
-            return CalculateRating(resultBook, true);
+            resultBook = CalculateProgressBar(resultBook);
+            return resultBook;                                                                                       
         }
 
-        public static BookVM CalculateRating(BookVM resultBook, bool makeProgressBar = false)
+        public static BookVM CalculateProgressBar(BookVM resultBook)
         {            
-            int rateCount = resultBook.Comments.Count;
-            double avarageRate = 0;
+            int rateCount = resultBook.Comments.Count;            
             resultBook.ProgressBar = new List<ProgressBarVM>();
             int[] ratings = new int[6];
 
@@ -116,35 +117,35 @@ namespace BookStore.Services.ShopService
             {
                 foreach (var comment in resultBook.Comments)
                 {
-                    avarageRate += comment.Rating;
                     ratings[(int)comment.Rating] += 1;
                 }
-                avarageRate= Math.Round(avarageRate/rateCount, 1) ;
-                if (makeProgressBar)
+                for (int i = 5; i > 0; i--)
                 {
-                    for (int i = 5; i > 0; i--)
-                    {
-                        ProgressBarVM progressBar = new ProgressBarVM();
-                        progressBar.Number = i;
-                        progressBar.Count = ratings[i];
-                        progressBar.Prossents = ratings[i] * 100 / rateCount;
-                        resultBook.ProgressBar.Add(progressBar);
-                    }
+                    ProgressBarVM progressBar = new ProgressBarVM();
+                    progressBar.Number = i;
+                    progressBar.Count = ratings[i];
+                    progressBar.Prossents = ratings[i] * 100 / rateCount;
+                    resultBook.ProgressBar.Add(progressBar);
                 }
             }
-
-            resultBook.RateValue = avarageRate;
-            resultBook.RateCount = rateCount;
-
             return resultBook;
         }
 
         public void AddBookComment(BookCommentDTO bookComment)
         {
-           _repository.BookComments.Add(bookComment);
+            _repository.BookComments.Add(bookComment);
             _repository.Save();
             BookDTO book = _repository.Books.GetById(bookComment.BookId);
-            book.Comments.Add(bookComment);
+            book.Comments.Add(bookComment);            
+            double avarageRate = 0;
+            foreach (var comment in book.Comments)
+            {
+                avarageRate += comment.Rating;
+            }            
+
+            book.RateCount = book.Comments.Count;
+            book.RateValue = Math.Round(avarageRate / book.RateCount, 1); 
+
             _repository.Books.Update(book);
             _repository.Save();          
         }

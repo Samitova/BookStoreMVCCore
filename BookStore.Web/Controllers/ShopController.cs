@@ -45,9 +45,10 @@ namespace BookStore.Web.Controllers
                 oldSearchText = HttpContext.Session.GetString("SearchText");
             }
 
-            if (!isBooksInSession || (isBooksInSession && oldSearchText != SearchText))
+            if (!isBooksInSession || (isBooksInSession && oldSearchText != SearchText) || (isBooksInSession && SearchText==""))
             {
                 books = _bookService.GetAllBooksFromDb(SearchText);
+                books = _bookService.DoSort(books, sortModel.SortedProperty, sortModel.SortedOrder);
                 HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(books));
                 HttpContext.Session.SetString("SearchText", SearchText);
             }

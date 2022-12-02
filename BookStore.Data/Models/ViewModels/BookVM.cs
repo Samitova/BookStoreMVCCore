@@ -75,7 +75,7 @@ namespace BookStore.Data.Models.ViewModels
         public int SoldCopies { get; set; } 
 
         [OrderKey("rating")]
-        public double RateValue { get; set; }
+        public double RateValue { get; set; }  
         public int RateCount { get; set; }
         public ICollection<BookCommentVM> Comments { get; set; }
 
