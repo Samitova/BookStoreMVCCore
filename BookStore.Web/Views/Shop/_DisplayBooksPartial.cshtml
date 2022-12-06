@@ -4,7 +4,7 @@
     var photoPath = $"/pictures/uploads/books/{Model.Id}/thumbs/{Model.PhotoPath ?? "noimage.png"}";
  }
 
-<div class="col card-wrapper ">    
+<div class="col card-wrapper">    
     <div class="card">
         <img src="@photoPath" class="card-img-top imageThumbnail" alt="" asp-append-version="true">
 
@@ -23,11 +23,17 @@
             <div class="availiable-quantaty">In stock @Model.AvaliableQuantaty item(s)</div>
 
             <div class="prices-box">
-                <div class="price-item-base d-inline">300 $</div>
+                @*<div class="price-item-base d-inline">300 $</div>*@
                 <div class="price-item-main d-inline">@Model.Price $</div>
-            </div>
+            </div>          
 
-            <div class="add-to-cart-btn">ADD TO CART</div>
+            <div class="addtocart-cover">
+                <div class="ajaxmsg" id="ajaxmsg_@Model.Id">
+                    Book was added to your cart
+                </div>                
+                <a href="#" class="addtocart" id="@Model.Id">ADD TO CART</a>    
+            </div>         
         </div>          
     </div>      
 </div>
+

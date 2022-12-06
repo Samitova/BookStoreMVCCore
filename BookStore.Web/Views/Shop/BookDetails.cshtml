@@ -19,19 +19,19 @@
                 <div class="col-md">
                     <p class="book-deteils-item">Author: <a class="book-deteils-link" asp-action="AuthorDetails" asp-route-id="@Model.AuthorId">@Model.AuthorFullName </a></p>
                     <p class="book-deteils-item">Publisher:<a class="book-deteils-link" asp-route-id="@Model.PublisherId"> @Model.PublisherName</a></p>
-                    <p class="book-deteils-item">Year Of Issue: @Model.YearOfIssue</p>
-                    <p class="book-deteils-item">ISBN: @Model.ISBN</p>
+                    <p class="book-deteils-item">Year Of Issue: <span>@Model.YearOfIssue</span></p>
+                    <p class="book-deteils-item">ISBN: <span>@Model.ISBN</span></p>
                 
                 </div>
                 <div class="col-md">                    
-                    <p class="book-deteils-item">Genre: @Model.Genre</p>
-                    <p class ="book-deteils-item">Pages: @Model.NumberOfPage</p>
-                    <p class="book-deteils-item">Cover type: @Model.CoverType</p>
+                    <p class="book-deteils-item">Genre: <span>@Model.Genre</span></p>
+                    <p class="book-deteils-item">Pages: <span>@Model.NumberOfPage</span></p>
+                    <p class="book-deteils-item">Cover type: <span>@Model.CoverType</span></p>
                 </div>
             </div>
             <hr/>
             <p class="book-deteils-item text-center">Annotation</p>
-            <p class="book-deteils-item">@Model.Annotation</p>
+            <p class="book-deteils-annotation">@Model.Annotation</p>
 
             <hr/>
             <div class="rating-box">
@@ -41,12 +41,17 @@
             <div class="availiable-quantaty">In stock @Model.AvaliableQuantaty item(s)</div>
 
             <div class="prices-box">
-                <div class="price-item-base d-inline">300 $</div>
+                @*<div class="price-item-base d-inline">300 $</div>*@
                 <div class="price-item-main d-inline">@Model.Price $</div>
             </div>
 
-            <div class="add-to-cart-btn">ADD TO CART</div>
-          
+            <div class="addtocart-cover">
+                <div class="ajaxmsg" id="ajaxmsg_@Model.Id">
+                    Book was added to your cart
+                </div>
+                <a href="#" class="addtocart" id="@Model.Id">ADD TO CART</a>
+            </div>
+
         </div>               
     </div>  
     <div class="row w-75 mx-auto">
@@ -118,4 +123,5 @@
 @section Scripts
 {
     <script src="~/scripts/bookdetailsscripts.js"></script>   
+    <script src="~/scripts/cartscripts.js"></script>
 }

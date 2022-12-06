@@ -33,6 +33,43 @@ namespace BookStore.Web.Controllers
                 return View();
             }
             return View(cartItems);
-        }              
+        }
+
+        //GET Cart/AddToCart/Id       
+        public IActionResult AddToCartPartial(int id)
+        {
+            CartVM cartItems;
+            if (!HttpContext.Session.TryGetObject<CartVM>("Cart", out cartItems))
+                cartItems = new CartVM();
+
+            CartItem cartItem = new CartItem();
+            var book = _bookService.GetBookById(id);
+            var productInCart = cartItems.Items.FirstOrDefault(x => x.BookId == id);
+
+            if (productInCart == null)
+            {
+                cartItems.Items.Add(new CartItem
+                {
+                    BookId = book.Id,
+                    Title = book.Title,
+                    AuthorName = book.AuthorFullName,
+                    AuthorId = book.AuthorId,
+                    AvaliableQuantaty = book.AvaliableQuantaty,
+                    Quantity = 1,
+                    Price = book.Price,
+                    Image = book.PhotoPath
+                });
+            }
+            else
+            {
+                productInCart.Quantity++;
+            }
+            cartItems.TotalAmount += 1;
+            cartItems.TotalPrice += book.Price;
+
+            HttpContext.Session.SetObject<CartVM>("Cart", cartItems);
+
+            return PartialView("_CartPartial", cartItems);
+        }
     }
 }

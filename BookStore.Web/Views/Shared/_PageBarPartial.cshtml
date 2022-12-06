@@ -11,7 +11,7 @@
             <span class="">Books Per Page</span>
         </li>
         <li class="d-inline">
-            <select class="" id="pageSelector" asp-items="@Model.GetPaginationSize()" onchange="ChangePageSize(this)"></select>
+            <select id="pageSelector" asp-items="@Model.GetPaginationSize()" onchange="ChangePageSize(this)"></select>
         </li>
     </ul>
 </div>

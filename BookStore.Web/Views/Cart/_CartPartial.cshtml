@@ -1,0 +1,12 @@
+﻿@model BookStore.Data.Models.ViewModels.CartVM
+
+<a class="nav-link cart-link d-flex" asp-area="" asp-controller="Cart" asp-action="Index">
+    <i class="fa-solid fa-cart-shopping"></i>
+    @{
+        if (Model.Items.Count > 0)
+        { 
+            <span class="cart-count">@Model.TotalAmount</span>
+            <span class="cart-price">@Model.TotalPrice$</span>
+        }
+    }   
+</a>

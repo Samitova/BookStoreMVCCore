@@ -1,9 +1,13 @@
 ﻿@using BookStore.Services.ShopService.SearchService
+@using BookStore.Data.Models.ViewModels
 
-
-@{    
+@{
     SearchBar searchBar = (SearchBar)ViewData["SearchBar"];
+    CartVM cart;
+    if (!Context.Session.TryGetObject<CartVM>("Cart", out cart))
+        cart = new CartVM();
 }
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,18 +22,18 @@
 <body>
 
     <main role="main">
-
+        @RenderSection("MySec", required: false)
         <header>
             <div class="container-fluid ">
                 <div class="row" style="background:#1d2020; height:20px;">
                 </div>
 
-                <div class="row navbar-dark bg-dark">
+                <div class="row top-navbar navbar-dark bg-dark">
                     <div class="col-lg-2 p-md-2 p-lg-4">
                         <div class="d-flex justify-content-center justify-content-lg-start">
                             <a class="navbar-brand mr-0 mr-md-3" href="/" aria-label="BookShop">
-                                <img src="\pictures\shoplogo.png" width="40" height="40" class="d-inline-block align-top" alt="logo" />
-                                BookShop
+                                <img src="\pictures\shoplogo.png" width="30" height="30" class="d-inline-block align-top" alt="logo" />
+                                BOOKYLAND
                             </a>
                         </div>
                     </div>
@@ -39,13 +43,16 @@
                     </div>
 
                     <div class="col-md-auto bg-dark  p-md-2 pr-md-4  p-lg-4 d-flex justify-content-center">
-                        <ul class="navbar-nav flex-row">
+                        <ul class="navbar-nav top-navbar flex-row">
                             <li class="nav-item ml-3">
                                 <a class="nav-link" asp-area="" asp-controller="Shop" asp-action="Index">Books</a>
                             </li>
                             <li class="nav-item ml-3">
                                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>                       
+                            </li>   
+                            <li class="nav-item ajaxcart ml-3 mr-3">
+                                <partial name="/Views/Cart/_CartPartial.cshtml" model="@cart" />
+                            </li>
                             <li class="nav-item d-md-none ml-3 mt-2">
                                 <button class="btn" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                                     aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +67,7 @@
             <nav class="navbar navbar-expand-md navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow">
                 <div class="container-fluid">               
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse border-top">
-                        <ul class="navbar-nav flex-grow-1">
+                        <ul class="top-navbar navbar-nav flex-grow-1">
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
@@ -88,5 +95,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>   
     @RenderSection("Scripts", required: false)
+   
 </body>
 </html>

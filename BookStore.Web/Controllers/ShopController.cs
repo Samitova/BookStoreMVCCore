@@ -19,7 +19,7 @@ namespace BookStore.Web.Controllers
     public class ShopController : Controller
     {
         private readonly ShopService _bookService;        
-        private int _pageSize = 2;       
+        private int _pageSize = 4;       
 
         public ShopController(ShopService bookService)
         {
@@ -35,8 +35,7 @@ namespace BookStore.Web.Controllers
 
             ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = SearchText};
             PageSize = ProccessPageSize(PageSize);
-            SortModel sortModel = SetSortModel("Index", sortedProperties, SortExpression);         
-
+            SortModel sortModel = SetSortModel("Index", sortedProperties, SortExpression);    
 
             bool isBooksInSession = HttpContext.Session.TryGetValue("Books", out _);
 
@@ -70,7 +69,6 @@ namespace BookStore.Web.Controllers
             BookVM book = _bookService.GetBookById(id);
             return View(book);
         }
-
         public IActionResult AddBookComment(BookCommentDTO bookComment)
         {
             ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
