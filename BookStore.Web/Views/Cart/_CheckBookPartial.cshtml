@@ -1,0 +1,31 @@
+﻿@model BookStore.Data.Models.ViewModels.CartItem
+
+<div class="row">
+    <div class="col-xl-8 d-flex">
+        <div class="col-sm-3 text-center">
+            <img src="/pictures/uploads/books/@Model.BookId/thumbs/@Model.Image" width="110" height="180" class="" alt="..." asp-append-version="true">
+        </div>
+        <div class="col-sm-9">
+            <a class="order-details-book-title" asp-action="BookDetails" asp-route-id="@Model.BookId">@Model.Title</a><br />
+            <a class="order-details-author" asp-action="AuthorDetails" asp-route-id="@Model.AuthorId">@Model.AuthorName</a>
+            <div class="availiable-quantaty">In stock @Model.AvaliableQuantaty item(s)</div>
+        </div>
+    </div>
+    <div class="col-md-12 col-xl-4">
+        <div class="order-prices-box">            
+            <div class="price-item-main d-inline">@Model.Price $</div>
+        </div>
+
+        <div class="row">
+            <div class="col d-flex">
+                <div class="row change-quantaty">
+                    <div class="col change-quantaty-minus">-</div>
+                    <div class="col change-quantaty-display">@Model.Quantity</div>
+                    <div class="col change-quantaty-plus">+</div>
+                </div>
+                <div class="row trash"><i class="fa-solid fa-trash-can"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
