@@ -19,7 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Shared\Components\" />
+    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\Views\" />
+    <Folder Include="Areas\Customer\Views\Shared\Components\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Views\" />
     <Folder Include="wwwroot\pictures\uploads\authors\1\" />
     <Folder Include="wwwroot\pictures\uploads\authors\2\" />
     <Folder Include="wwwroot\pictures\uploads\authors\3\" />

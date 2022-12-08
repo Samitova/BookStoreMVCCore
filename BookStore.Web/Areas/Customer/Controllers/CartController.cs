@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
-namespace BookStore.Web.Controllers
+namespace BookStore.Web.Areas.Customer.Controllers
 {
     public class CartController : Controller
     {
@@ -23,10 +23,10 @@ namespace BookStore.Web.Controllers
             ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
 
             CartVM cartItems;
-            if (!HttpContext.Session.TryGetObject<CartVM>("Cart", out cartItems))
+            if (!HttpContext.Session.TryGetObject("Cart", out cartItems))
                 cartItems = new CartVM();
-            
-            if (cartItems.Items.Count == 0 )
+
+            if (cartItems.Items.Count == 0)
             {
                 ViewBag.Message = "Your cart is empty";
                 return View();
@@ -38,7 +38,7 @@ namespace BookStore.Web.Controllers
         public IActionResult AddToCartPartial(int id)
         {
             CartVM cartItems;
-            if (!HttpContext.Session.TryGetObject<CartVM>("Cart", out cartItems))
+            if (!HttpContext.Session.TryGetObject("Cart", out cartItems))
                 cartItems = new CartVM();
 
             CartItem cartItem = new CartItem();
@@ -66,7 +66,7 @@ namespace BookStore.Web.Controllers
             cartItems.TotalAmount += 1;
             cartItems.TotalPrice += book.Price;
 
-            HttpContext.Session.SetObject<CartVM>("Cart", cartItems);
+            HttpContext.Session.SetObject("Cart", cartItems);
 
             return PartialView("_CartPartial", cartItems);
         }
@@ -75,7 +75,7 @@ namespace BookStore.Web.Controllers
         public JsonResult IncrementProduct(int bookId)
         {
             CartVM cartItems;
-            if (!HttpContext.Session.TryGetObject<CartVM>("Cart", out cartItems))
+            if (!HttpContext.Session.TryGetObject("Cart", out cartItems))
                 cartItems = new CartVM();
 
 
@@ -83,9 +83,9 @@ namespace BookStore.Web.Controllers
 
             cartItem.Quantity++;
 
-            HttpContext.Session.SetObject<CartVM>("Cart", cartItems);
+            HttpContext.Session.SetObject("Cart", cartItems);
 
-            var result = new { qty = cartItem.Quantity, price = cartItem.Price, title =cartItem.Title };
+            var result = new { qty = cartItem.Quantity, price = cartItem.Price, title = cartItem.Title };
 
             return Json(result);
         }
@@ -94,7 +94,7 @@ namespace BookStore.Web.Controllers
         public JsonResult DecrementProduct(int bookId)
         {
             CartVM cartItems;
-            if (!HttpContext.Session.TryGetObject<CartVM>("Cart", out cartItems))
+            if (!HttpContext.Session.TryGetObject("Cart", out cartItems))
                 cartItems = new CartVM();
 
             CartItem cartItem = cartItems.Items.FirstOrDefault(x => x.BookId == bookId);
@@ -109,7 +109,7 @@ namespace BookStore.Web.Controllers
                 cartItems.Items.Remove(cartItem);
             }
 
-            HttpContext.Session.SetObject<CartVM>("Cart", cartItems);
+            HttpContext.Session.SetObject("Cart", cartItems);
             var result = new { qty = cartItem.Quantity, price = cartItem.Price, title = cartItem.Title };
 
             return Json(result);
@@ -119,12 +119,12 @@ namespace BookStore.Web.Controllers
         public void RemoveProduct(int bookId)
         {
             CartVM cartItems;
-            if (!HttpContext.Session.TryGetObject<CartVM>("Cart", out cartItems))
+            if (!HttpContext.Session.TryGetObject("Cart", out cartItems))
                 cartItems = new CartVM();
 
             CartItem cartItem = cartItems.Items.FirstOrDefault(x => x.BookId == bookId);
             cartItems.Items.Remove(cartItem);
-            HttpContext.Session.SetObject<CartVM>("Cart", cartItems);            
-        }  
+            HttpContext.Session.SetObject("Cart", cartItems);
+        }
     }
 }

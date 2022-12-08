@@ -22,7 +22,7 @@ else
                 <p class="order-details-header">Your Cart</p>
                 @foreach (var item in Model.Items)
                 {
-                    <partial name="/Views/Cart/_CheckBookPartial.cshtml" model="@item" />
+                    <partial name="/Areas/Customer/Views/Cart/_CheckBookPartial.cshtml" model="@item" />
                 }
             </div>
             <div class="col-xl-4 order-details-summary">

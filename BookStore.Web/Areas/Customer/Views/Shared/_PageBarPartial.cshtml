@@ -1,6 +1,5 @@
 ﻿@model BookStore.Services.ShopService.PaginationService.PaginationModel
 
-
 <div class="paging-item ml-5 d-none d-lg-block">
     <p class="">Showing @Model.StartRecord - @Model.EndRecord of @Model.TotalItems books</p>
 </div>
@@ -80,8 +79,11 @@
     function ChangePageSize(obj)
     {
         var controllerName = '@this.ViewContext.RouteData.Values["controller"].ToString()';
-        window.location.href = "/" + controllerName + "/@Model.Action" + "?pageSize=" + obj.value 
-                               + "&SerchText=" + "@Model.SearchText"+"&SortExpression=" + "@Model.SortExpression";
+        var areaName = '@this.ViewContext.RouteData.Values["area"].ToString()';
+
+        
+        window.location.href = "/" + areaName + "/" + controllerName + "/@Model.Action" + "?pageSize=" + obj.value
+            + "&SerchText=" + "@Model.SearchText"+"&SortExpression=" + "@Model.SortExpression";
     }
 </script>
 

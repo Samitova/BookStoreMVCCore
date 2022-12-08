@@ -14,28 +14,28 @@ using System.Collections.Generic;
 using static System.Reflection.Metadata.BlobBuilder;
 
 
-namespace BookStore.Web.Controllers
+namespace BookStore.Web.Areas.Customer.Controllers
 {
     public class ShopController : Controller
     {
-        private readonly ShopService _bookService;        
-        private int _pageSize = 4;       
+        private readonly ShopService _bookService;
+        private int _pageSize = 4;
 
         public ShopController(ShopService bookService)
         {
-            _bookService = bookService;           
+            _bookService = bookService;
         }
 
         public IActionResult Index(int PageSize, string SortExpression = "", string SearchText = "", int CurrentPage = 1)
         {
-            Dictionary<string, string> sortedProperties = new Dictionary<string, string>() { {"title", "title"}, {"price", "price_desc"},{"authorfullname", "authorfullname"},{"rating", "rating_desc"},{"bestsellers", "bestsellers_desc"},{"novelties", "novelties_desc"}};
+            Dictionary<string, string> sortedProperties = new Dictionary<string, string>() { { "title", "title" }, { "price", "price_desc" }, { "authorfullname", "authorfullname" }, { "rating", "rating_desc" }, { "bestsellers", "bestsellers_desc" }, { "novelties", "novelties_desc" } };
             List<BookVM> books = new List<BookVM>();
             NavigationService navigationService = new NavigationService();
             string oldSearchText = "";
 
-            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = SearchText};
+            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = SearchText };
             PageSize = ProccessPageSize(PageSize);
-            SortModel sortModel = SetSortModel("Index", sortedProperties, SortExpression);    
+            SortModel sortModel = SetSortModel("Index", sortedProperties, SortExpression);
 
             bool isBooksInSession = HttpContext.Session.TryGetValue("Books", out _);
 
@@ -44,7 +44,7 @@ namespace BookStore.Web.Controllers
                 oldSearchText = HttpContext.Session.GetString("SearchText");
             }
 
-            if (!isBooksInSession || (isBooksInSession && oldSearchText != SearchText) || (isBooksInSession && SearchText==""))
+            if (!isBooksInSession || isBooksInSession && oldSearchText != SearchText || isBooksInSession && SearchText == "")
             {
                 books = _bookService.GetAllBooksFromDb(SearchText);
                 books = _bookService.DoSort(books, sortModel.SortedProperty, sortModel.SortedOrder);
@@ -73,7 +73,7 @@ namespace BookStore.Web.Controllers
         {
             ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
             if (string.IsNullOrEmpty(bookComment.PublisherName))
-                bookComment.PublisherName = "Anonimus";            
+                bookComment.PublisherName = "Anonimus";
             _bookService.AddBookComment(bookComment);
             BookVM book = _bookService.GetBookById(bookComment.BookId);
             return View("BookDetails", book);
@@ -99,16 +99,16 @@ namespace BookStore.Web.Controllers
             {
                 author = JsonConvert.DeserializeObject<AuthorVM>(HttpContext.Session.GetString("Author"));
             }
-            
+
             navigationService.SetNavigationService("AuthorDetails", author.Books, CurrentPage, PageSize, "", SortExpression);
             ViewData["NavigationService"] = navigationService;
             return View(author);
         }
 
         private SortModel SetSortModel(string action, Dictionary<string, string> sortedProperties, string sortExpression = "")
-        {            
+        {
             SortModel sortModel = new SortModel();
-            sortModel.InitSortModel(action, sortedProperties);  
+            sortModel.InitSortModel(action, sortedProperties);
             sortModel.ApplySort(sortExpression);
             ViewData["SortModel"] = sortModel;
             return sortModel;

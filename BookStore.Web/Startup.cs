@@ -69,7 +69,7 @@ namespace BookStore.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Shop}/{action=Index}/{id?}");
+                    pattern: "{area=Customer}/{controller=Shop}/{action=Index}/{id?}");
             });
         }
     }
