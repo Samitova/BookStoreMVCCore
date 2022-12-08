@@ -1,13 +1,12 @@
 ﻿using BookStore.Data.Models.ViewModels;
 using BookStore.Services.ShopService;
-using BookStore.Services.ShopService.PaginationService;
 using BookStore.Services.ShopService.SearchService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using static System.Reflection.Metadata.BlobBuilder;
+using System.Net;
 
 namespace BookStore.Web.Controllers
 {
@@ -71,5 +70,61 @@ namespace BookStore.Web.Controllers
 
             return PartialView("_CartPartial", cartItems);
         }
+
+        // GET: Cart/IncrementProduct       
+        public JsonResult IncrementProduct(int bookId)
+        {
+            CartVM cartItems;
+            if (!HttpContext.Session.TryGetObject<CartVM>("Cart", out cartItems))
+                cartItems = new CartVM();
+
+
+            CartItem cartItem = cartItems.Items.FirstOrDefault(x => x.BookId == bookId);
+
+            cartItem.Quantity++;
+
+            HttpContext.Session.SetObject<CartVM>("Cart", cartItems);
+
+            var result = new { qty = cartItem.Quantity, price = cartItem.Price, title =cartItem.Title };
+
+            return Json(result);
+        }
+
+        // GET: Cart/DecrementProduct       
+        public JsonResult DecrementProduct(int bookId)
+        {
+            CartVM cartItems;
+            if (!HttpContext.Session.TryGetObject<CartVM>("Cart", out cartItems))
+                cartItems = new CartVM();
+
+            CartItem cartItem = cartItems.Items.FirstOrDefault(x => x.BookId == bookId);
+
+            if (cartItem.Quantity > 1)
+            {
+                cartItem.Quantity--;
+            }
+            else
+            {
+                cartItem.Quantity = 0;
+                cartItems.Items.Remove(cartItem);
+            }
+
+            HttpContext.Session.SetObject<CartVM>("Cart", cartItems);
+            var result = new { qty = cartItem.Quantity, price = cartItem.Price, title = cartItem.Title };
+
+            return Json(result);
+        }
+
+        // GET: Cart/RemoveProduct       
+        public void RemoveProduct(int bookId)
+        {
+            CartVM cartItems;
+            if (!HttpContext.Session.TryGetObject<CartVM>("Cart", out cartItems))
+                cartItems = new CartVM();
+
+            CartItem cartItem = cartItems.Items.FirstOrDefault(x => x.BookId == bookId);
+            cartItems.Items.Remove(cartItem);
+            HttpContext.Session.SetObject<CartVM>("Cart", cartItems);            
+        }  
     }
 }

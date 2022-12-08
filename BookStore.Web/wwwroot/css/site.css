@@ -530,7 +530,7 @@ span.loader {
     border-radius: 5px 5px 5px 5px;   
     width: 130px;
     height: 30px;
-    border: 2px solid #343a40;
+    border: 1px solid #343a40;
     margin-right: 10px;    
     text-align:center;    
 }
@@ -611,7 +611,7 @@ span.loader {
 .paging-item {
     height: 30px;    
     border-radius: 5px 5px 5px 5px;
-    border: 2px solid #343a40;  
+    border: 1px solid #343a40;  
     text-align: center;    
     margin-top:5px;
     margin-right:2px;
@@ -934,19 +934,19 @@ form .rate-btn button {
     font-weight: bold;
 }
 
-.change-quantaty-minus,
-.change-quantaty-plus {
+.decrementquantaty,
+.incrementquantaty {
     font-size: 14px;
     height: 100%;
     text-align: center;
-    display: inline;
+    display: inline-block;
     text-align: center;
     padding-top: 5px;
     cursor: pointer;
 }
 
-.change-quantaty-display {
-    font-size: 14px;    
+.bookquantaty {
+    font-size: 14px;
     height: 100%;
     padding-top: 5px;
     border-left: 1px solid #94782e;
@@ -955,7 +955,7 @@ form .rate-btn button {
     text-align: center;
 }
 
-.trash {
+.removebook {
     height: 30px;
     border-radius: 15px;
     padding-top: 5px;
@@ -968,13 +968,13 @@ form .rate-btn button {
     background: #867d65;
 }
 
-    .trash:hover {
-        background: #c1252c;
-        cursor:pointer;
-    }
+.removebook:hover {
+    background: #c1252c;
+    cursor: pointer;
+}
 
-    .fa-trash-can {
-        color: #fff;
-    }
+.fa-trash-can {
+    color: #fff;
+}
 
 

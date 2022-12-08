@@ -1,198 +1,58 @@
 ﻿@model BookStore.Data.Models.ViewModels.CartVM
 
 @{
-    ViewData["Title"] = "Cart Details";        
+    ViewData["Title"] = "Cart Details";
 }
 
-<div class="container-fluid order-details-wrapper">
-    <div class="row mx-auto d-flex">
-        <div class="col-xl-8">            
-            <p class="order-details-header">Your Cart</p>
-            @foreach (var item in Model.Items)
-            {
-                <partial name="/Views/Cart/_CheckBookPartial.cshtml" model="@item" />
-            }   
-        </div>
-        <div class="col-xl-4 order-details-summary">
-            <p class="order-details-header text-center">Order Details</p>            
-                @foreach (var item in Model.Items)
-                {
-                    <div class="summary-item">
-                        <div>@item.Title</div>
-                        <div class="summary-item-price">@item.Price $</div>
-                    </div>                             
-                }          
-            <hr/>
-            <div class="summary-item">
-                 <div class="summary-item-price ">Total amount</div>
-                 <div class="summary-item-price ">@Model.TotalPrice $</div>
+@if (Model==null || Model.Items.Count == 0)
+{
+     <div class="container-fluid order-details-wrapper">
+        <div class="row mx-auto d-flex">
+            <div class="col-xl-8">
+                <p class="order-details-header">Your Cart is empty</p>
             </div>
-
-            <div class="checkout-btn mx-auto">                
-                <button class="">CHECKOUT</button>
-            </div>           
-       
         </div>
     </div>
-  
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*@if (ViewBag.Message != null)
-{
-    <h5>@ViewBag.Message</h5>
 }
 else
 {
-    <div class="ajaxbg">
-        <span>
-            <img src="~/Content/images/ajax-loader.gif" height="100" weight="150" />
-        </span>
-    </div>
-
-    <table class="table">
-        <tr>
-            <th>
-                Title
-            </th>
-            <th>
-                Quantity
-            </th>
-            <th>
-                Price
-            </th>
-            <th>
-                Image
-            </th>
-            <th>
-                
-            </th>
-            <th>
-                Total €
-            </th>
-        </tr>
-
-        @foreach (var item in Model.Items)
-        {
-            <tr class="ajaxallertmsg">
-                <td class="message@(item.BookId)" colspan="6" height="30"></td>
-            </tr>
-            <tr id="id_@item.BookId">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td class="qty@(item.BookId)">
-                    @Html.DisplayFor(modelItem => item.Quantity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)€
-                </td>
-                <td>
-                    <img src="/pictures/uploads/books/@item.BookId/Thumbs/@item.Image" />
-                </td>
-                <td>
-                    <a href="#" class="incproduct" data-id="@item.BookId">+</a>
-                    <a href="#" class="decproduct" data-id="@item.BookId">-</a>
-                    <a href="#" class="removeproduct" data-id="@item.BookId">Remove</a>
-                </td>
-                <td class="total@(item.BookId)">
-                    @Html.DisplayFor(modelItem => item.Total)
-                </td>
-            </tr>
-        }
-        <tr>
-            <td>    </td>
-            <td>    </td>
-            <td>    </td>
-            <td>    </td>
-            <td>    </td>
-            <td class="grandtotal"><b>Grand total: </b> <span>@Model.TotalPrice$</span> </td>
-        </tr>
-    </table>
-    <div class="paypaldiv">
-        <form class="paypalform" action="https://www.sandbox.paypal.com/us/cgi-bin/webscr" method="post">
-            <input type="hidden" name="cmd" value="_cart">
-            <input type="hidden" name="upload" value="1" />
-            <input type="hidden" name="business" value="sb-rjgdb30115@business.example.com">
-
-            @foreach (var item in Model.Items)
-            {
-                <input type="hidden" name="item_name_@count" value="@item.Title">
-                <input type="hidden" name="amount_@count" value="@item.Price">
-                <input type="hidden" name="quantity_@count" value="@item.Quantity">
-                count++;
-            }
-
-            <input type="hidden" name="currency_code" value="USD">
-            <div style="display:none">
-                <input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+    <div class="container-fluid order-details-wrapper">
+        <div class="row mx-auto d-flex">
+            <div class="col-xl-8">
+                <p class="order-details-header">Your Cart</p>
+                @foreach (var item in Model.Items)
+                {
+                    <partial name="/Views/Cart/_CheckBookPartial.cshtml" model="@item" />
+                }
             </div>
-        </form>
+            <div class="col-xl-4 order-details-summary">
+                <p class="order-details-header text-center">Order Details</p>
+                @foreach (var item in Model.Items)
+                {
+                    <div class="summary-item">
+                        <div class="summary-book-qty@(item.BookId)">@item.Title</div>
+                        <div class="summary-item-price amount@(item.BookId)">@item.Price $</div>
+                    </div>
+                }
+                <hr />
+                <div class="summary-item">
+                    <div class="summary-item-price ">Total amount</div>
+                    <div class="summary-item-price total-amount">@Model.TotalPrice $</div>
+                </div>
+
+                <div class="checkout-btn mx-auto">
+                    <button class="">CHECKOUT</button>
+                </div>
+
+            </div>
+        </div>
+
     </div>
-    <br />
-    <a href="#" class="placeorder btn btn-primary">Checkout</a>
+
+    @section  Scripts
+    {
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="~/scripts/cartscripts.js"></script>
+    }
 }
 
-*@
-@section  Scripts
-    {
-    <script src="~/Content/ShopScripts/CartScripts.js"></script>
-}

@@ -35,4 +35,10 @@
     <Folder Include="wwwroot\pictures\uploads\books\7\thumbs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\..\Lerua Shop\Lerua Shop\Bin\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
