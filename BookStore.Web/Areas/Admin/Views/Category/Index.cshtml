@@ -1,0 +1,43 @@
+﻿@model BookStore.Data.Models.ViewModels.CategoryVM
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+
+<div class="container">
+    <p class="text-center cat-header">Categories</p>
+    <p>
+        <a asp-action="AddCategory" class="addcategory" id="@Model.Id">Create New</a> 
+    </p>
+    <table class="table category-table">
+        <thead class="category-table-header">
+            <tr>
+                <th class="categoty-table-item">
+                    Category
+                </th>
+                <th class="categoty-table-item">
+                    Icon
+                </th>
+                <th class="category-edit-group"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Categories)
+            {
+                <tr>
+                    <td>
+                        @item.CategoryName
+                    </td>
+                    <td class="category-icon">                        
+                        <span><i class="@item.IconPath"></i></span>
+                    </td>
+                    <td class="category-edit-group">
+                        <a class="btn edit-categoty">Edit</a> 
+                        <a class="btn delete-category">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

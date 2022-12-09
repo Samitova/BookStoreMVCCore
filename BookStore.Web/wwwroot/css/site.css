@@ -444,7 +444,7 @@ hr.a-color {
     display: none;
 }
 
-.addtocart {
+.addtocart{
     margin-top: 10px;
     margin-bottom: 30px;
     padding: 6px 15px 5px 15px;
@@ -460,7 +460,7 @@ hr.a-color {
     text-decoration: none;
 }
 
-.addtocart:hover {
+.addtocart:hover{
     background: #2aa29e;
     color: #fff !important;
     cursor: pointer;
@@ -977,4 +977,85 @@ form .rate-btn button {
     color: #fff;
 }
 
+/*----------------------------------------------------*/
+.cat-header {
+    font-size:24px;
+    font-weight:bold;
+    margin-top:20px;
+}
 
+.category-table-header {
+    margin-top: 50px;
+    background: #faf7ef;
+}
+
+.category-table {
+    width: 100%;   
+}
+
+.category-icon {
+    color: #248a87;
+    font-size: 24px;    
+}
+
+.category-table tr {
+    border-top: none;
+}
+
+.category-edit-group {
+    text-align: right;    
+}
+
+.addcategory {
+    height: 30px;
+    width: 120px;
+    background: #248a87;
+    color: #fff;
+    padding: 3px 10px 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    border: none;
+    display: block;
+}
+
+.addcategory:hover {
+    background: #2aa29e;
+    color: #fff !important;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.edit-categoty {
+    font-size: 14px;
+    background: #a8811a;
+    color: #fff !important;
+    width: 80px;
+    font-weight: bold;
+}
+
+.edit-categoty:hover {
+    background: #c49927;
+    cursor: pointer;
+}
+
+.delete-category {
+    font-size: 14px;
+    background: #343a40;
+    color: #fff !important;
+    width: 80px;
+    font-weight: bold;
+}
+
+.delete-category:hover {
+    background: #c1252c;
+    cursor:pointer;
+}
+
+/* broun #a8811a; ligth broun #c49927;*/
+/* dark #343a40; ligth dark #40474f;*/
+/* green #248a87; ligth green #2aa29e;*/

@@ -10,6 +10,7 @@ using System.Net;
 
 namespace BookStore.Web.Areas.Customer.Controllers
 {
+    [Area("customer")]
     public class CartController : Controller
     {
         private readonly ShopService _bookService;

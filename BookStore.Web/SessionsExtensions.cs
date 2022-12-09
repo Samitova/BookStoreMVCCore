@@ -1,8 +1,6 @@
-﻿using BookStore.Data.Models.ViewModels;
-using BookStore.Services.ShopService.PaginationService;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using static System.Reflection.Metadata.BlobBuilder;
+
 
 namespace BookStore.Web
 {

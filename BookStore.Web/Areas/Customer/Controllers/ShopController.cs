@@ -16,6 +16,7 @@ using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookStore.Web.Areas.Customer.Controllers
 {
+    [Area("customer")]
     public class ShopController : Controller
     {
         private readonly ShopService _bookService;
