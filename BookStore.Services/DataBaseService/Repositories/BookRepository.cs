@@ -44,7 +44,7 @@ namespace BookStore.Services.DataBaseService.Repositories
 
         }
 
-        public override BookDTO GetById(int id)
+        public BookDTO GetById(int? id)
         {
             var book = GetAll(filter: x => x.Id == id, includeProperties: "Comments").FirstOrDefault();
             return book;

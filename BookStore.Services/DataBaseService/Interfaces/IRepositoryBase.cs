@@ -11,8 +11,8 @@ namespace BookStore.Data.Models.Interfaces
     {
         #region Methods
 
-        T GetById(int id);
-        Task<T> GetByIdAsync(int id);       
+        T GetById(int? id);
+        Task<T> GetByIdAsync(int? id);       
         Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter);
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "");  
@@ -33,6 +33,7 @@ namespace BookStore.Data.Models.Interfaces
         void Add(T entity);
         void Update(T entity);
         void Delete(T entity);
+        void Delete(int id);
 
         #endregion
 

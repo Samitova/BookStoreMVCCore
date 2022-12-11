@@ -99,11 +99,6 @@ namespace BookStore.Services.DataBaseService.Repositories
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
+        }    
     }
 }

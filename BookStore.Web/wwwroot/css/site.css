@@ -260,7 +260,8 @@ hr.a-color {
     text-align: center;    
 }
 
-#categories-show-btn a {
+#categories-show-btn a,
+.backhref{
     color: #c39d1d;
     font-size: 14px;
     font-weight: bold;
@@ -269,8 +270,14 @@ hr.a-color {
     cursor: pointer;
  }
 
-/*----------------------------------------------------------------------------------*/
+.backhref:hover,
+ #categories-show-btn a:hover{
+    text-decoration: none;
+    cursor: pointer;
+    color: #c49927;
+}
 
+/*----------------------------------------------------------------------------------*/
 .breadcrumb-a {
     text-decoration: none;
     color: #445554;
@@ -1055,6 +1062,7 @@ form .rate-btn button {
     background: #c1252c;
     cursor:pointer;
 }
+
 
 /* broun #a8811a; ligth broun #c49927;*/
 /* dark #343a40; ligth dark #40474f;*/

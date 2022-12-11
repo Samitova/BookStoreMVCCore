@@ -133,8 +133,7 @@ namespace BookStore.Services.ShopService
 
         public void AddBookComment(BookCommentDTO bookComment)
         {
-            _repository.BookComments.Add(bookComment);
-            _repository.Save();
+            _repository.BookComments.Add(bookComment);           
             BookDTO book = _repository.Books.GetById(bookComment.BookId);
             book.Comments.Add(bookComment);            
             double avarageRate = 0;
@@ -146,8 +145,7 @@ namespace BookStore.Services.ShopService
             book.RateCount = book.Comments.Count;
             book.RateValue = Math.Round(avarageRate / book.RateCount, 1); 
 
-            _repository.Books.Update(book);
-            _repository.Save();          
+            _repository.Books.Update(book);                     
         }
 
         public AuthorVM GetAuthor(int id, SortModel sortModel)

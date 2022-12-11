@@ -10,6 +10,5 @@ namespace BookStore.Data.Models.ViewModels
     {
         public CategoryDTO CategoryDTO { get; set; } = new CategoryDTO();
         public IEnumerable<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
-
     }
 }

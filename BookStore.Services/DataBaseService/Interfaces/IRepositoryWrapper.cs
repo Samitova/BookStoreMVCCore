@@ -11,7 +11,6 @@ namespace BookStore.Services.DataBaseService.Interfaces
         IAuthorRepository Authors { get; }
         IPublisherRepository Publishers { get; }
         ICategoryRepository Categories { get; }
-        IBookCommentsRepository BookComments { get; }
-        void Save();
+        IBookCommentsRepository BookComments { get; }      
     }
 }

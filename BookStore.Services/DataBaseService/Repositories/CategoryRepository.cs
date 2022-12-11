@@ -13,5 +13,7 @@ namespace BookStore.Services.DataBaseService.Repositories
 
         public CategoryRepository(BookStoreContext context) : base(context)
         { }
+
+
     }
 }

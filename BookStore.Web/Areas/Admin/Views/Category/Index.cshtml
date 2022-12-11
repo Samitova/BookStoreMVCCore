@@ -4,11 +4,17 @@
     ViewData["Title"] = "Categories";
 }
 
+@if (TempData["AM"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["success"]
+    </div>
+}
 
 <div class="container">
     <p class="text-center cat-header">Categories</p>
     <p>
-        <a asp-action="AddCategory" class="addcategory" id="@Model.Id">Create New</a> 
+        <a asp-area="Admin" asp-controller="Category" asp-action="CreateUpdateCategory" class="addcategory" id="0">Create New</a>
     </p>
     <table class="table category-table">
         <thead class="category-table-header">
@@ -33,8 +39,10 @@
                         <span><i class="@item.IconPath"></i></span>
                     </td>
                     <td class="category-edit-group">
-                        <a class="btn edit-categoty">Edit</a> 
-                        <a class="btn delete-category">Delete</a>
+                        <a class="btn edit-categoty" asp-area="Admin" asp-controller="Category"
+                        asp-action="CreateUpdateCategory" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn delete-category" asp-area="Admin" asp-controller="Category"
+                       asp-action="DeleteCategory" asp-route-id="@item.Id">Delete</a>
                     </td>
                 </tr>
             }

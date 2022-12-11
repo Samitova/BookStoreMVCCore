@@ -25,5 +25,47 @@ namespace BookStore.Web.Areas.Admin.Controllers
             categoryVM.Categories = _repository.Categories.GetAll(orderBy: x=>x.OrderBy(y=>y.CategoryName));
             return View(categoryVM);
         }
+
+        [HttpGet]
+        public IActionResult CreateUpdateCategory(int id)
+        {
+            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
+            CategoryVM categoryVM = new CategoryVM();
+            
+            if (id == 0)
+            {
+                return View(categoryVM);
+            }
+            else
+            {               
+                categoryVM.CategoryDTO = _repository.Categories.GetById(id);
+                if(categoryVM.CategoryDTO == null)
+                    return NotFound();
+                else
+                    return View(categoryVM);    
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateUpdateCategory(CategoryVM categoryVM)
+        {
+            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
+            if (ModelState.IsValid)
+            {
+                if (categoryVM.CategoryDTO.Id == 0)
+                {
+                    _repository.Categories.Add(categoryVM.CategoryDTO);
+                    TempData["success"] = "Category was created successfuly";
+                }
+                else
+                {
+                    _repository.Categories.Update(categoryVM.CategoryDTO);
+                    TempData["success"] = "Category was updated successfuly";
+                }                
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+
+        }
     }
 }

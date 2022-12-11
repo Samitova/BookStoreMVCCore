@@ -15,10 +15,12 @@ namespace BookStore.Services.DataBaseService.Repositories
         public AuthorRepository(BookStoreContext context) : base(context)
         { }
 
-        public override AuthorDTO GetById(int id)
+        public AuthorDTO GetById(int? id)
         {
             AuthorDTO authorDTO = GetAll(filter: x => x.Id == id, includeProperties: "Books").FirstOrDefault();
             return authorDTO;
         }
+
+
     }
 }
