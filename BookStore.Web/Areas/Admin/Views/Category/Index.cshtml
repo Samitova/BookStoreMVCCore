@@ -4,18 +4,17 @@
     ViewData["Title"] = "Categories";
 }
 
-@if (TempData["AM"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["success"]
-    </div>
-}
-
 <div class="container">
     <p class="text-center cat-header">Categories</p>
     <p>
         <a asp-area="Admin" asp-controller="Category" asp-action="CreateUpdateCategory" class="addcategory" id="0">Create New</a>
     </p>
+    @if (TempData["success"] != null)
+    {
+        <div class="alert alert-success alert-msg">
+            @TempData["success"]
+        </div>
+    }
     <table class="table category-table">
         <thead class="category-table-header">
             <tr>
@@ -49,3 +48,9 @@
         </tbody>
     </table>
 </div>
+
+
+@section  Scripts
+{    
+    <script src="~/scripts/categoryscript.js"></script>
+}

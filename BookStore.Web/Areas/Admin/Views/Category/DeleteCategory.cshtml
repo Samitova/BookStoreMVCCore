@@ -1,0 +1,31 @@
+﻿@model BookStore.Data.Models.ModelsDTO.CategoryDTO
+
+<div class="container">
+    <p class="cat-header text-center">Delete Category</p>
+    <h3>Are you sure you want to delete this category?</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-4 align-content-center">
+            <form asp-action="DeleteCategory" method="post">
+                <input type="hidden" asp-for="@Model.Id" />
+                <input type="hidden" asp-for="@Model.Timestamp" />
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.CategoryName" class="control-label"></label>
+                    <input asp-for="@Model.CategoryName" class="form-control" />
+                    <span asp-validation-for="@Model.CategoryName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.IconPath" class="control-label"></label>
+                    <input asp-for="@Model.IconPath" class="form-control" />
+                    <span asp-validation-for="@Model.IconPath" class="text-danger"></span>
+                </div>
+                <div class="form-group">                   
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <a class="btn btn-dark" asp-action="Index">Cancel</a>                   
+                </div>
+            </form>
+        </div>
+    </div>  
+</div>

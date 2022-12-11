@@ -1063,6 +1063,9 @@ form .rate-btn button {
     cursor:pointer;
 }
 
+.hidden {
+    display: none;
+}
 
 /* broun #a8811a; ligth broun #c49927;*/
 /* dark #343a40; ligth dark #40474f;*/

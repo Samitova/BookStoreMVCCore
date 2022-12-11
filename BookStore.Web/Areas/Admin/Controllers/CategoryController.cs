@@ -27,12 +27,12 @@ namespace BookStore.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateUpdateCategory(int id)
+        public IActionResult CreateUpdateCategory(int? id)
         {
             ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
             CategoryVM categoryVM = new CategoryVM();
             
-            if (id == 0)
+            if (id==null || id == 0)
             {
                 return View(categoryVM);
             }
@@ -65,7 +65,39 @@ namespace BookStore.Web.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
+        }
 
+
+        [HttpGet]
+        public IActionResult DeleteCategory(int? id)
+        {
+            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var category = _repository.Categories.GetById(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+        [HttpPost, ActionName("DeleteCategory")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteCategoryPost(int? id)
+        {
+            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
+           
+            var category = _repository.Categories.GetById(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            _repository.Categories.Delete(category);
+            TempData["success"] = "Category was deleted successfuly";
+            return RedirectToAction("Index");
         }
     }
 }
