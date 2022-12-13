@@ -25,7 +25,7 @@ namespace BookStore.Services.ShopService.SortingService
         public string SortExpression { get; set; }
 
         [DataMember]
-        private List<SortableColumn> SortableColumns = new List<SortableColumn>();
+        public List<SortableColumn> SortableColumns = new List<SortableColumn>();
 
         public SortModel()
         {          
@@ -56,8 +56,9 @@ namespace BookStore.Services.ShopService.SortingService
             return checkColumn;
         }
 
-        public void ApplySort( string sortExpression)
+        public void ApplySort(string action, string sortExpression)
         {
+            Action = action;
             if (string.IsNullOrEmpty(sortExpression))
             {
                 sortExpression = this.SortedProperty.ToLower();
@@ -86,9 +87,8 @@ namespace BookStore.Services.ShopService.SortingService
             }
         }
 
-        public void InitSortModel(string action, Dictionary<string, string> properties)
-        {
-            Action = action;
+        public void InitSortModel(Dictionary<string, string> properties)
+        {            
             foreach (var property in properties)
             {
                 AddColumn(property.Key, property.Value);                

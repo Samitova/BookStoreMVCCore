@@ -22,14 +22,12 @@ namespace BookStore.Services.ShopService.PaginationService
         public string SearchText { get; set; }
         public string SortExpression { get; set; }
 
-        public PaginationModel(string action, int totalItems, int currentPage, string sortExpression, string searchText, int pageSize)
+        public PaginationModel(string action, int totalItems, int currentPage, int pageSize)
         {
             Action = action;
             TotalItems = totalItems;
             CurrentPage = currentPage;
-            PageSize = pageSize;
-            SortExpression = sortExpression;
-            SearchText = searchText;
+            PageSize = pageSize;            
 
             TotalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize); ;
             int startPage = currentPage - 5;

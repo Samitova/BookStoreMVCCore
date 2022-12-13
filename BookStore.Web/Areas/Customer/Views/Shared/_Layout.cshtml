@@ -38,8 +38,15 @@
                         </div>
                     </div>
 
-                    <div class="col pl-md-4 p-md-2 p-lg-4 d-flex justify-content-md-start justify-content-center  justify-content-lg-center">
-                        <partial name="_SearchBarPartial" model="@searchBar" />
+                    <div class="col pl-md-4 p-md-2 p-lg-4 d-flex justify-content-md-start justify-content-center  justify-content-lg-center">                        
+                        <div class="search-container">
+                            <form method="get" class="search-bar" asp-area="Customer" asp-controller="@searchBar.Controler" asp-action="@searchBar.Action">
+                                <input class="input-search" type="search" name="SearchText" value="@searchBar.SearchText" placeholder="Search..." aria-label="Search">
+                                <button type="submit">
+                                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i> </span>
+                                </button>
+                            </form>
+                        </div>
                     </div>
 
                     <div class="col-md-auto bg-dark  p-md-2 pr-md-4  p-lg-4 d-flex justify-content-center">

@@ -8,6 +8,7 @@ using BookStore.Services.ShopService.SearchService;
 using BookStore.Services.ShopService.SortingService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,59 +21,116 @@ namespace BookStore.Web.Areas.Customer.Controllers
     public class ShopController : Controller
     {
         private readonly ShopService _bookService;
-        private int _pageSize = 4;
+        private int _pageSize = 2;
+        private SortModel _sortModel = new SortModel();
 
         public ShopController(ShopService bookService)
         {
-            _bookService = bookService;
+            _bookService = bookService;            
         }
 
-        public IActionResult Index(int PageSize, string SortExpression = "", string SearchText = "", int CurrentPage = 1)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            Dictionary<string, string> sortedProperties = new Dictionary<string, string>() { { "title", "title" }, { "price", "price_desc" }, { "authorfullname", "authorfullname" }, { "rating", "rating_desc" }, { "bestsellers", "bestsellers_desc" }, { "novelties", "novelties_desc" } };
+            base.OnActionExecuting(context);
+            ViewData["SearchBar"] = new SearchBar() { Action = "Search", Controler = "Shop", SearchText = "" };
+            SetSortModel();
+        }
+
+        public IActionResult Index()
+        {          
             List<BookVM> books = new List<BookVM>();
-            NavigationService navigationService = new NavigationService();
-            string oldSearchText = "";
-
-            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = SearchText };
-            PageSize = ProccessPageSize(PageSize);
-            SortModel sortModel = SetSortModel("Index", sortedProperties, SortExpression);
-
-            bool isBooksInSession = HttpContext.Session.TryGetValue("Books", out _);
-
-            if (isBooksInSession)
-            {
-                oldSearchText = HttpContext.Session.GetString("SearchText");
-            }
-
-            if (!isBooksInSession || isBooksInSession && oldSearchText != SearchText || isBooksInSession && SearchText == "")
-            {
-                books = _bookService.GetAllBooksFromDb(SearchText);
-                books = _bookService.DoSort(books, sortModel.SortedProperty, sortModel.SortedOrder);
-                HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(books));
-                HttpContext.Session.SetString("SearchText", SearchText);
-            }
-            else
-            {
-                books = JsonConvert.DeserializeObject<PaginatedList<BookVM>>(HttpContext.Session.GetString("Books"));
-                books = _bookService.DoSort(books, sortModel.SortedProperty, sortModel.SortedOrder);
-            }
-
-            navigationService.SetNavigationService("Index", books, CurrentPage, PageSize, SearchText, SortExpression);
+            NavigationService navigationService = new NavigationService();            
+           
+            books = _bookService.GetAllBooksFromDb("");           
+            HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(books));
+           
+            navigationService.SetNavigationService("Paging", books, 1, _pageSize);
 
             ViewData["NavigationService"] = navigationService;
             return View(navigationService.PagedBooks);
         }
+                 
+        public IActionResult Search(string SearchText = "")
+        {   
+            List<BookVM>  books = _bookService.GetAllBooksFromDb(SearchText);
+            HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(books));
 
+            NavigationService navigationService = new NavigationService();
+            navigationService.SetNavigationService("Paging", books, 1, _pageSize);
+
+            ViewData["NavigationService"] = navigationService;
+            return View("Index", navigationService.PagedBooks);
+        }
+
+        public IActionResult Sort(string sortExpression = "")
+        {
+            NavigationService navigationService = new NavigationService();          
+
+            _sortModel.ApplySort("Sort", sortExpression);
+            ViewData["SortModel"] = _sortModel;
+
+            List<BookVM> books = JsonConvert.DeserializeObject<PaginatedList<BookVM>>(HttpContext.Session.GetString("Books"));
+            books = _bookService.DoSort(books, _sortModel.SortedProperty, _sortModel.SortedOrder);
+            HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(books));
+
+            navigationService.SetNavigationService("Paging", books, 1, _pageSize);
+            ViewData["NavigationService"] = navigationService;
+            return View("Index", navigationService.PagedBooks);
+        }
+
+
+        public IActionResult Paging(int PageSize, int CurrentPage=1)
+        {
+            NavigationService navigationService = new NavigationService();
+            if(PageSize!=_pageSize)
+                _pageSize = PageSize;
+            List<BookVM> books = JsonConvert.DeserializeObject<PaginatedList<BookVM>>(HttpContext.Session.GetString("Books"));
+            navigationService.SetNavigationService("Paging", books, CurrentPage, _pageSize);
+            ViewData["NavigationService"] = navigationService;
+            return View("Index", navigationService.PagedBooks);   
+        }
+
+        public IActionResult AuthorBooksPaging(int PageSize, int CurrentPage=1)
+        {
+            if (PageSize != _pageSize)
+                _pageSize = PageSize;
+            AuthorVM author = JsonConvert.DeserializeObject<AuthorVM>(HttpContext.Session.GetString("Author"));
+            author.Books = JsonConvert.DeserializeObject<PaginatedList<BookVM>>(HttpContext.Session.GetString("Books"));
+
+            NavigationService navigationService = new NavigationService();
+            navigationService.SetNavigationService("AuthorBooksPaging", author.Books, CurrentPage, _pageSize);
+
+            ViewData["NavigationService"] = navigationService;
+            return View("AuthorDetails", author);
+        }
+
+        public IActionResult AuthorDetails(int id, int PageSize, string SortExpression = "")
+        {
+            NavigationService navigationService = new NavigationService();
+            AuthorVM author = new AuthorVM();
+
+            if (PageSize != _pageSize && PageSize != 0)
+                _pageSize = PageSize;
+
+            _sortModel.ApplySort("AuthorDetails", SortExpression);
+            ViewData["SortModel"] = _sortModel;
+
+            author = _bookService.GetAuthor(id, _sortModel);
+            HttpContext.Session.SetString("Author", JsonConvert.SerializeObject(author));
+            author.Books = _bookService.DoSort(author.Books, _sortModel.SortedProperty, _sortModel.SortedOrder);
+            HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(author.Books));
+
+            navigationService.SetNavigationService("AuthorBooksPaging", author.Books, 1, _pageSize);
+            ViewData["NavigationService"] = navigationService;
+            return View(author);
+        }
         public IActionResult BookDetails(int id)
         {
-            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
             BookVM book = _bookService.GetBookById(id);
             return View(book);
         }
         public IActionResult AddBookComment(BookCommentDTO bookComment)
         {
-            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
             if (string.IsNullOrEmpty(bookComment.PublisherName))
                 bookComment.PublisherName = "Anonimus";
             _bookService.AddBookComment(bookComment);
@@ -80,59 +138,12 @@ namespace BookStore.Web.Areas.Customer.Controllers
             return View("BookDetails", book);
         }
 
-        public IActionResult AuthorDetails(int id, int PageSize, string SortExpression = "", int CurrentPage = 1)
+        private void SetSortModel()
         {
-            Dictionary<string, string> sortedProperties = new Dictionary<string, string>() { { "title", "title" }, { "price", "price_desc" }, { "authorfullname", "authorfullname" }, { "rating", "rating_desc" }, { "bestsellers", "bestsellers_desc" }, { "novelties", "novelties_desc" } };
-            NavigationService navigationService = new NavigationService();
-            AuthorVM author = new AuthorVM();
-            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
-            PageSize = ProccessPageSize(PageSize);
-            SortModel sortModel = SetSortModel("AuthorDetails", sortedProperties, SortExpression);
-
-            bool isAuthorInSession = HttpContext.Session.TryGetValue("Author", out _);
-
-            if (!isAuthorInSession)
-            {
-                author = _bookService.GetAuthor(id, sortModel);
-                HttpContext.Session.SetString("Author", JsonConvert.SerializeObject(author));
-            }
-            else
-            {
-                author = JsonConvert.DeserializeObject<AuthorVM>(HttpContext.Session.GetString("Author"));
-            }
-
-            navigationService.SetNavigationService("AuthorDetails", author.Books, CurrentPage, PageSize, "", SortExpression);
-            ViewData["NavigationService"] = navigationService;
-            return View(author);
-        }
-
-        private SortModel SetSortModel(string action, Dictionary<string, string> sortedProperties, string sortExpression = "")
-        {
-            SortModel sortModel = new SortModel();
-            sortModel.InitSortModel(action, sortedProperties);
-            sortModel.ApplySort(sortExpression);
-            ViewData["SortModel"] = sortModel;
-            return sortModel;
-        }
-
-        private int ProccessPageSize(int PageSize)
-        {
-            bool isPageSizeInSession = HttpContext.Session.TryGetValue("PageSize", out _);
-
-            if (!isPageSizeInSession)
-            {
-                PageSize = _pageSize;
-                HttpContext.Session.SetString("PageSize", PageSize.ToString());
-            }
-            else if (PageSize == 0)
-            {
-                PageSize = int.Parse(HttpContext.Session.GetString("PageSize"));
-            }
-            else
-            {
-                HttpContext.Session.SetString("PageSize", PageSize.ToString());
-            }
-            return PageSize;
+            Dictionary<string, string> sortedProperties = new Dictionary<string, string>() { { "title", "title" }, { "price", "price_desc" }, { "author", "author" }, { "rating", "rating_desc" }, { "bestsellers", "bestsellers_desc" }, { "novelties", "novelties_desc" } };
+            _sortModel.InitSortModel(sortedProperties);
+            _sortModel.ApplySort("Sort", "");
+            ViewData["SortModel"] = _sortModel;
         }
     }
 }

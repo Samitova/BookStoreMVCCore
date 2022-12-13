@@ -28,7 +28,7 @@ namespace BookStore.Data.Models.ViewModels
         [DisplayName("Author")]
         [MaxLength(50)]
         [Required]
-        [OrderKey("authorfullname")]
+        [OrderKey("author")]
         public string AuthorFullName { get; set; }
 
         public Genre Genre { get; set; }

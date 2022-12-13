@@ -15,6 +15,10 @@ a.navbar-brand {
     font-weight:bold;
 }
 
+.nav-item {
+    margin-left:10px;
+}
+
 .top-navbar {
     font-size: 16px;
 }
@@ -607,6 +611,7 @@ span.loader {
     background: #343a40;
     color: #fff;
     text-decoration: none;
+    cursor:pointer;
 }
 
 .paging-item.active .paging-item-link {    
@@ -1065,6 +1070,28 @@ form .rate-btn button {
 
 .hidden {
     display: none;
+}
+/*--------------------------------------------------------------------------------------*/
+
+.admin-search-btn {
+    border: 1px solid #248a87;
+    color: #248a87;
+    background:#fff;
+}
+
+.admin-search-btn:hover {
+    border: 1px solid #248a87;
+    color: #fff;
+    background: #248a87;
+    cursor:pointer;
+}
+
+.admin-search {
+    outline: none;
+    border: 1px solid #248a87;    
+    border-radius: 5px;
+    height: 30px;
+    padding-left: 5px;
 }
 
 /* broun #a8811a; ligth broun #c49927;*/

@@ -22,15 +22,13 @@
         {
             <li class="paging-item">
                 <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="1"
-                    asp-route-pagesize="@Model.PageSize" asp-route-searchtext="@Model.SearchText"
-                    asp-route-sortexpression="@Model.SortExpression">
+                    asp-route-pagesize="@Model.PageSize">
                     First
                 </a>
             </li>
             <li class="paging-item">
                 <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@(Model.CurrentPage-1)"
-                    asp-route-pagesize="@Model.PageSize" asp-route-searchtext="@Model.SearchText"
-                    asp-route-sortexpression="@Model.SortExpression">
+                    asp-route-pagesize="@Model.PageSize">
                     Previous
                 </a>
             </li>
@@ -42,8 +40,7 @@
                 @if (pg != Model.CurrentPage)
                 {
                     <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@pg"
-                        asp-route-pagesize="@Model.PageSize" asp-route-searchtext="@Model.SearchText"
-                        asp-route-sortexpression="@Model.SortExpression">
+                        asp-route-pagesize="@Model.PageSize">
                         @pg
                     </a>
                 }
@@ -58,15 +55,13 @@
         {
             <li class="paging-item">
                 <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@(Model.CurrentPage+1)"
-               asp-route-pagesize="@Model.PageSize" asp-route-searchtext="@Model.SearchText"
-               asp-route-sortexpression="@Model.SortExpression">
+               asp-route-pagesize="@Model.PageSize">
                     Next
                 </a>
             </li>
             <li class="paging-item">
                 <a class="paging-item-link" asp-action="@Model.Action" asp-route-currentpage="@Model.TotalPages"
-               asp-route-pagesize="@Model.PageSize" asp-route-searchtext="@Model.SearchText"
-               asp-route-sortexpression="@Model.SortExpression">
+               asp-route-pagesize="@Model.PageSize">
                     Last
                 </a>
             </li>
@@ -80,10 +75,8 @@
     {
         var controllerName = '@this.ViewContext.RouteData.Values["controller"].ToString()';
         var areaName = '@this.ViewContext.RouteData.Values["area"].ToString()';
-
         
-        window.location.href = "/" + areaName + "/" + controllerName + "/@Model.Action" + "?pageSize=" + obj.value
-            + "&SerchText=" + "@Model.SearchText"+"&SortExpression=" + "@Model.SortExpression";
+        window.location.href = "/" + areaName + "/" + controllerName + "/@Model.Action" + "?pageSize=" + obj.value;
     }
 </script>
 

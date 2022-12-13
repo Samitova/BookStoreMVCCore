@@ -137,9 +137,25 @@
         </ul>
     </div>
 
-    <div class="main-content ">
+    <div class="main-content">        
+
         <div class="sort-table-wrapper ml-1">
-            <partial name="_SortingBarPartial" model="@sortModel"/>
+            <nav class="navbar navbar-expand-lg  justify-content-end">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="sort-item sort-item-main">
+                            <a asp-action="Index" asp-route-sortExpression="">ALL</a>
+                        </li>
+                        <li class="sort-item">
+                            <a asp-action="@sortModel.Action" asp-route-sortExpression="@sortModel.GetColumn("bestsellers").SortExpression">BESTSELLERS</a>
+                        </li>
+                        <li class="sort-item">
+                            <a asp-action="@sortModel.Action" asp-route-sortExpression="@sortModel.GetColumn("novelties").SortExpression">NOVELTIES</a>
+                        </li>
+                    </ul>
+                </div>
+                <partial name="_SortingBarPartial" model="@sortModel" />
+            </nav>
         </div>
                 
         <div class="row  ml-1">
