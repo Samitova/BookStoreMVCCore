@@ -1,7 +1,6 @@
 ﻿using BookStore.Data.Models.ModelsDTO;
 using BookStore.Data.Models.ViewModels;
 using BookStore.Services.DataBaseService.Interfaces;
-using BookStore.Services.DataBaseService.Repositories;
 using BookStore.Services.ShopService;
 using BookStore.Services.ShopService.PaginationService;
 using BookStore.Services.ShopService.SearchService;
@@ -10,38 +9,40 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using static System.Reflection.Metadata.BlobBuilder;
-
+using System.Linq;
 
 namespace BookStore.Web.Areas.Customer.Controllers
 {
-    [Area("customer")]
+    [Area("Customer")]
     public class ShopController : Controller
     {
+        private readonly IRepositoryWrapper _repository;
         private readonly ShopService _bookService;
         private int _pageSize = 2;
         private SortModel _sortModel = new SortModel();
 
-        public ShopController(ShopService bookService)
+        public ShopController(IRepositoryWrapper repositoryWrapper, ShopService bookService)
         {
-            _bookService = bookService;            
+            _bookService = bookService;
+            _repository = repositoryWrapper;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-            ViewData["SearchBar"] = new SearchBar() { Action = "Search", Controler = "Shop", SearchText = "" };
-            SetSortModel();
+            ViewData["SearchBar"] = new SearchBar() { Action = "Search", Controler = "Shop", SearchText = "" };             
+            ViewData["Categories"] = _repository.Categories.GetAll().ToList(); 
+            SetSortModel();                      
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? categoryId)
         {          
             List<BookVM> books = new List<BookVM>();
-            NavigationService navigationService = new NavigationService();            
-           
-            books = _bookService.GetAllBooksFromDb("");           
+            NavigationService navigationService = new NavigationService();
+
+
+            books = _bookService.GetAllBooksFromDb(categoryId:categoryId);           
             HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(books));
            
             navigationService.SetNavigationService("Paging", books, 1, _pageSize);

@@ -234,11 +234,16 @@ hr.a-color {
     display: inline-block;
 }
 
-.subcategories-item a:hover {
-    border: 3px solid #31b9b5;
-    text-decoration: none;
-    color: #000;
+.subcategories-item i {
+    color: #31b9b5;
+    padding-right:5px;
 }
+
+    .subcategories-item a:hover {
+        border: 3px solid #31b9b5;
+        text-decoration: none;
+        color: #000;
+    }
 
 .category-header {
     background: #faf7ef;
@@ -250,6 +255,7 @@ hr.a-color {
 .book-box {
     display: flex;
     flex-wrap: wrap;
+    margin-left:10px;
 }
 
 .category-name {    

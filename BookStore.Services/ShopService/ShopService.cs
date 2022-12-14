@@ -68,13 +68,16 @@ namespace BookStore.Services.ShopService
             }           
         }
 
-        public List<BookVM> GetAllBooksFromDb(string SearchText = "")
+        public List<BookVM> GetAllBooksFromDb(string SearchText = "", int? categoryId=null )
         {
             List<BookDTO> booksDto = new List<BookDTO>();            
 
             if (string.IsNullOrEmpty(SearchText))
             {
-                booksDto = _repository.Books.GetAll(includeProperties: "Comments").ToList();
+                if(categoryId == null)
+                    booksDto = _repository.Books.GetAll(includeProperties: "Comments").ToList();
+                else
+                    booksDto = _repository.Books.GetAll(filter: x=>x.CategoryId==categoryId, includeProperties: "Comments").ToList();
             }
             else
             {

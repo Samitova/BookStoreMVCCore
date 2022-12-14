@@ -1,12 +1,13 @@
 ﻿@using BookStore.Services.ShopService
 @using BookStore.Services.ShopService.SortingService
-
+@using BookStore.Data.Models.ModelsDTO;
 @model List<BookStore.Data.Models.ViewModels.BookVM>
 
 @{
     ViewData["Title"] = "Books";    
     NavigationService navigationService = (NavigationService)ViewData["NavigationService"];  
     SortModel sortModel = (SortModel)ViewData["SortModel"];
+    List<CategoryDTO> categories = (List<CategoryDTO>)ViewData["Categories"];
 }
 
 <div class="container-fluid">
@@ -29,13 +30,11 @@
                 <div class="navbar-expand-md">
                     <div class="collapse navbar-collapse" id="navbarTogglerCategories">
                         <ul class="list-inline">
-                            @for (var i = 0; i < 10; i++)
+                            @foreach (var item in categories)
                             {
                                 <li class="list-inline-item">
                                     <div class="subcategories-item justify-content-lg-start">
-                                        <a href="#">
-                                            <div> Audioknihy</div>
-                                        </a>
+                                        <a asp-area="Customer" asp-controller="Shop" asp-action="Index" asp-route-categoryId="@item.Id"><i class="@item.IconPath"></i> @item.CategoryName</a>
                                     </div>
                                 </li>
                             }
