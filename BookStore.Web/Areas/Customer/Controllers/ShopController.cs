@@ -31,8 +31,7 @@ namespace BookStore.Web.Areas.Customer.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-            ViewData["SearchBar"] = new SearchBar() { Action = "Search", Controler = "Shop", SearchText = "" };             
-            ViewData["Categories"] = _repository.Categories.GetAll().ToList(); 
+            ViewData["SearchBar"] = new SearchBar() { Action = "Search", Controler = "Shop", SearchText = "" };    
             SetSortModel();                      
         }
 
@@ -40,8 +39,7 @@ namespace BookStore.Web.Areas.Customer.Controllers
         {          
             List<BookVM> books = new List<BookVM>();
             NavigationService navigationService = new NavigationService();
-
-
+            SetCategory(categoryId);
             books = _bookService.GetAllBooksFromDb(categoryId:categoryId);           
             HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(books));
            
@@ -146,5 +144,16 @@ namespace BookStore.Web.Areas.Customer.Controllers
             _sortModel.ApplySort("Sort", "");
             ViewData["SortModel"] = _sortModel;
         }
+        private void SetCategory(int? id)
+        {
+            CategoryVM categoryVM = new CategoryVM();
+            categoryVM.Categories = _repository.Categories.GetAll().ToList();
+            if (id != null)
+            {
+                categoryVM.CategoryDTO = _repository.Categories.GetById(id);
+            }
+            ViewData["Categories"] = categoryVM;
+        }
+
     }
 }

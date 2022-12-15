@@ -1,13 +1,14 @@
 ﻿@using BookStore.Services.ShopService
 @using BookStore.Services.ShopService.SortingService
-@using BookStore.Data.Models.ViewModels
+@using BookStore.Data.Models.ModelsDTO;
 @model List<BookStore.Data.Models.ViewModels.BookVM>
 
 @{
-    ViewData["Title"] = "Books";    
-    NavigationService navigationService = (NavigationService)ViewData["NavigationService"];  
+    ViewData["Title"] = "Products";   
+    NavigationService navigationService = (NavigationService)ViewData["NavigationService"];
     SortModel sortModel = (SortModel)ViewData["SortModel"];
-    CategoryVM categories = (CategoryVM)ViewData["Categories"];
+    List<Category> categories = (List<Category>)ViewData["Categories"];
+
 }
 
 <div class="container-fluid">
@@ -24,24 +25,17 @@
                 </ol>
             </nav>
 
-            @if (categories.CategoryDTO.CategoryName == null)
-            {
-                <div class="category-name text-lg-left">Books</div>
-            }
-            else
-            {
-                <div class="category-name text-lg-left">@categories.CategoryDTO.CategoryName</div>
-            }
+            <div class="category-name text-lg-left">Books</div>
 
             <div class="categories">
                 <div class="navbar-expand-md">
                     <div class="collapse navbar-collapse" id="navbarTogglerCategories">
-                        <ul class="list-inline">
-                            @foreach (var item in categories.Categories)
+                        <ul class="list-inline">                        
+                            @foreach (var item in categories)
                             {
                                 <li class="list-inline-item">
                                     <div class="subcategories-item justify-content-lg-start">
-                                        <a asp-area="Customer" asp-controller="Shop" asp-action="Index" asp-route-categoryId="@item.Id"><i class="@item.IconPath"></i> @item.CategoryName</a>
+                                        <a asp-area="Admin" asp-controller="Product" asp-action="Index" asp-route-categotyId="@item.Id"><i class="@item.IconPath"></i> @item.CategoryName</a>
                                     </div>
                                 </li>
                             }
@@ -62,7 +56,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="container-fluid d-inline-flex">
 
@@ -143,47 +136,118 @@
         </ul>
     </div>
 
-    <div class="main-content">        
-
+    <div class="main-content ">
         <div class="sort-table-wrapper ml-1">
-            <nav class="navbar navbar-expand-lg  justify-content-end">
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="sort-item sort-item-main">
-                            <a asp-action="Index" asp-route-sortExpression="">ALL</a>
-                        </li>
-                        <li class="sort-item">
-                            <a asp-action="@sortModel.Action" asp-route-sortExpression="@sortModel.GetColumn("bestsellers").SortExpression">BESTSELLERS</a>
-                        </li>
-                        <li class="sort-item">
-                            <a asp-action="@sortModel.Action" asp-route-sortExpression="@sortModel.GetColumn("novelties").SortExpression">NOVELTIES</a>
-                        </li>
-                    </ul>
-                </div>
-                <partial name="_SortingBarPartial" model="@sortModel" />
-            </nav>
+            @*<partial name="_SortingBarPartial" model="@sortModel" />*@
+
+            <a asp-area="Admin" asp-controller="Category" asp-action="CreateUpdateCategory" class="addcategory" id="0">Create New</a>
+
         </div>
-                
+
         <div class="row  ml-1">
-            @for(int i=0; i< Model.Count; i++)
+            @for (int i = 0; i < Model.Count; i++)
             {
-                <partial name="_DisplayBooksPartial" model="Model[i]" />
+                <partial name="_DisplayBooksPartial" model="@Model[i]" />
                 if (i < Model.Count - 1)
                 {
                     <div class="vl"></div>
-                }                
-            }           
+                }
+            }
         </div>
 
         <div class="row ml-1 justify-content-lg-between justify-content-center">
-            <partial name="_PageBarPartial" model="@navigationService.PaginationModel" />            
+            <partial name="_PageBarPartial" model="@navigationService.PaginationModel" />
         </div>
-    </div>    
+    </div>
 </div>
 
 @section Scripts
-{
+    {
     <script src="~/scripts/cartscripts.js"></script>
 }
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+<div class="container">
+    <p class="text-center cat-header">Products</p>
+    <p>
+        <a asp-area="Admin" asp-controller="Product" asp-action="CreateUpdateProduct" class="addcategory" id="0">Create New</a>
+    </p>
+    @if (TempData["success"] != null)
+    {
+        <div class="alert alert-success alert-msg">
+            @TempData["success"]
+        </div>
+    }
+    <table class="table category-table">
+        <thead class="category-table-header">
+            <tr>
+                <th class="categoty-table-item">
+                    Photo
+                </th>
+                <th class="categoty-table-item">
+                    Title
+                </th>
+                <th class="categoty-table-item">
+                    Author
+                </th>
+                <th class="categoty-table-item">
+                    Price
+                </th>
+                 <th class="categoty-table-item">
+                    Quantaty
+                </th>               
+                <th class="category-edit-group"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="/pictures/uploads/books/@item.Id/thumbs/@item.PhotoPath" class="imageThumbnail" alt="" asp-append-version="true">
+                    </td>
+                    <td class="category-icon">
+                        @item.Title
+                    </td>
+                    <td class="category-icon">
+                        @item.AuthorFullName
+                    </td>
+                    <td class="category-icon">
+                        @item.Price $
+                    </td>
+                    <td class="category-icon">
+                        @item.AvaliableQuantaty
+                    </td>
+
+                    <td class="category-edit-group">
+                        <a class="btn edit-categoty" asp-area="Admin" asp-controller="Product"
+                       asp-action="CreateUpdateProduct" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn edit-categoty" asp-area="Admin" asp-controller="Product"
+                       asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a class="btn delete-category" asp-area="Admin" asp-controller="Product"
+                       asp-action="DeleteProduct" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section  Scripts
+    {
+    <script src="~/scripts/categoryscript.js"></script>
+}*@
 
 
