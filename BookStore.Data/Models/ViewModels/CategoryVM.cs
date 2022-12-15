@@ -8,7 +8,7 @@ namespace BookStore.Data.Models.ViewModels
 {
     public class CategoryVM:BaseEntity
     {
-        public CategoryDTO CategoryDTO { get; set; } = new CategoryDTO();
-        public IEnumerable<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
+        public Category CategoryDTO { get; set; } = new Category();
+        public IEnumerable<Category> Categories { get; set; } = new List<Category>();
     }
 }

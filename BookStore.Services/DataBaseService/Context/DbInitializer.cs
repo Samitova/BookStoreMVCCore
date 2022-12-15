@@ -38,19 +38,19 @@ namespace BookStore.Services.DataBaseService.Context
             if (!context.Categories.Any())
             {
                 context.Categories.AddRange(
-                  new CategoryDTO
+                  new Category
                   {
                       CategoryName = "Adult Books",                     
                   },
-                  new CategoryDTO
+                  new Category
                   {
                       CategoryName = "Love",
                   },
-                  new CategoryDTO
+                  new Category
                   {
                       CategoryName = "Children Books",
                   },
-                   new CategoryDTO
+                   new Category
                    {
                        CategoryName = "Studing",
                    });

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BookStore.Services.DataBaseService.Repositories
 {
-    public class CategoryRepository : RepositoryBase<CategoryDTO>, ICategoryRepository
+    public class CategoryRepository : RepositoryBase<Category>, ICategoryRepository
     {
 
         public CategoryRepository(BookStoreContext context) : base(context)

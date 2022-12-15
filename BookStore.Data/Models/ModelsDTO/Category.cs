@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BookStore.Data.Models.ModelsDTO
 {
-    public class CategoryDTO:BaseEntity
+    public class Category:BaseEntity
     {
         [MaxLength(50), MinLength(2)]
         [DisplayName("Category")]

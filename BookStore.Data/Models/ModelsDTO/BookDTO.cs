@@ -29,7 +29,7 @@ namespace BookStore.Data.Models.ModelsDTO
         public int CategoryId { get; set; }
 
         [MaxLength(50)]
-        public string CategoryName { get; set;}
+        public string CategoryName { get; set;}        
 
         [Required]
         public int PublisherId { get; set; }
@@ -67,7 +67,7 @@ namespace BookStore.Data.Models.ModelsDTO
         public ICollection<BookCommentDTO> Comments { get; set; }
 
         [ForeignKey("CategoryId")]
-        public CategoryDTO Category { get; set; }
+        public Category Category { get; set; }      
 
         [ForeignKey("PublisherId")]
         public PublisherDTO Publisher { get; set; }
