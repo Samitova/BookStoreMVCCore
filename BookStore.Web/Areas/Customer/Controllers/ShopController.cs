@@ -147,10 +147,14 @@ namespace BookStore.Web.Areas.Customer.Controllers
         private void SetCategory(int? id)
         {
             CategoryVM categoryVM = new CategoryVM();
-            categoryVM.Categories = _repository.Categories.GetAll().ToList();
-            if (id != null)
+            if (id == null)
             {
-                categoryVM.CategoryDTO = _repository.Categories.GetById(id);
+                categoryVM.Categories = _repository.Categories.GetAll(filter: x => x.ParentId == 0, orderBy: x => x.OrderBy(y => y.CategoryName)).ToList();
+            }
+            else 
+            {
+                categoryVM.Categories = _repository.Categories.GetAll(filter: x => x.ParentId == id, orderBy: x => x.OrderBy(y => y.CategoryName)).ToList();
+                categoryVM.Category = _repository.Categories.GetById(id);
             }
             ViewData["Categories"] = categoryVM;
         }

@@ -24,13 +24,13 @@
                 </ol>
             </nav>
 
-            @if (categories.CategoryDTO.CategoryName == null)
+            @if (categories.Category.CategoryName == null)
             {
                 <div class="category-name text-lg-left">Books</div>
             }
             else
             {
-                <div class="category-name text-lg-left">@categories.CategoryDTO.CategoryName</div>
+                <div class="category-name text-lg-left">@categories.Category.CategoryName</div>
             }
 
             <div class="categories">
@@ -143,41 +143,43 @@
         </ul>
     </div>
 
-    <div class="main-content">        
+    <div class="main-content">
+        @if (Model.Count > 0)
+        {
+            <div class="sort-table-wrapper ml-1">
+                <nav class="navbar navbar-expand-lg  justify-content-end">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="sort-item sort-item-main">
+                                <a asp-action="Index" asp-route-sortExpression="">ALL</a>
+                            </li>
+                            <li class="sort-item">
+                                <a asp-action="@sortModel.Action" asp-route-sortExpression="@sortModel.GetColumn("bestsellers").SortExpression">BESTSELLERS</a>
+                            </li>
+                            <li class="sort-item">
+                                <a asp-action="@sortModel.Action" asp-route-sortExpression="@sortModel.GetColumn("novelties").SortExpression">NOVELTIES</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <partial name="_SortingBarPartial" model="@sortModel" />
+                </nav>
+            </div>
 
-        <div class="sort-table-wrapper ml-1">
-            <nav class="navbar navbar-expand-lg  justify-content-end">
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="sort-item sort-item-main">
-                            <a asp-action="Index" asp-route-sortExpression="">ALL</a>
-                        </li>
-                        <li class="sort-item">
-                            <a asp-action="@sortModel.Action" asp-route-sortExpression="@sortModel.GetColumn("bestsellers").SortExpression">BESTSELLERS</a>
-                        </li>
-                        <li class="sort-item">
-                            <a asp-action="@sortModel.Action" asp-route-sortExpression="@sortModel.GetColumn("novelties").SortExpression">NOVELTIES</a>
-                        </li>
-                    </ul>
-                </div>
-                <partial name="_SortingBarPartial" model="@sortModel" />
-            </nav>
-        </div>
-                
-        <div class="row  ml-1">
-            @for(int i=0; i< Model.Count; i++)
-            {
-                <partial name="_DisplayBooksPartial" model="Model[i]" />
-                if (i < Model.Count - 1)
+            <div class="row  ml-1">
+                @for (int i = 0; i < Model.Count; i++)
                 {
-                    <div class="vl"></div>
-                }                
-            }           
-        </div>
+                    <partial name="_DisplayBooksPartial" model="Model[i]" />
+                    if (i < Model.Count - 1)
+                    {
+                        <div class="vl"></div>
+                    }
+                }
+            </div>
 
-        <div class="row ml-1 justify-content-lg-between justify-content-center">
-            <partial name="_PageBarPartial" model="@navigationService.PaginationModel" />            
-        </div>
+            <div class="row ml-1 justify-content-lg-between justify-content-center">
+                <partial name="_PageBarPartial" model="@navigationService.PaginationModel" />
+            </div>
+        }       
     </div>    
 </div>
 
