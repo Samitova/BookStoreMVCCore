@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStore.Services.Migrations
 {
     [DbContext(typeof(BookStoreContext))]
-    [Migration("20221202115811_addRatetoBook")]
-    partial class addRatetoBook
+    [Migration("20221215192410_AddCategoryParentId")]
+    partial class AddCategoryParentId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -182,8 +182,19 @@ namespace BookStore.Services.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CategoryName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("IconPath")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -191,6 +202,8 @@ namespace BookStore.Services.Migrations
                         .HasColumnType("rowversion");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -263,6 +276,13 @@ namespace BookStore.Services.Migrations
                     b.Navigation("Publisher");
                 });
 
+            modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.Category", b =>
+                {
+                    b.HasOne("BookStore.Data.Models.ModelsDTO.Category", null)
+                        .WithMany("SubCategory")
+                        .HasForeignKey("CategoryId");
+                });
+
             modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.AuthorDTO", b =>
                 {
                     b.Navigation("Books");
@@ -271,6 +291,11 @@ namespace BookStore.Services.Migrations
             modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.BookDTO", b =>
                 {
                     b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.Category", b =>
+                {
+                    b.Navigation("SubCategory");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStore.Services.Migrations
 {
     [DbContext(typeof(BookStoreContext))]
-    [Migration("20221202115811_addRatetoBook")]
-    partial class addRatetoBook
+    [Migration("20221220202023_RemoveSubCategory")]
+    partial class RemoveSubCategory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -183,7 +183,15 @@ namespace BookStore.Services.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CategoryName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("IconPath")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()

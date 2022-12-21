@@ -1,8 +1,11 @@
-﻿using AutoMapper;
+﻿using BookStore.Data.Models.ModelsDTO;
 using BookStore.Data.Models.ViewModels;
 using BookStore.Services.DataBaseService.Interfaces;
 using BookStore.Services.ShopService.SearchService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BookStore.Web.Areas.Admin.Controllers
@@ -10,36 +13,70 @@ namespace BookStore.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly IRepositoryWrapper _repository;
-        private readonly IMapper _mapper;
-        public CategoryController(IRepositoryWrapper repositoryWrapper, IMapper mapper)
+        private readonly IRepositoryWrapper _repository;        
+        public CategoryController(IRepositoryWrapper repositoryWrapper)
         {
-            _repository = repositoryWrapper;
-            _mapper = mapper;
+            _repository = repositoryWrapper;           
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
+            ViewData["SearchBar"] = new SearchBar() { Action = "Index", Controler = "Category", SearchText = "" };            
         }
 
         public IActionResult Index()
-        {
-            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
-            CategoryVM categoryVM = new CategoryVM();
-            categoryVM.Categories = _repository.Categories.GetAll(orderBy: x=>x.OrderBy(y=>y.CategoryName));
+        {           
+            CategoryVM categoryVM = GetTreeVeiwCategories();            
             return View(categoryVM);
+        }
+
+        public CategoryVM GetTreeVeiwCategories()
+        {
+            CategoryVM categoryVM = new CategoryVM();
+            categoryVM.Categories = _repository.Categories.GetAll(filter: x => x.ParentId == 0, orderBy: x => x.OrderBy(y => y.CategoryName));
+
+            foreach (var category in categoryVM.Categories)
+            {
+                BuildSubCategory(category);
+            }
+            return categoryVM;
+        }
+
+        private void BuildSubCategory(Category rootCategory)
+        {            
+            List<Category> categories = _repository.Categories.GetAll(filter: x => x.ParentId == rootCategory.Id, orderBy: x => x.OrderBy(y => y.CategoryName)).ToList();
+
+            if (categories.Count > 0)
+            {
+                foreach (var subCategory in categories)
+                {
+                    BuildSubCategory(subCategory);
+                    rootCategory.SubCategory.Add(subCategory);
+                }
+            }
         }
 
         [HttpGet]
         public IActionResult CreateUpdateCategory(int? id)
-        {
-            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
+        {           
             CategoryVM categoryVM = new CategoryVM();
-            
+            categoryVM.Categories = _repository.Categories.GetAll(orderBy: x => x.OrderBy(y => y.CategoryName)).ToList();
+
+            ViewBag.categories = categoryVM.Categories.Select(i => new SelectListItem()
+            {
+                Text = i.CategoryName,
+                Value = i.Id.ToString()
+            });
+
             if (id==null || id == 0)
             {
                 return View(categoryVM);
             }
             else
             {               
-                categoryVM.CategoryDTO = _repository.Categories.GetById(id);
-                if(categoryVM.CategoryDTO == null)
+                categoryVM.Category = _repository.Categories.GetById(id);
+                if(categoryVM.Category == null)
                     return NotFound();
                 else
                     return View(categoryVM);    
@@ -48,30 +85,26 @@ namespace BookStore.Web.Areas.Admin.Controllers
 
         [HttpPost]
         public IActionResult CreateUpdateCategory(CategoryVM categoryVM)
-        {
-            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
+        {           
             if (ModelState.IsValid)
             {
-                if (categoryVM.CategoryDTO.Id == 0)
+                if (categoryVM.Category.Id == 0)
                 {
-                    _repository.Categories.Add(categoryVM.CategoryDTO);
+                    _repository.Categories.Add(categoryVM.Category);                   
                     TempData["success"] = "Category was created successfuly";
                 }
                 else
                 {
-                    _repository.Categories.Update(categoryVM.CategoryDTO);
+                    _repository.Categories.Update(categoryVM.Category);
                     TempData["success"] = "Category was updated successfuly";
-                }                
-                return RedirectToAction("Index");
+                }   
             }
             return RedirectToAction("Index");
         }
 
-
         [HttpGet]
         public IActionResult DeleteCategory(int? id)
         {
-            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
             if (id == null || id == 0)
             {
                 return NotFound();
@@ -87,9 +120,7 @@ namespace BookStore.Web.Areas.Admin.Controllers
         [HttpPost, ActionName("DeleteCategory")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteCategoryPost(int? id)
-        {
-            ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };
-           
+        {           
             var category = _repository.Categories.GetById(id);
             if (category == null)
             {

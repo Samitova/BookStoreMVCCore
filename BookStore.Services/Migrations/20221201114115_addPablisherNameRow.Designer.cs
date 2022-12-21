@@ -168,7 +168,7 @@ namespace BookStore.Services.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.CategoryDTO", b =>
+            modelBuilder.Entity("BookStore.Data.Models.ModelsDTO.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -237,7 +237,7 @@ namespace BookStore.Services.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookStore.Data.Models.ModelsDTO.CategoryDTO", "Category")
+                    b.HasOne("BookStore.Data.Models.ModelsDTO.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)

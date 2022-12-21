@@ -156,7 +156,7 @@ namespace BookStore.Services.DataBaseService.Repositories
         }
 
         #endregion
-        internal void SaveChanges()
+        public void SaveChanges()
         {
             try
             {

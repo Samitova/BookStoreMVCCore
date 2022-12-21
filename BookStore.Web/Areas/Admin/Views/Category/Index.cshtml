@@ -15,38 +15,41 @@
             @TempData["success"]
         </div>
     }
-    <table class="table category-table">
-        <thead class="category-table-header">
-            <tr>
-                <th class="categoty-table-item">
+
+    <ul class="category-table">
+        <li class=" category-table-header">
+            <div class="row ">
+                <div class="col category-table-item">
                     Category
-                </th>
-                <th class="categoty-table-item">
+                </div>
+                <div class=" col category-table-item">
                     Icon
-                </th>
-                <th class="category-edit-group"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Categories)
-            {
-                <tr>
-                    <td>
+                </div>
+                <div class="col category-table-item">
+                </div>
+            </div>           
+        </li>
+        @foreach (var item in Model.Categories)
+        {
+            <li class="category-table-li">
+                <div class="row">
+                    <div class="col category-table-item">
                         @item.CategoryName
-                    </td>
-                    <td class="category-icon">                        
-                        <span><i class="@item.IconPath"></i></span>
-                    </td>
-                    <td class="category-edit-group">
-                        <a class="btn edit-categoty" asp-area="Admin" asp-controller="Category"
-                        asp-action="CreateUpdateCategory" asp-route-id="@item.Id">Edit</a>
+                    </div>
+                    <div class="col category-icon">
+                        <i class="@item.IconPath"></i>
+                    </div>
+                    <div class="col category-edit-group">
+                        <a class="btn edit-category" asp-area="Admin" asp-controller="Category"
+                       asp-action="CreateUpdateCategory" asp-route-id="@item.Id">Edit</a>
                         <a class="btn delete-category" asp-area="Admin" asp-controller="Category"
                        asp-action="DeleteCategory" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    </div>                    
+                </div>
+                <partial name="_SubCategoryPartial" model="@item.SubCategory" />
+            </li>           
+        }
+    </ul>
 </div>
 
 

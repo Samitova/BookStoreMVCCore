@@ -1003,22 +1003,52 @@ form .rate-btn button {
 }
 
 .category-table-header {
-    margin-top: 50px;
+    margin-top: 10px;
+    height: 35px;
     background: #faf7ef;
+    border: 1px solid #c1b8b8;
+    font-weight: bold;
+    font-size: 14px;    
+}
+
+.category-table-item {
+    display: inline;
+    padding-top: 7px;
+    margin-left: 20px;  
+}
+
+.category-table-li {
+    /*border: 1px solid #c1b8b8;*/
+    margin-top:10px;
+}
+
+.subcategory-table-li {
+   /* border: 1px solid #c1b8b8;*/
+   
+    margin: 5px 0  5px 5px;
 }
 
 .category-table {
-    width: 100%;   
+    width: 100%;
+    list-style-type: none;
+}
+
+.sub-category-table {
+    width: 100%;    
+    margin-left:10px;
 }
 
 .category-icon {
     color: #248a87;
-    font-size: 24px;    
+    font-size: 18px;
+    margin-left: 20px;
+    padding-top: 7px;
+    text-align:left;
 }
 
-.category-table tr {
+/*.category-table tr {
     border-top: none;
-}
+}*/
 
 .category-edit-group {
     text-align: right;    
@@ -1048,25 +1078,30 @@ form .rate-btn button {
     text-decoration: none;
 }
 
-.edit-categoty {
-    font-size: 14px;
+.edit-category {
+    font-size: 12px;
     background: #a8811a;
     color: #fff !important;
     width: 80px;
     font-weight: bold;
+    margin-right: 5px;
+    height: 30px;
+    margin: 5px;
 }
 
-.edit-categoty:hover {
+.edit-category:hover {
     background: #c49927;
     cursor: pointer;
 }
 
 .delete-category {
-    font-size: 14px;
+    font-size: 12px;
     background: #343a40;
     color: #fff !important;
     width: 80px;
     font-weight: bold;
+    height: 30px;
+    margin:5px;
 }
 
 .delete-category:hover {
@@ -1099,6 +1134,21 @@ form .rate-btn button {
     height: 30px;
     padding-left: 5px;
 }
+
+select.selectParentCategory {
+    display: block;
+}
+
+select.noParentCategory {
+    display: none;
+}
+
+.nested-table
+ {
+    border: 1px solid #d4cdcd;    
+    width: 100%;    
+}
+
 
 /* broun #a8811a; ligth broun #c49927;*/
 /* dark #343a40; ligth dark #40474f;*/
