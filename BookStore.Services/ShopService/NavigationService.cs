@@ -14,10 +14,16 @@ namespace BookStore.Services.ShopService
         {          
         }
 
-        public void SetNavigationService(string action, List<BookVM>  books, int currentPage, int pageSize)
+        //public void SetNavigationService(string action, List<BookVM>  books, int currentPage, int pageSize)
+        //{
+        //    PagedBooks = new PaginatedList<BookVM>(books, currentPage, pageSize);
+        //    PaginationModel = new PaginationModel(action, PagedBooks.TotalRecord, currentPage, pageSize);
+        //}
+        //
+        public void SetNavigationService(string action, List<BookVM> books, int currentPage, int pageSize, string searchText, string sortExpression)
         {
             PagedBooks = new PaginatedList<BookVM>(books, currentPage, pageSize);
-            PaginationModel = new PaginationModel(action, PagedBooks.TotalRecord, currentPage, pageSize);
-        }       
+            PaginationModel = new PaginationModel(action, PagedBooks.TotalRecord, currentPage, sortExpression, searchText, pageSize);
+        }
     }
 }

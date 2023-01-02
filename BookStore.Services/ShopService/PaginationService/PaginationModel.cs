@@ -22,12 +22,14 @@ namespace BookStore.Services.ShopService.PaginationService
         public string SearchText { get; set; }
         public string SortExpression { get; set; }
 
-        public PaginationModel(string action, int totalItems, int currentPage, int pageSize)
+        public PaginationModel(string action, int totalItems, int currentPage, string sortExpression, string searchText, int pageSize)
         {
             Action = action;
             TotalItems = totalItems;
             CurrentPage = currentPage;
-            PageSize = pageSize;            
+            PageSize = pageSize;
+            SortExpression = sortExpression;
+            SearchText = searchText;
 
             TotalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize); ;
             int startPage = currentPage - 5;
@@ -60,7 +62,7 @@ namespace BookStore.Services.ShopService.PaginationService
                 StartPage = startPage;
                 EndPage = endPage;
             }
-        }
+        }      
 
         public List<SelectListItem> GetPaginationSize()
         {

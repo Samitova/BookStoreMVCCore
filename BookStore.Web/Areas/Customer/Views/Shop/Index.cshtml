@@ -10,20 +10,9 @@
     CategoryVM categories = (CategoryVM)ViewData["Categories"];
 }
 
-<div class="container-fluid">
+<div class="container-fluid main-container">
     <div class="row">
-        <div class="category-header">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="#" class="breadcrumb-a"><i class="fa-sharp fa-solid fa-house pr-2"></i></a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Books
-                    </li>
-                </ol>
-            </nav>
-
+        <div class="category-header">           
             @if (categories.Category.CategoryName == null)
             {
                 <div class="category-name text-lg-left">Books</div>
@@ -41,7 +30,7 @@
                             {
                                 <li class="list-inline-item">
                                     <div class="subcategories-item justify-content-lg-start">
-                                        <a asp-area="Customer" asp-controller="Shop" asp-action="Index" asp-route-categoryId="@item.Id"><i class="@item.IconPath"></i> @item.CategoryName</a>
+                                        <a asp-area="Customer" asp-controller="Shop" asp-action="Category" asp-route-categoryId="@item.Id"><i class="@item.IconPath"></i> @item.CategoryName</a>
                                     </div>
                                 </li>
                             }

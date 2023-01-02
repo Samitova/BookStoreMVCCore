@@ -4,6 +4,7 @@ using BookStore.Services.ShopService.SearchService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SmartBreadcrumbs.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -19,6 +20,8 @@ namespace BookStore.Web.Areas.Customer.Controllers
         {
             _bookService = bookService;
         }
+
+        [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult Index()
         {
             ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = "" };

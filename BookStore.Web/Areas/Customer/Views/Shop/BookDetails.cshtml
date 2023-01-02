@@ -2,7 +2,7 @@
 @model BookStore.Data.Models.ViewModels.BookVM
 
 @{
-    ViewData["Title"] = "Book Details";
+    ViewData["Title"] = Model.Title;
     var photoPath = $"/pictures/uploads/books/{Model.Id}/{Model.PhotoPath ?? "noimage.png"}";
     ProgressBarVM progressBar = new ProgressBarVM();
 }

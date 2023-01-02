@@ -109,8 +109,8 @@ body {
 
 /*--------------------------------------For open-closw sidebar--------------------------------------*/
 
-.main-conrainer {
-    background:#fff;     
+.main-container {
+    background:#fff;    
 }
 
 #side-nav {
@@ -288,20 +288,26 @@ hr.a-color {
 }
 
 /*----------------------------------------------------------------------------------*/
-.breadcrumb-a {
+li.breadcrumb-item a {
     text-decoration: none;
     color: #445554;
 }
 
-.breadcrumb-a:hover {
+li.breadcrumb-item a:hover {
     text-decoration: none;
-    color: #2ba19e;
+    color: #b0a5a5;
+}
+
+li.breadcrumb-item.active {
+    text-decoration: none;
+    color: #94782e;    
 }
 
 .breadcrumb {
     font-size: 14px;
-    padding-top: 5px;
-    padding-left: 15px;
+    height:100%;
+    padding:10px 0 10px 30px;      
+    margin-bottom:0px;
     background: #faf7ef;
 }
 

@@ -1,6 +1,10 @@
 ﻿@using BookStore.Services.ShopService.SearchService
 @model BookStore.Services.ShopService.SortingService.SortModel
 
+@{
+    SearchBar searchBar = (SearchBar)ViewData["SearchBar"];
+}
+
 <div class="dropdown my-2 my-lg-0" id="sort-dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         SORTING
@@ -8,7 +12,7 @@
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         @foreach (var item in Model.SortableColumns)
         {
-            <a class="dropdown-item" asp-action="@Model.Action" asp-route-sortExpression="@Model.GetColumn(item.ColumnName).SortExpression">
+            <a class="dropdown-item" asp-action="@Model.Action" asp-route-searchtext="@searchBar.SearchText" asp-route-sortExpression="@Model.GetColumn(item.ColumnName).SortExpression">
                 @item.ColumnName<i class="dropdown-icon @Model.GetColumn(item.ColumnName).SortIcon" aria-hidden="true"></i>
             </a>
         }

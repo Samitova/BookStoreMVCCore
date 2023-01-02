@@ -3,7 +3,7 @@
 @model BookStore.Data.Models.ViewModels.AuthorVM
 
 @{
-    ViewData["Title"] = "Author Details";
+    ViewData["Title"] = Model.FullName;
     var photoPath = $"/pictures/uploads/authors/{Model.Id}/{Model.PhotoPath ?? "noimage.png"}";
     SortModel sortModel = (SortModel)ViewData["SortModel"];
     NavigationService navigationService = (NavigationService)ViewData["NavigationService"];

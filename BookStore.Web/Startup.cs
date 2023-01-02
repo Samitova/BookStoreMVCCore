@@ -10,10 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json.Serialization;
+using SmartBreadcrumbs.Extensions;
 using System;
-
-
+using System.Reflection;
 
 namespace BookStore.Web
 {
@@ -42,6 +41,16 @@ namespace BookStore.Web
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
+            });
+            
+            services.AddBreadcrumbs(Assembly.GetExecutingAssembly(), options =>
+            {
+                options.TagName = "nav";
+                options.TagClasses = "";
+                options.OlClasses = "breadcrumb";
+                options.LiClasses = "breadcrumb-item";
+                options.ActiveLiClasses = "breadcrumb-item active";
+                options.SeparatorElement = "<li class=\"separator\">/</li>";
             });
         }
 
