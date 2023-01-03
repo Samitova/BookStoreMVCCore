@@ -1,0 +1,37 @@
+﻿@model BookStore.Data.Models.ViewModels.BookVM
+
+@{
+    var photoPath = $"/pictures/uploads/books/{Model.Id}/thumbs/{Model.PhotoPath ?? "noimage.png"}";
+ }
+
+<div class="col card-wrapper">    
+    <div class="card">
+        <img src="@photoPath" class="card-img-top imageThumbnail" alt="" asp-append-version="true">
+
+        <div class="card-body">
+            <div>
+                <a class="card-title" asp-action="BookDetails" asp-route-id="@Model.Id">@Model.Title</a><br />
+            </div>
+            <div>
+                <a class="card-author" asp-action="AuthorDetails" asp-route-id="@Model.AuthorId">@Model.AuthorFullName</a>                
+            </div>
+            <div>
+                @Model.ISBN
+            </div>
+
+            <div class="availiable-quantaty">In stock @Model.AvaliableQuantaty item(s)</div>
+
+            <div class="prices-box">                
+                <div class="price-item-main d-inline">@Model.Price $</div>
+            </div>          
+
+            <div class="product-edit-group">               
+                <a class="btn edit-btn" asp-area="Admin" asp-controller="Product"
+                   asp-action="CreateUpdateProduct" asp-route-id="@Model.Id">Edit</a>
+                <a class="btn delete-btn" asp-area="Admin" asp-controller="Product"
+                   asp-action="DeleteProduct" asp-route-id="@Model.Id">Delete</a>
+            </div>
+        </div>          
+    </div>      
+</div>
+

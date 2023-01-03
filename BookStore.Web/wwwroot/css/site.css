@@ -339,14 +339,23 @@ li.breadcrumb-item.active {
     margin-left:20px;
 }
 
-.search-bar button {        
-    background: transparent;
-    border: 0;       
-    cursor:pointer;
-    border-radius:50%
+.btn-outline-success {
+    border-color: #1ea4a0;
+    color: #1ea4a0;
 }
 
-.search-icon {   
+.btn-outline-success:hover {
+    background: #1ea4a0;
+}
+
+.search-bar button {
+     background: transparent;
+     border: 0;
+     cursor: pointer;
+     border-radius: 50%
+}
+
+.search-icon {
     font-size: 16px;
     cursor: pointer;
     display: flex;
@@ -365,10 +374,11 @@ li.breadcrumb-item.active {
 .search-icon:hover {
     background: #23beb9;
 }
+
 /*-----------------------------------------*/
 .card {
     height: 550px;
-    width: 250px;
+    width: 300px;
     min-width: 250px;
     border: none;
     margin-left: auto;
@@ -1052,12 +1062,14 @@ form .rate-btn button {
     text-align:left;
 }
 
-/*.category-table tr {
-    border-top: none;
-}*/
 
 .category-edit-group {
     text-align: right;    
+}
+
+.product-edit-group {
+    text-align: center;
+    margin-top:50px;
 }
 
 .addcategory {
@@ -1084,7 +1096,7 @@ form .rate-btn button {
     text-decoration: none;
 }
 
-.edit-category {
+.edit-btn {
     font-size: 12px;
     background: #a8811a;
     color: #fff !important;
@@ -1095,24 +1107,24 @@ form .rate-btn button {
     margin: 5px;
 }
 
-.edit-category:hover {
+.edit-btn:hover {
     background: #c49927;
     cursor: pointer;
 }
 
-.delete-category {
+.delete-btn {
     font-size: 12px;
     background: #343a40;
     color: #fff !important;
     width: 80px;
     font-weight: bold;
     height: 30px;
-    margin:5px;
+    margin: 5px;
 }
 
-.delete-category:hover {
+.delete-btn:hover {
     background: #c1252c;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .hidden {

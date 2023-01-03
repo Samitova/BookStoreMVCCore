@@ -25,7 +25,7 @@ namespace BookStore.Web.Areas.Customer.Controllers
     {
         private readonly IRepositoryWrapper _repository;
         private readonly ShopService _bookService;
-        private int _pageSize = 2;
+        private int _pageSize = 4;
         private SortModel _sortModel = new SortModel();
 
         public ShopController(IRepositoryWrapper repositoryWrapper, ShopService bookService)
@@ -51,6 +51,8 @@ namespace BookStore.Web.Areas.Customer.Controllers
             List<BookVM> books = new List<BookVM>();
             NavigationService navigationService = new NavigationService();
             string oldSearchText = "";
+            if (SearchText == null)
+                SearchText = "";
 
             ViewData["SearchBar"] = new SearchBar() { Action = "Index", Controler = "Shop", SearchText = SearchText };
 

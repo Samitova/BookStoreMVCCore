@@ -61,7 +61,7 @@
                                 <partial name="/Areas/Customer/Views/Cart/_CartPartial.cshtml" model="@cart" />
                             </li>
                             <li class="nav-item d-md-none ml-3 mt-2">
-                                <button class="btn" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                <button class="btn" type="button" data-toggle="collapse" data-target="#customBarCollapse" aria-controls="navbarSupportedContent"
                                     aria-expanded="false" aria-label="Toggle navigation">
                                     <span class="navbar-toggler-icon"></span>
                                 </button>
@@ -73,7 +73,7 @@
 
             <nav class="navbar navbar-expand-md navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow">
                 <div class="container-fluid">               
-                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse border-top">
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse border-top" id="customBarCollapse">
                         <ul class="top-navbar navbar-nav flex-grow-1">
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>

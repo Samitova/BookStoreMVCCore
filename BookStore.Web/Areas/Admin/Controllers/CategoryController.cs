@@ -13,7 +13,7 @@ namespace BookStore.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly IRepositoryWrapper _repository;        
+        private readonly IRepositoryWrapper _repository;
         public CategoryController(IRepositoryWrapper repositoryWrapper)
         {
             _repository = repositoryWrapper;           
