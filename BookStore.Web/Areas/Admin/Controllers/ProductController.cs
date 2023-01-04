@@ -231,6 +231,35 @@ namespace BookStore.Web.Areas.Admin.Controllers
             return View(book);
         }
 
+        [HttpGet]
+        public IActionResult DeleteProduct(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            var book = _bookService.GetBookById(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            return View(book);
+        }
+
+        [HttpPost, ActionName("DeleteProduct")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteProductPost(int? id)
+        {
+            var book = _repository.Books.GetById(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            _repository.Books.Delete(book);
+            TempData["success"] = "Book was deleted successfuly";
+            return RedirectToAction("Index");
+        }
+
         #region privateFunctions
         private void SetBookFields(BookVM book) 
         {

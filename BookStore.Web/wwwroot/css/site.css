@@ -398,7 +398,8 @@ li.breadcrumb-item.active {
     color: #a8811a;
     background: #faf7ef;
     margin-bottom: 20px;
-    border-bottom: 1px solid #a8811a;    
+    border-bottom: 1px solid #a8811a;   
+    
 }
 
 
@@ -1163,6 +1164,10 @@ form .rate-btn button {
 .delete-btn:hover {
     background: #c1252c;
     cursor: pointer;
+}
+
+.delete-group {
+    margin-top:20px;
 }
 
 .hidden {

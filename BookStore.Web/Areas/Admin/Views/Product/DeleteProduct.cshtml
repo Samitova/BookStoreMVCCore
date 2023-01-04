@@ -1,0 +1,51 @@
+﻿@model BookStore.Data.Models.ViewModels.BookVM
+
+@{
+    ViewData["Title"] = "Delete Product";
+    var photoPath = $"/pictures/uploads/books/{Model.PhotoPath}";
+}
+
+<div class="container">      
+    <div class="row">
+        <div class="product-card">
+            <div class="card-header text-center text-uppercase"><h5>Do you want to delete this Book?</h5></div>
+            <form asp-action="DeleteProduct" method="post">
+                <input type="hidden" asp-for="@Model.Id" />
+                <input type="hidden" asp-for="@Model.Timestamp" />
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="row w-75 mx-auto">
+                    <div class="col-md text-center">
+                        <img src="@photoPath" class="img-fluid image-preview" alt="..." asp-append-version="true">
+                    </div>
+                    <div class="col-md ">
+                        <p class="book-deteils-title">@Model.Title.ToUpper()</p>
+
+                        <div class="row">
+                            <div class="col-md">
+                                <p class="book-deteils-item">Author: <a class="book-deteils-link" asp-aria="customer" asp-controller="shop" asp-action="AuthorDetails" asp-route-id="@Model.AuthorId">@Model.AuthorFullName </a></p>
+                                <p class="book-deteils-item">Publisher:<a href="#" class="book-deteils-link"> @Model.PublisherName</a></p>
+                                <p class="book-deteils-item">Year Of Issue: <span>@Model.YearOfIssue</span></p>
+                                <p class="book-deteils-item">ISBN: <span>@Model.ISBN</span></p>
+
+                            </div>
+                            <div class="col-md">
+                                <p class="book-deteils-item">Genre: <span>@Model.Genre</span></p>
+                                <p class="book-deteils-item">Pages: <span>@Model.NumberOfPage</span></p>
+                                <p class="book-deteils-item">Cover type: <span>@Model.CoverType</span></p>
+                            </div>
+                        </div>
+                        <hr />
+                        <p class="book-deteils-item text-center">Annotation</p>
+                        <p class="book-deteils-annotation">@Model.Annotation</p>
+                        <hr />
+                        <div class="form-group delete-group">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <a class="btn btn-dark" asp-action="Index">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
