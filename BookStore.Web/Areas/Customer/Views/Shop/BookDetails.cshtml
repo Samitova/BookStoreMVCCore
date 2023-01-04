@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = Model.Title;
-    var photoPath = $"/pictures/uploads/books/{Model.Id}/{Model.PhotoPath ?? "noimage.png"}";
+    var photoPath = $"~/pictures/uploads/books/{Model.PhotoPath}";
     ProgressBarVM progressBar = new ProgressBarVM();
 }
 

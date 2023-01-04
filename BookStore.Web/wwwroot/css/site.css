@@ -384,6 +384,23 @@ li.breadcrumb-item.active {
     margin-left: auto;
     margin-right: auto;
 }
+.product-card {
+    margin:10px 0 100px 0;    
+    padding: 0px 0 20px 0;
+    width: 100%;
+    border: 1px solid #a8811a;    
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card-header {
+    height: 40px;
+    color: #a8811a;
+    background: #faf7ef;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #a8811a;    
+}
+
 
 .vl {
     border-left: 3px solid #eee;
@@ -439,10 +456,16 @@ li.breadcrumb-item.active {
     width: 130px;
 }
 
+.image-preview {
+    height: 300px;
+    width: 200px;
+    padding:5px 0 10px 0;
+}
+
 .rating-box {
     padding-top: 5px;
-    width:250px;
-    border-radius: 25px;   
+    width: 250px;
+    border-radius: 25px;
     font-size: 16px;
 }
 

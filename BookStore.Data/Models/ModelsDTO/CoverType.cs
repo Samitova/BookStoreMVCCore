@@ -6,7 +6,7 @@ namespace BookStore.Data.Models.ModelsDTO
 {
     public enum CoverType
     {
-        HardBack,
+        HardBack=1,
         SoftBack
     }
 }

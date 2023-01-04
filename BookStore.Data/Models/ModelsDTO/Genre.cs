@@ -6,7 +6,7 @@ namespace BookStore.Data.Models.ModelsDTO
 {
     public enum Genre
     {
-        Sport,
+        Sport=1,
         Scifi,
         Crime,
         Romance,

@@ -37,6 +37,7 @@ namespace BookStore.Services.DataBaseService.Repositories
 
         public void Update(T entity)
         {
+            _context.ChangeTracker.Clear();
             _context.Update(entity);
             SaveChanges();
         }

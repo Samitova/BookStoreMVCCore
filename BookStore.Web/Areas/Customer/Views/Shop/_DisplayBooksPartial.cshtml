@@ -1,7 +1,7 @@
 ﻿@model BookStore.Data.Models.ViewModels.BookVM
 
 @{
-    var photoPath = $"/pictures/uploads/books/{Model.Id}/thumbs/{Model.PhotoPath ?? "noimage.png"}";
+    var photoPath = $"~/pictures/uploads/books/{Model.PhotoPath}";
  }
 
 <div class="col card-wrapper">    

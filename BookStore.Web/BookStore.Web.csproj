@@ -30,16 +30,6 @@
     <Folder Include="wwwroot\pictures\uploads\authors\1\" />
     <Folder Include="wwwroot\pictures\uploads\authors\2\" />
     <Folder Include="wwwroot\pictures\uploads\authors\3\" />
-    <Folder Include="wwwroot\pictures\uploads\books\3\gallery\thumbs\" />
-    <Folder Include="wwwroot\pictures\uploads\books\3\thumbs\" />
-    <Folder Include="wwwroot\pictures\uploads\books\4\gallery\thumbs\" />
-    <Folder Include="wwwroot\pictures\uploads\books\4\thumbs\" />
-    <Folder Include="wwwroot\pictures\uploads\books\5\gallery\thumbs\" />
-    <Folder Include="wwwroot\pictures\uploads\books\5\thumbs\" />
-    <Folder Include="wwwroot\pictures\uploads\books\6\gallery\thumbs\" />
-    <Folder Include="wwwroot\pictures\uploads\books\6\thumbs\" />
-    <Folder Include="wwwroot\pictures\uploads\books\7\gallery\thumbs\" />
-    <Folder Include="wwwroot\pictures\uploads\books\7\thumbs\" />
   </ItemGroup>
 
   <ItemGroup>

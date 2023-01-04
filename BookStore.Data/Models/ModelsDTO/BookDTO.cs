@@ -55,14 +55,10 @@ namespace BookStore.Data.Models.ModelsDTO
         public string Annotation { get; set; }
 
         [MaxLength(50), MinLength(2)]
-        public CoverType CoverType { get; set; }
-
-        [MaxLength(50)]
+        public CoverType CoverType { get; set; }        
         public string PhotoPath { get; set; }
         public int SoldCopies { get; set; } = 0;
-
         public double RateValue { get; set; }
-
         public int RateCount { get; set; }
         public ICollection<BookCommentDTO> Comments { get; set; }
 

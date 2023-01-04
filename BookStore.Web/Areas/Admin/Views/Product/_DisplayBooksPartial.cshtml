@@ -1,7 +1,7 @@
 ﻿@model BookStore.Data.Models.ViewModels.BookVM
 
 @{
-    var photoPath = $"/pictures/uploads/books/{Model.Id}/thumbs/{Model.PhotoPath ?? "noimage.png"}";
+    var photoPath = $"~/pictures/uploads/books/{Model.PhotoPath}";
  }
 
 <div class="col card-wrapper">    
@@ -27,7 +27,7 @@
 
             <div class="product-edit-group">               
                 <a class="btn edit-btn" asp-area="Admin" asp-controller="Product"
-                   asp-action="CreateUpdateProduct" asp-route-id="@Model.Id">Edit</a>
+                   asp-action="UpdateProduct" asp-route-id="@Model.Id">Edit</a>
                 <a class="btn delete-btn" asp-area="Admin" asp-controller="Product"
                    asp-action="DeleteProduct" asp-route-id="@Model.Id">Delete</a>
             </div>

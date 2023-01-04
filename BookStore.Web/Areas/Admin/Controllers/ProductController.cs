@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BookStore.Data.Models.ModelsDTO;
+﻿using BookStore.Data.Models.ModelsDTO;
 using BookStore.Data.Models.ViewModels;
 using BookStore.Services.DataBaseService.Interfaces;
 using BookStore.Services.ShopService.PaginationService;
@@ -13,22 +12,32 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SmartBreadcrumbs.Nodes;
-using SmartBreadcrumbs.Attributes;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Operations;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using System;
+using static System.Net.WebRequestMethods;
+using AutoMapper;
 
 namespace BookStore.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]   
     public class ProductController : Controller
     {
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IRepositoryWrapper _repository;
+        private readonly IMapper _mapper;
         private readonly ShopService _bookService;
         private SortModel _sortModel = new SortModel();
         private int _pageSize = 4;
         
-        public ProductController(IRepositoryWrapper repositoryWrapper, ShopService bookService)
+        public ProductController(IRepositoryWrapper repositoryWrapper, ShopService bookService, IWebHostEnvironment webHostEnvironment, IMapper mapper)
         {
             _bookService = bookService;
             _repository = repositoryWrapper;
+            _webHostEnvironment = webHostEnvironment;
+            _mapper = mapper;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -119,35 +128,141 @@ namespace BookStore.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateUpdateProduct(int? id)
+        public IActionResult CreateProduct(int id)
         {
-            CategoryVM categoryVM = new CategoryVM();
-            categoryVM.Categories = _repository.Categories.GetAll(orderBy: x => x.OrderBy(y => y.CategoryName)).ToList();
+            BookVM book = new BookVM();
+            SetBookFields(book);
+            return View(book);
+        }
 
-            ViewBag.categories = categoryVM.Categories.Select(i => new SelectListItem()
+        [HttpPost]
+        public IActionResult CreateProduct(BookVM book)
+        {
+            if (!ModelState.IsValid)
+            {
+                SetBookFields(book);
+                return View(book);
+            }
+            if (book.BookImage != null && book.BookImage.Length > 0)
+            {
+                string ext = book.BookImage.ContentType.ToLower();
+
+                if (ext != "image/jpg" && ext != "image/jpeg" && ext != "image/pjpeg" &&
+                    ext != "image/gif" && ext != "image/x-png" && ext != "image/png" && ext != "image/webp")
+                {
+                    ModelState.AddModelError("", "Bad image extention");
+                    SetBookFields(book);
+                    return View(book);
+                }
+                else
+                {
+                    string uniqueFileName = UploadFile(book);
+                    book.PhotoPath = uniqueFileName;
+                }
+            }
+            else 
+            {
+                book.PhotoPath = "no_image.png";
+            }
+            
+           
+            book.CategoryName = _repository.Categories.GetById(book.CategoryId)?.CategoryName;
+            book.AuthorFullName = _repository.Authors.GetById(book.AuthorId)?.FullName;
+            book.PublisherName = _repository.Publishers.GetById(book.PublisherId)?.PublisherName;
+
+            BookDTO bookDTO = _mapper.Map<BookDTO>(book);
+
+            _repository.Books.Add(bookDTO);
+            TempData["success"] = "Book was added successfuly";          
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult UpdateProduct(int id)
+        {
+            BookVM book = new BookVM();
+            book = _bookService.GetBookById(id);
+            if (book == null)
+                return NotFound();
+            else
+            {
+                SetBookFields(book);
+                return View(book);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult UpdateProduct(BookVM book)
+        {
+            if (!ModelState.IsValid)
+            {
+                SetBookFields(book);
+                return View(book);
+            }
+            if (book.BookImage != null && book.BookImage.Length > 0)
+            {
+                string ext = book.BookImage.ContentType.ToLower();
+
+                if (ext != "image/jpg" && ext != "image/jpeg" && ext != "image/pjpeg" &&
+                    ext != "image/gif" && ext != "image/x-png" && ext != "image/png" && ext != "image/webp")
+                {
+                    ModelState.AddModelError("", "Bad image extention");
+                    SetBookFields(book);
+                    return View(book);
+                }
+                else
+                {
+                    string uniqueFileName = UploadFile(book);
+                    book.PhotoPath = uniqueFileName;
+                }
+            }
+
+            book.CategoryName = _repository.Categories.GetById(book.CategoryId)?.CategoryName;
+            book.AuthorFullName = _repository.Authors.GetById(book.AuthorId)?.FullName;
+            book.PublisherName = _repository.Publishers.GetById(book.PublisherId)?.PublisherName;
+            BookDTO bookDTO = _mapper.Map<BookDTO>(book);
+
+             _repository.Books.Update(bookDTO);
+            TempData["success"] = "Book was updated successfuly";           
+
+            return RedirectToAction("Index");
+        }
+
+        private void SetBookFields(BookVM book) 
+        {
+            book.Categories = _repository.Categories.GetAll(orderBy: x => x.OrderBy(y => y.CategoryName)).Select(i => new SelectListItem()
             {
                 Text = i.CategoryName,
                 Value = i.Id.ToString()
             });
 
-            if (id == null || id == 0)
+            book.Authors = _repository.Authors.GetAll(orderBy: x => x.OrderBy(y => y.FullName)).Select(i => new SelectListItem()
             {
-                return View(categoryVM);
-            }
-            else
+                Text = i.FullName,
+                Value = i.Id.ToString()
+            });
+
+            book.Publishers = _repository.Publishers.GetAll(orderBy: x => x.OrderBy(y => y.PublisherName)).Select(i => new SelectListItem()
             {
-                categoryVM.Category = _repository.Categories.GetById(id);
-                if (categoryVM.Category == null)
-                    return NotFound();
-                else
-                    return View(categoryVM);
-            }
+                Text = i.PublisherName,
+                Value = i.Id.ToString()
+            });
         }
-
-
-
-
-
+        private string UploadFile(BookVM book) 
+        {
+            string uniqueFileName = null;
+            if (book.BookImage != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "pictures\\uploads\\books\\");
+                uniqueFileName = Guid.NewGuid().ToString()+"_"+book.BookImage.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    book.BookImage.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
+        }
         private void SetSortModel()
         {
             Dictionary<string, string> sortedProperties = new Dictionary<string, string>() { { "title", "title" }, { "price", "price_desc" }, { "author", "author" }, { "rating", "rating_desc" } };
@@ -155,7 +270,6 @@ namespace BookStore.Web.Areas.Admin.Controllers
             _sortModel.ApplySort("Index", "");
             ViewData["SortModel"] = _sortModel;
         }
-
         private void SetCategories()
         {
             CategoryVM categoryVM = new CategoryVM();
@@ -172,7 +286,6 @@ namespace BookStore.Web.Areas.Admin.Controllers
             }
             ViewData["Categories"] = categoryVM;
         }
-
         private int ProccessPageSize(int PageSize)
         {
             bool isPageSizeInSession = HttpContext.Session.TryGetValue("PageSize", out _);
@@ -192,7 +305,6 @@ namespace BookStore.Web.Areas.Admin.Controllers
             }
             return PageSize;
         }
-
         private void BuildBreadcrumbNodeCategoteryTree(Category category, MvcBreadcrumbNode node)
         {
             if (category.ParentId == 0)
@@ -211,6 +323,5 @@ namespace BookStore.Web.Areas.Admin.Controllers
 
             ViewData["BreadcrumbNode"] = node;
         }
-
     }
 }
