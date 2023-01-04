@@ -1,0 +1,16 @@
+﻿@model BookStore.Data.Models.ViewModels.ProgressBarVM
+
+<div class="col-md progress-box-item d-flex justify-content-between">
+    <div class="col-2 ">
+        <span class="fa-stack small">
+            <i class="fa-solid fa-star fa-stack-2x"></i>  
+            <i class="fa-regular fa-@Model.Number fa-stack-1x fa-inverse"></i>
+        </span>       
+    </div>
+    <div class="col  pt-3">
+        <div class="progress">
+            <div class=" progress-bar" role="progressbar" style="width:@Model.Prossents%;" aria-valuenow="@Model.Prossents" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+    <div class="col-2 ">@Model.Count</div>
+</div>           

@@ -10,50 +10,51 @@
 <div class="container-fluid book-wrapper ">
     <div class="row w-75 mx-auto">
         <div class="col-md text-center">
-            <img src="@photoPath" class="img-fluid" alt="..." asp-append-version="true">   
+            <img src="@photoPath" class="img-fluid" alt="..." asp-append-version="true">
         </div>
         <div class="col-md ">
-            <p class="book-deteils-title">@Model.Title.ToUpper()</p> 
-             
+            <p class="book-deteils-title">@Model.Title.ToUpper()</p>
+
             <div class="row">
                 <div class="col-md">
                     <p class="book-deteils-item">Author: <a class="book-deteils-link" asp-aria="customer" asp-controller="shop" asp-action="AuthorDetails" asp-route-id="@Model.AuthorId">@Model.AuthorFullName </a></p>
                     <p class="book-deteils-item">Publisher:<a href="#" class="book-deteils-link"> @Model.PublisherName</a></p>
                     <p class="book-deteils-item">Year Of Issue: <span>@Model.YearOfIssue</span></p>
                     <p class="book-deteils-item">ISBN: <span>@Model.ISBN</span></p>
-                
+
                 </div>
-                <div class="col-md">                    
+                <div class="col-md">
                     <p class="book-deteils-item">Genre: <span>@Model.Genre</span></p>
                     <p class="book-deteils-item">Pages: <span>@Model.NumberOfPage</span></p>
                     <p class="book-deteils-item">Cover type: <span>@Model.CoverType</span></p>
                 </div>
             </div>
-            <hr/>
+            <hr />
             <p class="book-deteils-item text-center">Annotation</p>
             <p class="book-deteils-annotation">@Model.Annotation</p>
 
-            <hr/>
+            <hr />
             <div class="rating-box">
-                <partial name="_RatingBarPartial" model="@Model.RateValue" />   
+                <partial name="_RatingBarPartial" model="@Model.RateValue" />
             </div>
 
             <div class="availiable-quantaty">In stock @Model.AvaliableQuantaty item(s)</div>
+            <div class="sold-quantaty">Were sold @Model.SoldCopies item(s)</div>
 
             <div class="prices-box">               
                 <div class="price-item-main d-inline">@Model.Price $</div>
             </div>
 
-            <div class="addtocart-cover">
-                <div class="ajaxmsg" id="ajaxmsg_@Model.Id">
-                    Book was added to your cart
-                </div>
-                <a href="#" class="addtocart" id="@Model.Id">ADD TO CART</a>
+            <div class="product-edit-group">
+                <a class="btn edit-btn" asp-area="Admin" asp-controller="Product"
+                   asp-action="UpdateProduct" asp-route-id="@Model.Id">Edit</a>
+                <a class="btn delete-btn" asp-area="Admin" asp-controller="Product"
+                   asp-action="DeleteProduct" asp-route-id="@Model.Id">Delete</a>
             </div>
 
-        </div>               
-    </div>  
-    <div class="row w-75 mx-auto">
+        </div>
+    </div>
+    <div class="row w-75 mx-auto mt-3">
         <p class="rating-header">Reviews</p>
     </div>
     <div class="row w-75 mx-auto rating-container">
@@ -69,58 +70,23 @@
             </div>
             <div class="big-rate-item">
                 <div class="rating-count">@Model.RateCount reviews</div>
-             </div>
+            </div>
         </div>
         <div class="col-md progress-box">
             @foreach (var bar in Model.ProgressBar)
             {
                 <partial name="_ProgressBarPartial" model="@bar" />
-            }                      
-        </div>
-
-        <div class="col-md">  
-            <div class="col-md">
-                <div class="star-header">Do you like this book?</div>
-            </div>
-            <div class="col-md">
-                <form method="post" asp-action="AddBookComment" asp-controller="Shop">
-                    <input type="hidden" name="bookComment.BookId" value="@Model.Id" />
-                    <input type="hidden" name="bookComment.PublishedDate" value="@DateTime.Now" />
-                    <div class="star-widgett">
-                        <input type="radio" name="bookComment.Rating" value="5" id="rate-5" />
-                        <label for="rate-5" class="fas fa-star"></label>
-                        <input type="radio" name="bookComment.Rating" value="4" id="rate-4" />
-                        <label for="rate-4" class="fas fa-star"></label>
-                        <input type="radio" name="bookComment.Rating" value="3" id="rate-3" />
-                        <label for="rate-3" class="fas fa-star"></label>
-                        <input type="radio" name="bookComment.Rating" value="2" id="rate-2" />
-                        <label for="rate-2" class="fas fa-star"></label>
-                        <input type="radio" name="bookComment.Rating" value="1" id="rate-1" />
-                        <label for="rate-1" class="fas fa-star"></label>
-                    </div>
-                
-                    <label for="publisherName">Name:</label><br>
-                    <input type="text" id="publisherName" name="bookComment.PublisherName" class="publisherName"><br><br>
-                    <div class="textarea">
-                        <textarea cols="30" name="bookComment.Comment" placeholder="Discribe your experience..."></textarea>
-                    </div>
-                    <div class="rate-btn">
-                        <button type="submit">Post</button>
-                    </div>
-                </form>
-            </div>            
+            }
         </div>       
     </div>
 
     @foreach (var item in Model.Comments)
     {
         <partial name="_CommentPartitial" model="@item" />
-    }   
+    }
 </div>
-
 
 @section Scripts
 {
-    <script src="~/scripts/bookdetailsscripts.js"></script>   
-    <script src="~/scripts/cartscripts.js"></script>
+    <script src="~/scripts/bookdetailsscripts.js"></script>    
 }

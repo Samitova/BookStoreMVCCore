@@ -486,9 +486,24 @@ li.breadcrumb-item.active {
     text-align: center;    
     border: none;
 }
+/*ligth #a8811a;  broun #c49927;*/
+
+.sold-quantaty {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #fff;
+    width: 200px;
+    height: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    background: #c49927;    
+    border-radius: 25px 25px 25px 25px;
+    text-align: center;
+    border: none;
+}
 
 .addtocart-cover {
-    margin-top: 5px;    
+    margin-top: 5px;
 }
 
 .ajaxmsg {

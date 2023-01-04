@@ -164,14 +164,12 @@ namespace BookStore.Web.Areas.Admin.Controllers
             {
                 book.PhotoPath = "no_image.png";
             }
-            
-           
+
             book.CategoryName = _repository.Categories.GetById(book.CategoryId)?.CategoryName;
             book.AuthorFullName = _repository.Authors.GetById(book.AuthorId)?.FullName;
             book.PublisherName = _repository.Publishers.GetById(book.PublisherId)?.PublisherName;
 
             BookDTO bookDTO = _mapper.Map<BookDTO>(book);
-
             _repository.Books.Add(bookDTO);
             TempData["success"] = "Book was added successfuly";          
             return RedirectToAction("Index");
@@ -227,7 +225,13 @@ namespace BookStore.Web.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+        public IActionResult BookDetails(int id)
+        {
+            BookVM book = _bookService.GetBookById(id);
+            return View(book);
+        }
 
+        #region privateFunctions
         private void SetBookFields(BookVM book) 
         {
             book.Categories = _repository.Categories.GetAll(orderBy: x => x.OrderBy(y => y.CategoryName)).Select(i => new SelectListItem()
@@ -323,5 +327,6 @@ namespace BookStore.Web.Areas.Admin.Controllers
 
             ViewData["BreadcrumbNode"] = node;
         }
+        #endregion
     }
 }

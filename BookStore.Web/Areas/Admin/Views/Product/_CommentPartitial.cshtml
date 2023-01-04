@@ -1,0 +1,12 @@
+﻿@model BookStore.Data.Models.ViewModels.BookCommentVM
+
+<div class="row w-75 comment-container mx-auto">
+    <div class="col-md">
+        <div class="comment-pablisher">@Model.PublisherName</div>
+        <div class="comment-date">@Model.PublishedDate.ToString("MM/dd/yyyy")</div>
+        <partial name="_RatingBarPartial" model="@Model.Rating" />
+    </div>
+    <div class="col-md">
+        <div class="comment-text">@Model.Comment</div>
+    </div>
+</div>
