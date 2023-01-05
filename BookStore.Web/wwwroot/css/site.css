@@ -1111,7 +1111,7 @@ form .rate-btn button {
     margin-top:50px;
 }
 
-.addcategory {
+.add-btn {
     height: 30px;
     width: 120px;
     background: #248a87;
@@ -1128,7 +1128,7 @@ form .rate-btn button {
     display: block;
 }
 
-.addcategory:hover {
+.add-btn:hover {
     background: #2aa29e;
     color: #fff !important;
     cursor: pointer;

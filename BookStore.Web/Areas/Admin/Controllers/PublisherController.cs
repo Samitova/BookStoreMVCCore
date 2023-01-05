@@ -27,5 +27,44 @@ namespace BookStore.Web.Areas.Admin.Controllers
             List<PublisherVM> model = _mapper.Map<IEnumerable<PublisherVM>>(publishers).ToList();
             return View(model);
         }
+
+        [HttpGet]
+        public IActionResult CreateUpdatePublisher(int? id)
+        {
+            PublisherDTO publisher = new PublisherDTO();     
+            if (id == null || id == 0)
+            {
+                return View(_mapper.Map<PublisherVM>(publisher));
+            }
+            else
+            {
+                publisher = _repository.Publishers.GetById(id);
+                if (publisher == null)
+                    return NotFound();
+                else
+                {                    
+                    return View(_mapper.Map<PublisherVM>(publisher));
+                }                    
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateUpdatePublisher(PublisherVM publisherVM)
+        {
+            if (ModelState.IsValid)
+            {
+                if (publisherVM.Id == 0)
+                {
+                    _repository.Publishers.Add(_mapper.Map<PublisherDTO>(publisherVM));
+                    TempData["success"] = "Publisher was created successfuly";
+                }
+                else
+                {
+                    _repository.Publishers.Update(_mapper.Map<PublisherDTO>(publisherVM));
+                    TempData["success"] = "Publisher was updated successfuly";
+                }
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
