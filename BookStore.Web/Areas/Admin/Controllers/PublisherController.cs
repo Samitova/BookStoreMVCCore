@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 
 namespace BookStore.Web.Areas.Admin.Controllers
 {
@@ -64,6 +65,35 @@ namespace BookStore.Web.Areas.Admin.Controllers
                     TempData["success"] = "Publisher was updated successfuly";
                 }
             }
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult DeletePublisher(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var publisher = _repository.Publishers.GetById(id);
+            if (publisher == null)
+            {
+                return NotFound();
+            }
+            return View(_mapper.Map<PublisherVM>(publisher));
+        }
+
+        [HttpPost, ActionName("DeletePublisher")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePublisherPost(int? id)
+        {
+            var publisher = _repository.Publishers.GetById(id);
+            if (publisher == null)
+            {
+                return NotFound();
+            }
+            _repository.Publishers.Delete(publisher);
+            TempData["success"] = $"Publisher \"{publisher.PublisherName}\" was deleted successfuly";
             return RedirectToAction("Index");
         }
     }

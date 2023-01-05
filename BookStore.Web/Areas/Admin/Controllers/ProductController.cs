@@ -260,7 +260,7 @@ namespace BookStore.Web.Areas.Admin.Controllers
             _repository.Books.Delete(book);
             DeleteFile(book.PhotoPath);
 
-            TempData["success"] = @$"Book ""{book.Title }"" was deleted successfuly";
+            TempData["success"] = $"Book \"{book.Title }\" was deleted successfuly";
             return RedirectToAction("Index");
         }
 

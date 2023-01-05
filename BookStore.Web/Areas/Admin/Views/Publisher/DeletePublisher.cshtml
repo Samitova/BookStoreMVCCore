@@ -1,0 +1,41 @@
+﻿@model BookStore.Data.Models.ViewModels.PublisherVM
+
+@{
+    ViewData["Title"] = "Delete Publisher";
+}
+
+<div class="container">
+    <div class="product-card" style="width:500px;">
+        <div class="card-header text-uppercase text-center">
+            <h5>Do you want to delete this Publisher?</h5>
+        </div>
+
+        <div class="col align-content-center">
+            <form asp-action="DeletePublisher" method="post">
+                <input type="hidden" asp-for="Id"/>
+                <input type="hidden" asp-for="Timestamp"/>
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="PublisherName" class="control-label"></label>
+                    <input asp-for="PublisherName" class="form-control"/>
+                    <span asp-validation-for="PublisherName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="City" class="control-label"></label>
+                    <input asp-for="City" class="form-control"/>
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Phone" class="control-label"></label>
+                    <input asp-for="Phone" class="form-control"/>
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a class="btn btn-dark" asp-action="Index">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
