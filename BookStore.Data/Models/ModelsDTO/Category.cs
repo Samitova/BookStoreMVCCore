@@ -12,7 +12,9 @@ namespace BookStore.Data.Models.ModelsDTO
         [MaxLength(50), MinLength(2)]
         [DisplayName("Category")]
         public string CategoryName { get; set; }
+
         [MaxLength(50)]
+        [DisplayName("Icon")]
         public string IconPath { get; set; }
 
         [Required]

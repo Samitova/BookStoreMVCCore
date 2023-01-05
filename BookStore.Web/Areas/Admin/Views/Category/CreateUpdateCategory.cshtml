@@ -12,10 +12,12 @@
 }
 
 <div class="container">
-    <p class="cat-header text-center">@((Model.Category == null || Model.Category.Id == 0) ? "Create " : "Update ")Category</p>
-    <hr />
-    <div class="row">
-        <div class="col-md-4 align-content-center">
+    <div class="product-card" style="width:500px;">
+        <div class="card-header text-uppercase text-center">
+            <h5>@((Model.Category == null || Model.Category.Id == 0) ? "Create " : "Update ")Category</h5>
+        </div>
+
+        <div class="col align-content-center">
             <form asp-action="CreateUpdateCategory" method="post">
                 <input type="hidden" asp-for="Category.Id"/>
                 <input type="hidden" asp-for="Category.Timestamp" />
@@ -52,20 +54,19 @@
                 <div class="form-group">
                     @if (Model.Category == null || Model.Category.Id == 0)
                     {
-                        <input type="submit" value="Create" class="addcategory" />
+                        <input type="submit" value="Create" class="add-btn" />
                     }
                     else
                     {
-                        <input type="submit" value="Update" class="btn edit-category" />
+                        <input type="submit" value="Update" class="add-btn" />
                     }                   
                 </div>
             </form>
+            <div>
+                <a class="backhref" asp-action="Index">Back to List</a>
+            </div>
         </div>
-    </div>
-
-    <div>
-        <a class="backhref" asp-action="Index">Back to List</a>
-    </div>
+    </div>    
 </div>
 
 
