@@ -14,7 +14,9 @@ namespace BookStore.Web.Services
             CreateMap<AuthorVM, AuthorDTO>();
             CreateMap<BookCommentDTO, BookCommentVM>();
             CreateMap<BookCommentVM, BookCommentDTO>();
-            
+            CreateMap<PublisherDTO, PublisherVM>();
+            CreateMap<PublisherVM, PublisherDTO>();
+
         }
     }
 }
