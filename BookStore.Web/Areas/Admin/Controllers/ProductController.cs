@@ -51,7 +51,7 @@ namespace BookStore.Web.Areas.Admin.Controllers
             base.OnActionExecuted(context);
             SetCategories();
         }
-
+        
         public IActionResult Index(int PageSize, string SortExpression = "", string SearchText = "", int CurrentPage = 1)
         {
             List<BookVM> books = new List<BookVM>();
@@ -225,11 +225,12 @@ namespace BookStore.Web.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
         public IActionResult BookDetails(int id)
         {
             BookVM book = _bookService.GetBookById(id);
-            return View(book);
-        }
+            return View(book);        }
 
         [HttpGet]
         public IActionResult DeleteProduct(int id)
@@ -254,9 +255,12 @@ namespace BookStore.Web.Areas.Admin.Controllers
             if (book == null)
             {
                 return NotFound();
-            }
+            }            
+            
             _repository.Books.Delete(book);
-            TempData["success"] = "Book was deleted successfuly";
+            DeleteFile(book.PhotoPath);
+
+            TempData["success"] = @$"Book ""{book.Title }"" was deleted successfuly";
             return RedirectToAction("Index");
         }
 
@@ -295,6 +299,18 @@ namespace BookStore.Web.Areas.Admin.Controllers
                 }
             }
             return uniqueFileName;
+        }
+        private void DeleteFile(string uniqueFileName)
+        {
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "pictures\\uploads\\books\\");
+            if (uniqueFileName != "no_image.png") 
+            {
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }  
         }
         private void SetSortModel()
         {
