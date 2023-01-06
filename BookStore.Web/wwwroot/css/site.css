@@ -1086,6 +1086,7 @@ form .rate-btn button {
 .category-table {
     width: 100%;
     list-style-type: none;
+    margin-bottom:100px;
 }
 
 .sub-category-table {
