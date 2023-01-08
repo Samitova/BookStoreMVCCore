@@ -27,12 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\pictures\uploads\authors\1\" />
-    <Folder Include="wwwroot\pictures\uploads\authors\2\" />
-    <Folder Include="wwwroot\pictures\uploads\authors\3\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="System.Web.Mvc">
       <HintPath>..\..\Lerua Shop\Lerua Shop\Bin\System.Web.Mvc.dll</HintPath>
     </Reference>

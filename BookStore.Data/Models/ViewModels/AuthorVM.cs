@@ -1,4 +1,5 @@
 ﻿using BookStore.Data.Models.ModelsDTO;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,8 +16,8 @@ namespace BookStore.Data.Models.ViewModels
         public string PhotoPath { get; set; }
         public string Biography { get; set; }       
         public List<BookVM> Books { get; set; }
+        public IFormFile AuthorImage { get; set; }
         public AuthorVM()
-        {
-        }       
+        {}       
     }
 }

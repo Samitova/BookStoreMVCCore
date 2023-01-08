@@ -40,21 +40,19 @@
             <li class="category-table-li">
                 <div class="row">
                     <div class="col category-table-item">
-                        <img src="~/pictures/uploads/books/@item.PhotoPath" class="imageThumbnail" alt="" asp-append-version="true">
+                        <img src="~/pictures/uploads/authors/@item.PhotoPath" class="author-image" alt="" asp-append-version="true">
                     </div>
                     <div class="col category-table-item">
-                        @item.FullName
+                        <a>@item.FullName</a>
                     </div>
                     <div class="col category-table-item">
                         @item.Biography
                     </div>
-                    <div class="col category-edit-group">
-                        <a class="btn add-btn" asp-area="Admin" asp-controller="Publisher"
-                       asp-action="AuthorDetails" asp-route-id="@item.Id">Details</a>
-                        <a class="btn edit-btn" asp-area="Admin" asp-controller="Publisher"
-                       asp-action="CreateUpdatePublisher" asp-route-id="@item.Id">Edit</a>
-                        <a class="btn delete-btn" asp-area="Admin" asp-controller="Publisher"
-                       asp-action="DeletePublisher" asp-route-id="@item.Id">Delete</a>
+                    <div class="col category-edit-group">                       
+                        <a class="btn edit-btn" asp-area="Admin" asp-controller="Author"
+                       asp-action="CreateUpdateAuthor" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn delete-btn" asp-area="Admin" asp-controller="Author"
+                       asp-action="DeleteAuthor" asp-route-id="@item.Id">Delete</a>
                     </div>
                 </div>
             </li>
@@ -63,7 +61,7 @@
 </div>
 
 @section  Scripts
-    {
+{
     <script src="~/scripts/categoryscript.js"></script>
 }
 

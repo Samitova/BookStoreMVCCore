@@ -128,7 +128,7 @@ namespace BookStore.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateProduct(int id)
+        public IActionResult CreateProduct(int? id)
         {
             BookVM book = new BookVM();
             SetBookFields(book);

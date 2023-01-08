@@ -457,10 +457,15 @@ li.breadcrumb-item.active {
     width: 130px;
 }
 
+.author-image {
+    height: 200px;
+    width: 200px;
+}
+
 .image-preview {
     height: 300px;
     width: 200px;
-    padding:5px 0 10px 0;
+    padding: 5px 0 10px 0;
 }
 
 .rating-box {
