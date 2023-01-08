@@ -19,15 +19,11 @@
 
                 <img src="@photoPath" class="img-fluid image-preview" alt="..." asp-append-version="true">
 
-                <div class="form-group">
-                    <label asp-for="FullName" class="control-label"></label>
-                    <input asp-for="FullName" class="form-control" />
-                    <span asp-validation-for="FullName" class="text-danger"></span>
+                <div class="form-group">                    
+                    <p> @Model.FullName </p>                    
                 </div>
-                <div class="form-group">
-                    <label asp-for="Biography" class="control-label"></label>
-                    <input asp-for="Biography" class="form-control" />
-                    <span asp-validation-for="Biography" class="text-danger"></span>
+                <div class="form-group">                  
+                    <p> @Model.Biography </p>                                      
                 </div>               
                 <div class="form-group">
                     <button type="submit" class="btn btn-danger">Delete</button>

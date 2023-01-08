@@ -17,19 +17,13 @@
                 <div asp-validation-summary="All" class="text-danger"></div>
 
                 <div class="form-group">
-                    <label asp-for="PublisherName" class="control-label"></label>
-                    <input asp-for="PublisherName" class="form-control"/>
-                    <span asp-validation-for="PublisherName" class="text-danger"></span>
+                    <p> @Model.PublisherName</p>                   
                 </div>
                 <div class="form-group">
-                    <label asp-for="City" class="control-label"></label>
-                    <input asp-for="City" class="form-control"/>
-                    <span asp-validation-for="City" class="text-danger"></span>
+                    <p> @Model.City</p>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Phone" class="control-label"></label>
-                    <input asp-for="Phone" class="form-control"/>
-                    <span asp-validation-for="Phone" class="text-danger"></span>
+                    <p> @Model.Phone</p>                    
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-danger">Delete</button>
