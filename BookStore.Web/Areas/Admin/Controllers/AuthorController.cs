@@ -96,6 +96,38 @@ namespace BookStore.Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult DeleteAuthor(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            var author = _repository.Authors.GetById(id);
+            if (author == null)
+            {
+                return NotFound();
+            }
+            return View(_mapper.Map<AuthorVM>(author));
+        }
+
+        [HttpPost, ActionName("DeleteAuthor")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteAuthorPost(int? id)
+        {
+            var author = _repository.Authors.GetById(id);
+            if (author == null)
+            {
+                return NotFound();
+            }
+
+            _repository.Authors.Delete(author);
+            DeleteFile(author.PhotoPath);
+
+            TempData["success"] = $"Book \"{author.FullName}\" was deleted successfuly";
+            return RedirectToAction("Index");
+        }
+
         private string UploadFile(AuthorVM author)
         {
             string uniqueFileName = null;
@@ -110,6 +142,19 @@ namespace BookStore.Web.Areas.Admin.Controllers
                 }
             }
             return uniqueFileName;
+        }
+
+        private void DeleteFile(string uniqueFileName)
+        {
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "pictures\\uploads\\authors\\");
+            if (uniqueFileName != "no_image.png")
+            {
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
         }
     }
 }
