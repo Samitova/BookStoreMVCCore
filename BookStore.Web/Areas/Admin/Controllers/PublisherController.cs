@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using BookStore.Data.Models.ModelsDTO;
-using BookStore.Data.Models.ViewModels;
-using BookStore.Services.DataBaseService.Interfaces;
+using BookStore.DataAccess.Contracts;
+using BookStore.DataAccess.Models;
+using BookStore.ViewModelData;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 
 namespace BookStore.Web.Areas.Admin.Controllers
 {
@@ -22,7 +21,7 @@ namespace BookStore.Web.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            List<PublisherDTO> publishers = _repository.Publishers.GetAll(orderBy: x => x.OrderBy(y => y.PublisherName)).ToList();
+            List<Publisher> publishers = _repository.Publishers.GetAll(orderBy: x => x.OrderBy(y => y.PublisherName)).ToList();
             List<PublisherVM> model = _mapper.Map<IEnumerable<PublisherVM>>(publishers).ToList();
             return View(model);
         }
@@ -30,7 +29,7 @@ namespace BookStore.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult CreateUpdatePublisher(int? id)
         {
-            PublisherDTO publisher = new PublisherDTO();     
+            Publisher publisher = new Publisher();     
             if (id == null || id == 0)
             {
                 return View(_mapper.Map<PublisherVM>(publisher));
@@ -54,12 +53,12 @@ namespace BookStore.Web.Areas.Admin.Controllers
             {
                 if (publisherVM.Id == 0)
                 {
-                    _repository.Publishers.Add(_mapper.Map<PublisherDTO>(publisherVM));
+                    _repository.Publishers.Add(_mapper.Map<Publisher>(publisherVM));
                     TempData["success"] = "Publisher was created successfuly";
                 }
                 else
                 {
-                    _repository.Publishers.Update(_mapper.Map<PublisherDTO>(publisherVM));
+                    _repository.Publishers.Update(_mapper.Map<Publisher>(publisherVM));
                     TempData["success"] = "Publisher was updated successfuly";
                 }
             }

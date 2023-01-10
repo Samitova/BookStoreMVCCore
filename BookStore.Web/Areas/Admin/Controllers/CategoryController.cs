@@ -1,7 +1,7 @@
-﻿using BookStore.Data.Models.ModelsDTO;
-using BookStore.Data.Models.ViewModels;
-using BookStore.Services.DataBaseService.Interfaces;
+﻿using BookStore.DataAccess.Contracts;
+using BookStore.DataAccess.Models;
 using BookStore.Services.ShopService.SearchService;
+using BookStore.ViewModelData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,7 +10,6 @@ using System.Linq;
 
 namespace BookStore.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly IRepositoryWrapper _repository;

@@ -1,10 +1,10 @@
-﻿using BookStore.Data.Models.ModelsDTO;
-using BookStore.Data.Models.ViewModels;
-using BookStore.Services.DataBaseService.Interfaces;
+﻿using BookStore.DataAccess.Contracts;
+using BookStore.DataAccess.Models;
 using BookStore.Services.ShopService;
 using BookStore.Services.ShopService.PaginationService;
 using BookStore.Services.ShopService.SearchService;
 using BookStore.Services.ShopService.SortingService;
+using BookStore.ViewModelData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -158,7 +158,7 @@ namespace BookStore.Web.Areas.Customer.Controllers
         }
 
        
-        public IActionResult AddBookComment(BookCommentDTO bookComment)
+        public IActionResult AddBookComment(BookComment bookComment)
         {
             if (string.IsNullOrEmpty(bookComment.PublisherName))
                 bookComment.PublisherName = "Anonimus";

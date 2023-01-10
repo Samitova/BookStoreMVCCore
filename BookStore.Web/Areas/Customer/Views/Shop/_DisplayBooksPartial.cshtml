@@ -1,4 +1,5 @@
-﻿@model BookStore.Data.Models.ViewModels.BookVM
+﻿@using BookStore.ViewModelData;
+@model BookVM
 
 @{
     var photoPath = $"~/pictures/uploads/books/{Model.PhotoPath}";
@@ -22,8 +23,7 @@
 
             <div class="availiable-quantaty">In stock @Model.AvaliableQuantaty item(s)</div>
 
-            <div class="prices-box">
-                @*<div class="price-item-base d-inline">300 $</div>*@
+            <div class="prices-box">               
                 <div class="price-item-main d-inline">@Model.Price $</div>
             </div>          
 

@@ -1,5 +1,5 @@
-﻿using BookStore.Data.Models.ViewModels;
-using BookStore.Services.ShopService.PaginationService;
+﻿using BookStore.Services.ShopService.PaginationService;
+using BookStore.ViewModelData;
 using System.Collections.Generic;
 
 

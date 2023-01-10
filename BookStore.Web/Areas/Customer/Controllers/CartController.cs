@@ -1,6 +1,6 @@
-﻿using BookStore.Data.Models.ViewModels;
-using BookStore.Services.ShopService;
+﻿using BookStore.Services.ShopService;
 using BookStore.Services.ShopService.SearchService;
+using BookStore.ViewModelData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

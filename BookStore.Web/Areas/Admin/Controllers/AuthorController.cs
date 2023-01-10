@@ -1,54 +1,51 @@
 ﻿using AutoMapper;
-using BookStore.Data.Models.ModelsDTO;
-using BookStore.Data.Models.ViewModels;
-using BookStore.Services.DataBaseService.Interfaces;
-using BookStore.Services.ShopService;
+using BookStore.DataAccess.Contracts;
+using BookStore.DataAccess.Models;
+using BookStore.Services.Contracts;
+using BookStore.ViewModelData;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace BookStore.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class AuthorController : Controller
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IRepositoryWrapper _repository;
-        private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;        
+        private readonly IAuthorManager _authorManager;        
 
-        public AuthorController(IRepositoryWrapper repositoryWrapper, IWebHostEnvironment webHostEnvironment, IMapper mapper)
+        public AuthorController(IAuthorManager authorManager, IWebHostEnvironment webHostEnvironment)
         {
             _webHostEnvironment = webHostEnvironment;
-            _repository = repositoryWrapper;
-            _mapper = mapper;
+            _authorManager = authorManager;    
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<AuthorDTO> authors = _repository.Authors.GetAll(orderBy: x => x.OrderBy(y => y.FullName)).ToList();
-            List<AuthorVM> model = _mapper.Map<IEnumerable<AuthorVM>>(authors).ToList();
-            return View(model);
+            IEnumerable<AuthorVM> authorsList = await _authorManager.GetAllAuthorsAsync();            
+            return View(authorsList);
         }
 
         [HttpGet]
-        public IActionResult CreateUpdateAuthor(int? id)
+        public async Task<IActionResult> CreateUpdateAuthor(int? id)
         {
-            AuthorDTO author = new AuthorDTO();
+            AuthorVM author = new AuthorVM();
             if (id == null || id == 0)
             {
-                return View(_mapper.Map<AuthorVM>(author));
+                return View(author);
             }
             else
             {
-                author = _repository.Authors.GetById(id);
+                author = await _authorManager.GetAuthorByIdAsync(id);
                 if (author == null)
                     return NotFound();
                 else
                 {
-                    return View(_mapper.Map<AuthorVM>(author));
+                    return View(author);
                 }
             }
         }
@@ -81,47 +78,39 @@ namespace BookStore.Web.Areas.Admin.Controllers
                     author.PhotoPath = "no_image.png";
             }
 
-            AuthorDTO authorDTO = _mapper.Map<AuthorDTO>(author);
-
             if (author.Id == 0)
             {
-                _repository.Authors.Add(authorDTO);
+                _authorManager.AddAuthor(author);
                 TempData["success"] = "Author was added successfuly";
             }
             else
             {
-                _repository.Authors.Update(authorDTO);
+                _authorManager.UpdateAuthor(author);
                 TempData["success"] = "Author was updated successfuly";               
             }
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult DeleteAuthor(int id)
+        public async Task <IActionResult> DeleteAuthor(int id)
         {
             if (id == 0)
             {
                 return NotFound();
             }
-            var author = _repository.Authors.GetById(id);
+            var author = await _authorManager.GetAuthorByIdAsync(id);
             if (author == null)
             {
                 return NotFound();
             }
-            return View(_mapper.Map<AuthorVM>(author));
+            return View(author);
         }
 
         [HttpPost, ActionName("DeleteAuthor")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteAuthorPost(int? id)
-        {
-            var author = _repository.Authors.GetById(id);
-            if (author == null)
-            {
-                return NotFound();
-            }
-
-            _repository.Authors.Delete(author);
+        {  
+            var author = _authorManager.DeleteAuthor (id);
             DeleteFile(author.PhotoPath);
 
             TempData["success"] = $"Book \"{author.FullName}\" was deleted successfuly";

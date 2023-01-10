@@ -1,4 +1,5 @@
-﻿@model BookStore.Data.Models.ViewModels.AuthorVM
+﻿@model AuthorVM
+
 @{
     ViewData["Title"] = "Create/Update Author";
     var photoPath = $"/pictures/uploads/authors/{Model.PhotoPath??"no_image.png"}";

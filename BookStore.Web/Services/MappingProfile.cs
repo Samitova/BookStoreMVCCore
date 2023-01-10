@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using BookStore.Data.Models.ModelsDTO;
-using BookStore.Data.Models.ViewModels;
+using BookStore.DataAccess.Models;
+using BookStore.ViewModelData;
 
 namespace BookStore.Web.Services
 {
@@ -8,15 +8,14 @@ namespace BookStore.Web.Services
     {
         public MappingProfile()
         {
-            CreateMap<BookDTO, BookVM>();
-            CreateMap<BookVM, BookDTO>();
-            CreateMap<AuthorDTO, AuthorVM>();
-            CreateMap<AuthorVM, AuthorDTO>();
-            CreateMap<BookCommentDTO, BookCommentVM>();
-            CreateMap<BookCommentVM, BookCommentDTO>();
-            CreateMap<PublisherDTO, PublisherVM>();
-            CreateMap<PublisherVM, PublisherDTO>();
-
+            CreateMap<Book, BookVM>();
+            CreateMap<BookVM, Book>();
+            CreateMap<Author, AuthorVM>();
+            CreateMap<AuthorVM, Author>();
+            CreateMap<BookComment, BookCommentVM>();
+            CreateMap<BookCommentVM, BookComment>();
+            CreateMap<Publisher, PublisherVM>();
+            CreateMap<PublisherVM, Publisher>();
         }
     }
 }

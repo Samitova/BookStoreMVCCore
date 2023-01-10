@@ -1,6 +1,6 @@
-using BookStore.Data.Models.Interfaces;
-using BookStore.Data.Models.ModelsDTO;
-using BookStore.Services.DataBaseService.Interfaces;
+
+using BookStore.DataAccess.Contracts;
+using BookStore.DataAccess.Models;
 using BookStore.Services.ShopService;
 using Moq;
 using System;
@@ -16,18 +16,18 @@ namespace BookStore.Services.Test
         private readonly Mock<IRepositoryWrapper> _bookRepositoryStub;
         public BookServiceTest()
         {
-            var book1 = new Mock<BookDTO>();
+            var book1 = new Mock<Book>();
             book1.SetupAllProperties();
             book1.Object.Id = 1;
             book1.Object.ISBN = "978-3-16-148410-0";
 
-            List<BookDTO> booksForIsbn = new List<BookDTO>() { book1.Object};
+            List<Book> booksForIsbn = new List<Book>() { book1.Object};
 
-            var book2 = new Mock<BookDTO>();
+            var book2 = new Mock<Book>();
             book2.SetupAllProperties();
             book2.Object.Id = 2;
             book2.Object.Title = "Love";
-            List<BookDTO> booksForTitle = new List<BookDTO>() { book2.Object };
+            List<Book> booksForTitle = new List<Book>() { book2.Object };
 
             _bookRepositoryStub = new Mock<IRepositoryWrapper>();
             _bookRepositoryStub.Setup(x => x.Books.SearchByIsbnAsync(It.IsAny<string>())).ReturnsAsync(booksForIsbn);

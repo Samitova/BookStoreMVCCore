@@ -1,7 +1,4 @@
-﻿using BookStore.Data.Models.ModelsDTO;
-using BookStore.Data.Models.ViewModels;
-using BookStore.Services.DataBaseService.Interfaces;
-using BookStore.Services.ShopService.PaginationService;
+﻿using BookStore.Services.ShopService.PaginationService;
 using BookStore.Services.ShopService;
 using BookStore.Services.ShopService.SearchService;
 using BookStore.Services.ShopService.SortingService;
@@ -19,6 +16,9 @@ using Microsoft.AspNetCore.Hosting;
 using System;
 using static System.Net.WebRequestMethods;
 using AutoMapper;
+using BookStore.DataAccess.Contracts;
+using BookStore.DataAccess.Models;
+using BookStore.ViewModelData;
 
 namespace BookStore.Web.Areas.Admin.Controllers
 {
@@ -169,7 +169,7 @@ namespace BookStore.Web.Areas.Admin.Controllers
             book.AuthorFullName = _repository.Authors.GetById(book.AuthorId)?.FullName;
             book.PublisherName = _repository.Publishers.GetById(book.PublisherId)?.PublisherName;
 
-            BookDTO bookDTO = _mapper.Map<BookDTO>(book);
+            Book bookDTO = _mapper.Map<Book>(book);
             _repository.Books.Add(bookDTO);
             TempData["success"] = "Book was added successfuly";          
             return RedirectToAction("Index");
@@ -218,7 +218,7 @@ namespace BookStore.Web.Areas.Admin.Controllers
             book.CategoryName = _repository.Categories.GetById(book.CategoryId)?.CategoryName;
             book.AuthorFullName = _repository.Authors.GetById(book.AuthorId)?.FullName;
             book.PublisherName = _repository.Publishers.GetById(book.PublisherId)?.PublisherName;
-            BookDTO bookDTO = _mapper.Map<BookDTO>(book);
+            Book bookDTO = _mapper.Map<Book>(book);
 
              _repository.Books.Update(bookDTO);
             TempData["success"] = "Book was updated successfuly";           
