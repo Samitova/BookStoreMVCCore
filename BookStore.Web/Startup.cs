@@ -32,7 +32,8 @@ namespace BookStore.Web
                options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();           
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IFileService, FilesService>();
             services.AddScoped<IShopManager, ShopManager>();
             services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();

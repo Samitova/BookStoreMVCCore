@@ -1,4 +1,5 @@
-﻿using BookStore.Services.Contracts;
+﻿using BookStore.DataAccess.Models;
+using BookStore.Services.Contracts;
 using BookStore.Services.Managers;
 using BookStore.Services.ShopService;
 using BookStore.Services.ShopService.PaginationService;
@@ -25,19 +26,24 @@ namespace BookStore.Web.Controllers
         { { "title", "title" }, { "price", "price_desc" }, { "rating", "rating_desc" },
         { "bestsellers", "bestsellers_desc" }, { "novelties", "novelties_desc" } };
 
+        private string _uploadsFolder;
+
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IFileService _fileService;
         private readonly IShopManager _shopManager;
 
-        public AuthorController(IShopManager shopManager, IWebHostEnvironment webHostEnvironment)
+        public AuthorController(IShopManager shopManager, IWebHostEnvironment webHostEnvironment, IFileService fileService)
         {
             _webHostEnvironment = webHostEnvironment;
+            _fileService = fileService;
             _shopManager = shopManager;
         }
         
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-            ViewData["SearchBar"] = new SearchBar() { Action = "Index", Controler = "Author", SearchText = "" };           
+            ViewData["SearchBar"] = new SearchBar() { Action = "Index", Controler = "Author", SearchText = "" };
+            _uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "pictures\\uploads\\authors\\");
         }
                 
         public async Task<IActionResult> Index()
@@ -63,49 +69,44 @@ namespace BookStore.Web.Controllers
             }
             if (author.AuthorImage != null && author.AuthorImage.Length > 0)
             {
-                string ext = author.AuthorImage.ContentType.ToLower();
-                if (ext != "image/jpg" && ext != "image/jpeg" && ext != "image/pjpeg" &&
-                    ext != "image/gif" && ext != "image/x-png" && ext != "image/png" && ext != "image/webp")
+                if (_fileService.IsProperImageExtention(author.AuthorImage.ContentType.ToLower()))
                 {
-                    ModelState.AddModelError("", "Bad image extention");
-                    return View(author);
+                    author.PhotoPath = _fileService.UploadFile(author.AuthorImage, _uploadsFolder);
                 }
                 else
                 {
-                    string uniqueFileName = UploadFile(author);
-                    author.PhotoPath = uniqueFileName;
+                    ModelState.AddModelError("", "Bad image extention");
+                    return View(author);
                 }
             }
             else
             {
                 author.PhotoPath = "no_image.png";
             }
-           
-            _shopManager.AuthorManager.AddAuthor(author);
-            TempData["success"] = "Author was added successfuly";
-          
-            return RedirectToAction("Index");
-        }
 
+            try
+            {
+                _shopManager.AuthorManager.AddAuthor(author);
+                TempData["success"] = "Author was added successfuly";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(author);
+            }
+        }
 
         [HttpGet]
         [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> UpdateAuthor(int? id)
         {
-            AuthorVM author = new AuthorVM();
-            if (id == null || id == 0)
-            {
-                return View(author);
-            }
+            AuthorVM author = await _shopManager.AuthorManager.GetAuthorByIdAsync(id);
+            if (author == null)
+                return NotFound();
             else
             {
-                author = await _shopManager.AuthorManager.GetAuthorByIdAsync(id);
-                if (author == null)
-                    return NotFound();
-                else
-                {
-                    return View(author);
-                }
+                return View(author);
             }
         }
 
@@ -117,47 +118,36 @@ namespace BookStore.Web.Controllers
                 return View(author);
             }
             if (author.AuthorImage != null && author.AuthorImage.Length > 0)
-            {
-                string ext = author.AuthorImage.ContentType.ToLower();
-                if (ext != "image/jpg" && ext != "image/jpeg" && ext != "image/pjpeg" &&
-                    ext != "image/gif" && ext != "image/x-png" && ext != "image/png" && ext != "image/webp")
+            {                
+                if (_fileService.IsProperImageExtention(author.AuthorImage.ContentType.ToLower()))
+                {
+                    _fileService.DeleteFile(author.PhotoPath, _uploadsFolder);
+                    author.PhotoPath = _fileService.UploadFile(author.AuthorImage, _uploadsFolder);                    
+                }
+                else
                 {
                     ModelState.AddModelError("", "Bad image extention");
                     return View(author);
                 }
-                else
-                {
-                    string uniqueFileName = UploadFile(author);
-                    author.PhotoPath = uniqueFileName;
-                }
-            }
-            else
-            {
-                if (author.Id == 0)
-                    author.PhotoPath = "no_image.png";
             }
 
-            if (author.Id == 0)
-            {
-                _shopManager.AuthorManager.AddAuthor(author);
-                TempData["success"] = "Author was added successfuly";
-            }
-            else
+            try
             {
                 _shopManager.AuthorManager.UpdateAuthor(author);
                 TempData["success"] = "Author was updated successfuly";
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(author);
+            }           
         }
 
         [HttpGet]
         [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
-            if (id == 0)
-            {
-                return NotFound();
-            }
             var author = await _shopManager.AuthorManager.GetAuthorByIdAsync(id);
             if (author == null)
             {
@@ -171,13 +161,20 @@ namespace BookStore.Web.Controllers
         public async Task<IActionResult> DeleteAuthorPost(int id)
         {
             AuthorVM author = await _shopManager.AuthorManager.GetAuthorByIdAsync(id);
-            _shopManager.AuthorManager.DeleteAuthor(id);
-            DeleteFile(author.PhotoPath);
 
-            TempData["success"] = $"Book \"{author.FullName}\" was deleted successfuly";
-            return RedirectToAction("Index");
+            try
+            {
+                _shopManager.AuthorManager.DeleteAuthor(id);
+                _fileService.DeleteFile(author.PhotoPath, _uploadsFolder);
+                TempData["success"] = $"Book \"{author.FullName}\" was deleted successfuly";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(author);
+            }
         }
-
 
         [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> AuthorDetails(int id, int PageSize, int CurrentPage = 1, string SortExpression = "")
@@ -204,34 +201,6 @@ namespace BookStore.Web.Controllers
             ViewData["NavigationService"] = navigationService;
             return View(author);
         }
-
-        private string UploadFile(AuthorVM author)
-        {
-            string uniqueFileName = null;
-            if (author.AuthorImage != null)
-            {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "pictures\\uploads\\authors\\");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + author.AuthorImage.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    author.AuthorImage.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
-        }
-
-        private void DeleteFile(string uniqueFileName)
-        {
-            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "pictures\\uploads\\authors\\");
-            if (uniqueFileName != "no_image.png")
-            {
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                if (System.IO.File.Exists(filePath))
-                {
-                    System.IO.File.Delete(filePath);
-                }
-            }
-        }
+       
     }
 }

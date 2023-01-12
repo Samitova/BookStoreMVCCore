@@ -27,7 +27,7 @@ namespace BookStore.Web.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-            ViewData["SearchBar"] = new SearchBar() { Action = "Index", Controler = "Category", SearchText = "" };
+            ViewData["SearchBar"] = new SearchBar() { Action = "Index", Controler = "BrowseCategory", SearchText = "" };
         }
 
         public IActionResult Index()
@@ -85,7 +85,7 @@ namespace BookStore.Web.Controllers
                 try
                 {
                     _shopManager.CategoryManager.AddCategory(categoryVM.Category);
-                    TempData["success"] = "Category was created successfuly";
+                    TempData["success"] = "BrowseCategory was created successfuly";
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -130,7 +130,7 @@ namespace BookStore.Web.Controllers
                 try
                 {
                     _shopManager.CategoryManager.UpdateCategory(categoryVM.Category);
-                    TempData["success"] = "Category was updated successfuly";
+                    TempData["success"] = "BrowseCategory was updated successfuly";
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -166,7 +166,7 @@ namespace BookStore.Web.Controllers
             try
             {
                 _shopManager.CategoryManager.DeleteCategory(id);
-                TempData["success"] = $"Category \"{category.CategoryName}\" was deleted successfuly";
+                TempData["success"] = $"BrowseCategory \"{category.CategoryName}\" was deleted successfuly";
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

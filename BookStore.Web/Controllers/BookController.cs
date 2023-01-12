@@ -34,16 +34,21 @@ namespace BookStore.Web.Controllers
 
         private readonly IShopManager _shopManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IFileService _fileService;
+        private string _uploadsFolder;
 
-        public BookController(IShopManager shopManager, IWebHostEnvironment webHostEnvironment)
+        public BookController(IShopManager shopManager, IWebHostEnvironment webHostEnvironment, IFileService fileService)
         {
             _shopManager = shopManager;
             _webHostEnvironment = webHostEnvironment;
+            _fileService = fileService;
         }
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-            ViewData["SearchBar"] = new SearchBar() { Action = "Index", Controler = "Book", SearchText = "" };                   
+            ViewData["SearchBar"] = new SearchBar() { Action = "Index", Controler = "Book", SearchText = "" };
+            _uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "pictures\\uploads\\books\\");
+
         }
         public override void OnActionExecuted(ActionExecutedContext context)
         {
@@ -98,7 +103,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Category(int categoryId, int PageSize, string SortExpression = "", int CurrentPage = 1)
+        public async Task<IActionResult> BrowseCategory(int categoryId, int PageSize, string SortExpression = "", int CurrentPage = 1)
         {
             IEnumerable<BookVM> books = new List<BookVM>();
             NavigationService navigationService = new NavigationService();
@@ -106,7 +111,7 @@ namespace BookStore.Web.Controllers
 
             PageSize = PaginationService.ProccessPageSize(PageSize, this.HttpContext);
 
-            SortModel sortModel = SortService.SetSortModel("Category", SortExpression, sortedProperties);
+            SortModel sortModel = SortService.SetSortModel("BrowseCategory", SortExpression, sortedProperties);
             ViewData["SortModel"] = sortModel;
 
             if (categoryId == 0)
@@ -121,16 +126,16 @@ namespace BookStore.Web.Controllers
             books = await _shopManager.BookManager.GetAllBooksAsync(categoryId: categoryId);
             books = SortService.SortBooks(books, sortModel);
 
-            var categoryBreadcrumbNode = new MvcBreadcrumbNode("Category", "Shop", categoryVM.Category.CategoryName);
+            var categoryBreadcrumbNode = new MvcBreadcrumbNode("BrowseCategory", "Book", categoryVM.Category.CategoryName);
             BuildBreadcrumbNodeCategoteryTree(categoryVM.Category, categoryBreadcrumbNode);
 
-            navigationService.SetNavigationService("Category", books, CurrentPage, PageSize, "", SortExpression);
+            navigationService.SetNavigationService("BrowseCategory", books, CurrentPage, PageSize, "", SortExpression);
             ViewData["NavigationService"] = navigationService;
             return View("Index", navigationService.PagedBooks);
         }
 
         [HttpGet]
-        [Breadcrumb(Title = "ViewData.Title", FromAction = "Index")]
+        [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> BookDetails(int id)
         {
             BookVM book = await _shopManager.BookManager.GetBookByIdAsync(id);
@@ -143,15 +148,16 @@ namespace BookStore.Web.Controllers
                 bookComment.PublisherName = "Anonimus";
             await _shopManager.BookManager.AddBookComment(bookComment);
             BookVM book = await _shopManager.BookManager.GetBookByIdAsync(bookComment.BookId);
-            var breadcrumbNode = new MvcBreadcrumbNode("Category", "Shop", book.Title);
+            var breadcrumbNode = new MvcBreadcrumbNode("BrowseCategory", "Book", book.Title);
             ViewData["BreadcrumbNode"] = breadcrumbNode;           
             return View("BookDetails", book);
         }
 
-
         //******************************************Admin functions**********************************
 
+        #region AdminFunction
         [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> CreateBook(int? id)
         {
             BookVM book = new BookVM();
@@ -169,19 +175,14 @@ namespace BookStore.Web.Controllers
             }
             if (book.BookImage != null && book.BookImage.Length > 0)
             {
-                string ext = book.BookImage.ContentType.ToLower();
-
-                if (ext != "image/jpg" && ext != "image/jpeg" && ext != "image/pjpeg" &&
-                    ext != "image/gif" && ext != "image/x-png" && ext != "image/png" && ext != "image/webp")
+                if (_fileService.IsProperImageExtention(book.BookImage.ContentType.ToLower()))
                 {
-                    ModelState.AddModelError("", "Bad image extention");
-                    await SetBookFields(book);
-                    return View(book);
+                    book.PhotoPath = _fileService.UploadFile(book.BookImage, _uploadsFolder);
                 }
                 else
                 {
-                    string uniqueFileName = UploadFile(book);
-                    book.PhotoPath = uniqueFileName;
+                    ModelState.AddModelError("", "Bad image extention");
+                    return View(book);
                 }
             }
             else
@@ -207,6 +208,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> UpdateBook(int id)
         {
             BookVM book = new BookVM();
@@ -221,28 +223,24 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateBook(BookVM book)
+        public async Task<IActionResult> UpdateBook(BookVM book)
         {
             if (!ModelState.IsValid)
             {
-                SetBookFields(book);
+                await SetBookFields(book);
                 return View(book);
             }
             if (book.BookImage != null && book.BookImage.Length > 0)
             {
-                string ext = book.BookImage.ContentType.ToLower();
-
-                if (ext != "image/jpg" && ext != "image/jpeg" && ext != "image/pjpeg" &&
-                    ext != "image/gif" && ext != "image/x-png" && ext != "image/png" && ext != "image/webp")
+                if (_fileService.IsProperImageExtention(book.BookImage.ContentType.ToLower()))
                 {
-                    ModelState.AddModelError("", "Bad image extention");
-                    SetBookFields(book);
-                    return View(book);
+                    _fileService.DeleteFile(book.PhotoPath, _uploadsFolder);
+                    book.PhotoPath = _fileService.UploadFile(book.BookImage, _uploadsFolder);
                 }
                 else
                 {
-                    string uniqueFileName = UploadFile(book);
-                    book.PhotoPath = uniqueFileName;
+                    ModelState.AddModelError("", "Bad image extention");
+                    return View(book);
                 }
             }
 
@@ -265,6 +263,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> DeleteBook(int id)
         {           
             var book = await _shopManager.BookManager.GetBookByIdAsync(id);
@@ -275,7 +274,7 @@ namespace BookStore.Web.Controllers
             return View(book);
         }
 
-        [HttpPost, ActionName("DeleteProduct")]
+        [HttpPost, ActionName("DeleteBook")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteBookPost(int id)
         {
@@ -288,7 +287,7 @@ namespace BookStore.Web.Controllers
             try
             {
                 _shopManager.BookManager.DeleteBook(id);
-                DeleteFile(book.PhotoPath);
+                _fileService.DeleteFile(book.PhotoPath, _uploadsFolder);
                 TempData["success"] = $"Book \"{book.Title}\" was deleted successfuly";
                 return RedirectToAction("Index");
             }
@@ -298,6 +297,7 @@ namespace BookStore.Web.Controllers
                 return View(book);
             }
         }
+        #endregion
 
         //*******************************************************************************************
 
@@ -329,7 +329,7 @@ namespace BookStore.Web.Controllers
             else
             {
                 var parentCategory = _shopManager.CategoryManager.GetCategoryById(category.ParentId);
-                var parentCategoryBreadcrumbNode = new MvcBreadcrumbNode("Category", "Book", parentCategory.CategoryName);
+                var parentCategoryBreadcrumbNode = new MvcBreadcrumbNode("BrowseCategory", "Book", parentCategory.CategoryName);
                 parentCategoryBreadcrumbNode.RouteValues = new { categoryId = parentCategory.Id };
                 node.Parent = parentCategoryBreadcrumbNode;
                 BuildBreadcrumbNodeCategoteryTree(parentCategory, parentCategoryBreadcrumbNode);
@@ -356,34 +356,7 @@ namespace BookStore.Web.Controllers
                 Text = i.PublisherName,
                 Value = i.Id.ToString()
             });
-        }
-        private string UploadFile(BookVM book)
-        {
-            string uniqueFileName = null;
-            if (book.BookImage != null)
-            {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "pictures\\uploads\\books\\");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + book.BookImage.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    book.BookImage.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
-        }
-        private void DeleteFile(string uniqueFileName)
-        {
-            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "pictures\\uploads\\books\\");
-            if (uniqueFileName != "no_image.png")
-            {
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                if (System.IO.File.Exists(filePath))
-                {
-                    System.IO.File.Delete(filePath);
-                }
-            }
-        }
+        }       
 
         #endregion
     }

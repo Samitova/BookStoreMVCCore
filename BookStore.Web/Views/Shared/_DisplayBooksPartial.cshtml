@@ -35,10 +35,10 @@
             </div>    
             
             <div class="product-edit-group">
-                <a class="btn edit-btn" asp-area="Admin" asp-controller="Product"
-                   asp-action="UpdateProduct" asp-route-id="@Model.Id">Edit</a>
-                <a class="btn delete-btn" asp-area="Admin" asp-controller="Product"
-                   asp-action="DeleteProduct" asp-route-id="@Model.Id">Delete</a>
+                <a class="btn edit-btn" asp-controller="Book"
+                   asp-action="UpdateBook" asp-route-id="@Model.Id">Edit</a>
+                <a class="btn delete-btn" asp-controller="Book"
+                   asp-action="DeleteBook" asp-route-id="@Model.Id">Delete</a>
             </div>
         </div>          
     </div>      
