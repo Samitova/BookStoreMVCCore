@@ -7,7 +7,7 @@ $(function () {
         e.preventDefault();
 
         var bookId = e.target.id;
-        var url = "/customer/cart/AddToCartPartial";
+        var url = "/cart/AddToCartPartial";
 
         $.get(url, {
             id: bookId
@@ -32,7 +32,7 @@ $(function () {
         e.preventDefault();
 
         var id = $(this).data("id");
-        var url = "/customer/cart/IncrementProduct";
+        var url = "/cart/IncrementProduct";
 
         $.getJSON(url, { bookId: id }, function (data) {
             $("div.qty" + id).html(data.qty);
@@ -62,7 +62,7 @@ $(function () {
         e.preventDefault();
 
         var id = $(this).data("id");
-        var url = "/customer/cart/DecrementProduct";
+        var url = "/cart/DecrementProduct";
 
         $.getJSON(url,
             { bookId: id },
@@ -103,7 +103,7 @@ $(function () {
         e.preventDefault();
 
         var id = $(this).data("id");
-        var url = "/customer/cart/RemoveProduct";
+        var url = "/cart/RemoveProduct";
 
         $.get(url,
             { bookId: id },

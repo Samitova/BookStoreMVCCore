@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace BookStore.Data.Models.Attributes
+namespace BookStore.ViewModelData.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class OrderKeyAttribute: Attribute

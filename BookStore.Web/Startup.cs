@@ -32,9 +32,8 @@ namespace BookStore.Web
                options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-            services.AddScoped<IAuthorManager, AuthorManager>();
-            services.AddScoped<ShopService>();   
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();           
+            services.AddScoped<IShopManager, ShopManager>();
             services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
             services.AddDistributedMemoryCache();   
@@ -79,7 +78,7 @@ namespace BookStore.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area=Customer}/{controller=Shop}/{action=Index}/{id?}");
+                    pattern: "{controller=Book}/{action=Index}/{id?}");
             });
         }
     }

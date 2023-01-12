@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using BookStore.Data.Models.Attributes;
 using Microsoft.AspNetCore.Http;
 using BookStore.DataAccess.Models;
+using BookStore.ViewModelData.Attributes;
 
 namespace BookStore.ViewModelData
 {

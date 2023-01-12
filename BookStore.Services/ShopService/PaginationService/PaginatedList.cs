@@ -12,9 +12,9 @@ namespace BookStore.Services.ShopService.PaginationService
         public PaginatedList()
         {                
         }
-        public PaginatedList(List<T> source, int pageIndex, int pageSize)
+        public PaginatedList(IEnumerable<T> source, int pageIndex, int pageSize)
         {
-            TotalRecord = source.Count;
+            TotalRecord = source.ToList().Count;
             var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
             this.AddRange(items);
         }

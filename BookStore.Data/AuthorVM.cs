@@ -17,8 +17,9 @@ namespace BookStore.ViewModelData
         [DisplayName("Author")]
         public string FullName { get; set; }
         public string PhotoPath { get; set; }
+        public string OldPhotoPath { get; set; }
         public string Biography { get; set; }
-        public List<BookVM> Books { get; set; }
+        public IEnumerable<BookVM> Books { get; set; }
         public IFormFile AuthorImage { get; set; }
       
     }

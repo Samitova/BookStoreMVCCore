@@ -1,0 +1,74 @@
+﻿@model CategoryVM
+
+@{
+    ViewData["Title"] = "Edit Category";
+    bool hasParentCategory = false;
+    string parentCategoryClass = "noParentCategory";
+    if (Model.Category.ParentId != 0)
+    {
+        hasParentCategory = true;
+        parentCategoryClass = "selectParentCategory";
+    }
+}
+
+<div class="container">
+    <div class="product-card" style="width:500px;">
+        <div class="card-header text-uppercase text-center">
+            <h5>Update Category</h5>
+        </div>
+
+        <div class="col align-content-center">
+            <form asp-action="UpdateCategory" method="post">
+                <input type="hidden" asp-for="Category.Id"/>
+                <input type="hidden" asp-for="Category.Timestamp" />
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Category.CategoryName" class="control-label"></label>                                                 
+                    <input asp-for="Category.CategoryName" class="form-control" />
+                    <span asp-validation-for="Category.CategoryName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Category.IconPath" class="control-label"></label>
+                    <input asp-for="Category.IconPath" class="form-control" />
+                    <span asp-validation-for="Category.IconPath" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    @if (hasParentCategory) 
+                    {
+                        <input type="checkbox" name="hasParent" id="hasParent" value="value" checked>
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="hasParent" id="hasParent" value="value">
+                    }                    
+                    <label for="checkbox_id">Has parent category</label>
+                </div>
+
+                <div class="form-group">  
+                    <select class="@parentCategoryClass" asp-for="Category.ParentId" asp-items="ViewBag.categories" id='parentCategory'>
+                        <option selected value="0">No parent category</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Update" class="add-btn"/>                                    
+                </div>
+            </form>
+            <div>
+                <a class="backhref" asp-action="Index">Back to List</a>
+            </div>
+        </div>
+    </div>    
+</div>
+
+
+@section Scripts
+ {
+    <script>
+        $('#hasParent').on('change', function () { 
+            $("#parentCategory").toggle();           
+        })
+    </script>
+}
+

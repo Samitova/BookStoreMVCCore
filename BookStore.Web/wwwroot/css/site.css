@@ -696,15 +696,18 @@ span.loader {
 }
 /*--------------------------------------------------------------*/
 .book-wrapper {
-    padding-top: 60px; 
+    padding-top: 30px; 
 }
 
 .author-wrapper {
-    padding-top: 60px;
+    padding-top: 30px;
+    padding-bottom: 60px;
     background: #faf7ef;
 }
 
-.book-deteils-title {    
+.book-deteils-title,
+.author-deteils-title {
+    margin-top:10px;
     font-size: 18px;
     font-weight: bold;
     display: block;
@@ -712,7 +715,8 @@ span.loader {
     text-align: center;
 }
 
-.book-deteils-link {    
+.book-deteils-link,
+.author-deteils-link {
     font-size: 14px;
     font-weight: bold;
     color: #c39d1d;
@@ -1119,7 +1123,7 @@ form .rate-btn button {
 
 .add-btn {
     height: 30px;
-    width: 120px;
+    width: 200px;    
     background: #248a87;
     color: #fff;
     padding: 3px 10px 5px 10px;

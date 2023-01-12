@@ -1,0 +1,189 @@
+﻿@using BookStore.Services.ShopService
+@using BookStore.Services.ShopService.SortingService
+@using BookStore.ViewModelData
+@model List<BookVM>
+
+@{
+    ViewData["Title"] = "Books";    
+    NavigationService navigationService = (NavigationService)ViewData["NavigationService"];  
+    SortModel sortModel = (SortModel)ViewData["SortModel"];
+    CategoryVM categories = (CategoryVM)ViewData["Categories"];
+}
+
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="category-header">           
+            @if (categories.Category.CategoryName == null)
+            {
+                <div class="category-name text-lg-left">Books</div>
+            }
+            else
+            {
+                <div class="category-name text-lg-left">@categories.Category.CategoryName</div>
+            }
+
+            <div class="categories">
+                <div class="navbar-expand-md">
+                    <div class="collapse navbar-collapse" id="navbarTogglerCategories">
+                        <ul class="list-inline">
+                            @foreach (var item in categories.Categories)
+                            {
+                                <li class="list-inline-item">
+                                    <div class="subcategories-item justify-content-lg-start">
+                                        <a asp-controller="Book" asp-action="Category" asp-route-categoryId="@item.Id"><i class="@item.IconPath"></i> @item.CategoryName</a>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="navbar-expand-md w-100">
+                    <div class="" id="categories-show-btn">
+                        <a class="navbar-toggler" data-toggle="collapse" data-target="#navbarTogglerCategories" aria-controls="navbarTogglerCategories" aria-expanded="false" aria-label="Toggle navigation">
+                            Categories <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <a class="navbar-toggler" data-toggle="collapse" data-target="#navbarTogglerFilters" aria-controls="navbarTogglerFilters" aria-expanded="false" aria-label="Toggle navigation">
+                            Filters
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid d-inline-flex">
+
+    <div class="sidebar-filter" id="side-nav">
+        <ul class="filter-item-wrapper">
+            <li class="filter-item-capture justify-content-between">
+                <a href="#" class="filter-link">
+                    Product type
+                </a>
+                <input class="hidden" type="checkbox" checked="checked" id="show-productType">
+                <label class="filter-capture-label" for="show-productType">Product type <i class="fa-solid fa-chevron-down"></i></label>
+
+                <ul class="filter-subitem-wrapper">
+                    <li>
+                        <div>
+                            <input type="checkbox" id="books" name="productFilter" value="books" />
+                            <label for="books">Books</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <input type="checkbox" id="audioBooks" name="productFilter" value="audioBooks" />
+                            <label for="audioBooks">Audio books</label>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <hr class="a-color" />
+        <ul class="filter-item-wrapper">
+            <li class="filter-item-capture justify-content-between">
+                <a href="#" class="filter-link">
+                    Show only
+                </a>
+                <input class="hidden" type="checkbox" checked="checked" id="show-only">
+                <label class="filter-capture-label" for="show-only"> Show only <i class="fa-solid fa-chevron-down"></i></label>
+
+                <ul class="filter-subitem-wrapper">
+                    <li>
+                        <div>
+                            <input type="checkbox" id="bestsellerOnly" name="onlyFilter" value="bestseller" />
+                            <label for="bestsellerOnly">Bestseller</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <input type="checkbox" id="salesOnly" name="onlyFilter" value="sales" />
+                            <label for="salesOnly">Sales</label>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <hr class="a-color" />
+        <ul class="filter-item-wrapper">
+            <li class="filter-item-capture justify-content-between">
+                <a href="#" class="filter-link">
+                    Author
+                </a>
+                <input class="hidden" type="checkbox" checked="checked" id="show-author">
+                <label class="filter-capture-label" for="show-author"> Author <i class="fa-solid fa-chevron-down"></i></label>
+
+                <ul class="filter-subitem-wrapper">
+                    <li>
+                        <div>
+                            <input type="checkbox" id="author2" name="authorFilter" value="Ben Aflek" />
+                            <label for="author2">Ben Aflek</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <input type="checkbox" id="author1" name="authorFilter" value="Dorian Klow" />
+                            <label for="author1">Dorian Klow</label>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        @if (Model.Count > 0)
+        {
+            <div class="sort-table-wrapper ml-1">
+                <nav class="navbar navbar-expand-lg  justify-content-end">
+                    <a asp-controller="Book" asp-action="CreateBook" class="add-btn" id="0">Create New Book</a>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="sort-item sort-item-main">
+                                <a asp-action="Index" asp-route-sortExpression="">ALL</a>
+                            </li>
+                            <li class="sort-item">
+                                <a asp-action="@sortModel.Action" asp-route-sortExpression="@sortModel.GetColumn("bestsellers").SortExpression">BESTSELLERS</a>
+                            </li>
+                            <li class="sort-item">
+                                <a asp-action="@sortModel.Action" asp-route-sortExpression="@sortModel.GetColumn("novelties").SortExpression">NOVELTIES</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <partial name="_SortingBarPartial" model="@sortModel" />
+                </nav>
+            </div>
+
+            @if (TempData["success"] != null)
+            {
+                <div class="alert alert-success alert-msg">
+                    @TempData["success"]
+                </div>
+            }
+
+            <div class="row  ml-1">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <partial name="_DisplayBooksPartial" model="Model[i]" />
+                    if (i < Model.Count - 1)
+                    {
+                        <div class="vl"></div>
+                    }
+                }
+            </div>
+
+            <div class="row ml-1 justify-content-lg-between justify-content-center">
+                <partial name="_PageBarPartial" model="@navigationService.PaginationModel" />
+            </div>
+        }       
+    </div>    
+</div>
+
+@section Scripts
+{
+    <script src="~/scripts/cartscripts.js"></script>
+}
+
+

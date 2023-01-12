@@ -12,7 +12,7 @@ namespace BookStore.Services.Test
 {
     public class BookServiceTest
     {
-        private readonly ShopService.ShopService _bookService;
+        private readonly ShopService.ShopManager _bookService;
         private readonly Mock<IRepositoryWrapper> _bookRepositoryStub;
         public BookServiceTest()
         {
@@ -33,7 +33,7 @@ namespace BookStore.Services.Test
             _bookRepositoryStub.Setup(x => x.Books.SearchByIsbnAsync(It.IsAny<string>())).ReturnsAsync(booksForIsbn);
             _bookRepositoryStub.Setup(x => x.Books.SearchByTitleAndAuthorAsync(It.IsAny<string>())).ReturnsAsync(booksForTitle);
 
-            //_bookService = new ShopService(_bookRepositoryStub.Object);
+            //_bookService = new BookManager(_bookRepositoryStub.Object);
         }
 
         [Fact]

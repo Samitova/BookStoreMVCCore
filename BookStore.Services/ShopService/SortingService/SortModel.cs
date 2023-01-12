@@ -56,7 +56,7 @@ namespace BookStore.Services.ShopService.SortingService
             return checkColumn;
         }
 
-        public void ApplySort(string action, string sortExpression)
+        public void ApplySort(string action, string sortExpression="")
         {
             Action = action;
             if (string.IsNullOrEmpty(sortExpression))

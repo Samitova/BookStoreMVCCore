@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 
@@ -17,43 +18,70 @@ namespace BookStore.DataAccess.Repositories
         private readonly DbSet<T> _table;       
 
         #endregion
-
         public RepositoryBase(BookStoreContext context)
         {
             _context = context;
             _table = _context.Set<T>();
         }
 
-        #region Async Methods
-     
+        #region Async Methods     
         public void Add(T entity)
         {
-            _table.Add(entity);
-            SaveChanges();           
+            try
+            {
+                _table.Add(entity);
+                SaveChanges();                
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);                
+            }                  
         }
 
         public void Update(T entity)
         {
-            _context.ChangeTracker.Clear();
-            _context.Update(entity);
-            SaveChanges();            
+            try
+            {
+                _context.ChangeTracker.Clear();
+                _context.Update(entity);
+                SaveChanges();                
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }                       
         }
 
-        public T Delete(int? id)
+        public void Delete(int id)
         {
-            T entityToDelete = _table.Find(id);
-            Delete(entityToDelete);
-            SaveChanges();
-            return entityToDelete;
+            try
+            {
+                T entityToDelete = _table.Find(id);
+                Delete(entityToDelete);
+                SaveChanges();               
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+            
         }
+
         public void Delete(T entity)
         {
-            if (_context.Entry(entity).State == EntityState.Detached)
+            try
             {
-                _table.Attach(entity);
+                if (_context.Entry(entity).State == EntityState.Detached)
+                {
+                    _table.Attach(entity);
+                }
+                _table.Remove(entity);
+                SaveChanges();               
             }
-            _table.Remove(entity);
-            SaveChanges();
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }           
         }
 
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
@@ -112,48 +140,11 @@ namespace BookStore.DataAccess.Repositories
         {
             return await _context.Set<T>().FindAsync(id);
         }
+
         public virtual T GetById(int? id)
         {
             return  _table.Find(id);
         }
-
-        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter)
-        {
-            return await _table.FirstOrDefaultAsync(filter);
-        }
-
-        public T FirstOrDefault(Expression<Func<T, bool>> filter)
-        {
-           return  _table.FirstOrDefault(filter);
-        }
-
-        public async Task<bool> AnyAsync(Expression<Func<T, bool>> filter)
-        {
-            return await _table.AnyAsync(filter);
-        }
-        public bool Any(Expression<Func<T, bool>> filter)
-        {
-            return _table.Any(filter);
-        }
-
-        public async Task<int> CountAsync(Expression<Func<T, bool>> filter = null)
-        {
-            if (filter == null)
-            {
-                return await _table.CountAsync();
-            }          
-            return await _table.CountAsync(filter);
-        }
-
-        public int Count(Expression<Func<T, bool>> filter = null)
-        {
-            if (filter == null)
-            {
-                return _table.Count();
-            }
-            return _table.Count(filter);
-        }
-
         #endregion
         public void SaveChanges()
         {

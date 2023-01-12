@@ -1,0 +1,60 @@
+﻿@model CategoryVM
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="container">
+    <p class="text-center cat-header">Categories</p>
+    <p>
+        <a asp-area="Admin" asp-controller="Category" asp-action="CreateCategory" class="add-btn" id="0">Create New Category</a>
+    </p>
+    @if (TempData["success"] != null)
+    {
+        <div class="alert alert-success alert-msg">
+            @TempData["success"]
+        </div>
+    }
+
+    <ul class="category-table">
+        <li class="category-table-header">
+            <div class="row ">
+                <div class="col category-table-item">
+                    Category
+                </div>
+                <div class=" col category-table-item">
+                    Icon
+                </div>
+                <div class="col category-table-item">
+                </div>
+            </div>           
+        </li>
+        @foreach (var item in Model.Categories)
+        {
+            <li class="category-table-li">
+                <div class="row">
+                    <div class="col category-table-item">
+                        @item.CategoryName
+                    </div>
+                    <div class="col category-icon">
+                        <i class="@item.IconPath"></i>
+                    </div>
+                    <div class="col category-edit-group">
+                        <a class="btn edit-btn"  asp-controller="Category"
+                       asp-action="UpdateCategory" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn delete-btn"  asp-controller="Category"
+                       asp-action="DeleteCategory" asp-route-id="@item.Id">Delete</a>
+                    </div>                    
+                </div>
+                <partial name="_SubCategoryPartial" model="@item.SubCategory" />
+            </li>           
+        }
+    </ul>
+</div>
+
+@section  Scripts
+{    
+    <script src="~/scripts/categoryscript.js"></script>
+}
+
+

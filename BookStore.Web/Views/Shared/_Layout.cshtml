@@ -1,0 +1,115 @@
+﻿@using BookStore.Services.ShopService.SearchService
+@using BookStore.ViewModelData
+@using BookStore.Web
+
+@{
+    SearchBar searchBar = (SearchBar)ViewData["SearchBar"];
+    CartVM cart;
+    if (!Context.Session.TryGetObject<CartVM>("Cart", out cart))
+        cart = new CartVM();
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 , shrink-to-fit=no" />
+    <title>@ViewData["Title"] - BookStore</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" />   
+</head>
+<body>
+
+    <main role="main">       
+        <header>
+            <div class="container-fluid ">
+                <div class="row" style="background:#1d2020; height:20px;">
+                </div>
+
+                <div class="row top-navbar navbar-dark bg-dark">
+                    <div class="col-lg-2 p-md-2 p-lg-4">
+                        <div class="d-flex justify-content-center justify-content-lg-start">
+                            <a class="navbar-brand mr-0 mr-md-3" href="/" aria-label="BookShop">
+                                <img src="\pictures\shoplogo.png" width="30" height="30" class="d-inline-block align-top" alt="logo" />
+                                BOOKYLAND
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col pl-md-4 p-md-2 p-lg-4 d-flex justify-content-md-start justify-content-center  justify-content-lg-center">                        
+                        <div class="search-container">
+                            <form method="get" class="search-bar" asp-controller="@searchBar.Controler" asp-action="@searchBar.Action">
+                                <input class="input-search" type="search" name="SearchText" value="@searchBar.SearchText" placeholder="Search..." aria-label="Search">
+                                <button type="submit">
+                                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i> </span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-md-auto bg-dark  p-md-2 pr-md-4  p-lg-4 d-flex justify-content-center">
+                        <ul class="navbar-nav top-navbar flex-row">
+                            <li class="nav-item ml-3">
+                                <a class="nav-link"  asp-controller="Book" asp-action="Index">Books</a>
+                            </li>
+                            <li class="nav-item ml-3">
+                                <a class="nav-link"  asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>   
+                            <li class="nav-item ajaxcart ml-3 mr-3">
+                                <partial name="/Views/Cart/_CartPartial.cshtml" model="@cart" />
+                            </li>
+                            <li class="nav-item d-md-none ml-3 mt-2">
+                                <button class="btn" type="button" data-toggle="collapse" data-target="#customBarCollapse" aria-controls="navbarSupportedContent"
+                                    aria-expanded="false" aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>      
+            </div>      
+
+            <nav class="navbar navbar-expand-md navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow">
+                <div class="container-fluid">               
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse border-top" id="customBarCollapse">
+                        <ul class="top-navbar navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>                            
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Book" asp-action="Index">Books</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Author" asp-action="Index">Authors</a>
+                            </li>
+                             <li class="nav-item">
+                                <a class="nav-link"  asp-controller="Publisher" asp-action="Index">Publishers</a>
+                            </li>                           
+                            <li class="nav-item">
+                                <a class="nav-link"  asp-controller="Category" asp-action="Index">Categories</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <breadcrumb></breadcrumb>
+           
+        </header>        
+        @RenderBody()
+    </main>
+
+    <footer class="border-top footer text-muted bg-dark">
+        <div class="container text-white">
+            &copy; 2022 - BookStore.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>   
+    @RenderSection("Scripts", required: false)
+   
+</body>
+</html>

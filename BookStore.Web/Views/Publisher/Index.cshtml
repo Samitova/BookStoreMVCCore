@@ -1,0 +1,67 @@
+﻿@model IEnumerable<PublisherVM>
+
+@{
+    ViewData["Title"] = "Publishers";
+}
+
+<div class="container">   
+    <p class="text-center cat-header">Publishers</p>
+
+    <p>
+        <a asp-area="Admin" asp-controller="Publisher" asp-action="CreateUpdatePublisher" class="add-btn" id="0">Create New Publisher</a>
+    </p>
+
+    @if (TempData["success"] != null)
+    {
+        <div class="alert alert-success alert-msg">
+            @TempData["success"]
+        </div>
+    }
+
+    <ul class="category-table">
+        <li class="category-table-header">
+            <div class="row ">
+                <div class="col category-table-item">
+                    Publisher Name
+                </div>
+                <div class="col category-table-item">
+                    City
+                </div>
+                <div class="col category-table-item">
+                    Phone
+                </div>
+                <div class="col category-table-item">
+                </div>
+            </div>           
+        </li>
+        @foreach (var item in Model)
+        {
+            <li class="category-table-li">
+                <div class="row">
+                    <div class="col category-table-item">
+                        @item.PublisherName
+                    </div>
+                    <div class="col category-table-item">
+                        @item.City
+                    </div>
+                     <div class="col category-table-item">
+                        @item.Phone
+                    </div>
+                    <div class="col category-edit-group">
+                        <a class="btn edit-btn" asp-area="Admin" asp-controller="Publisher"
+                       asp-action="CreateUpdatePublisher" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn delete-btn" asp-area="Admin" asp-controller="Publisher"
+                       asp-action="DeletePublisher" asp-route-id="@item.Id">Delete</a>
+                    </div>                    
+                </div>              
+            </li>           
+        }
+    </ul>
+</div>
+
+@section  Scripts
+{
+    <script src="~/scripts/categoryscript.js"></script>
+}
+
+
