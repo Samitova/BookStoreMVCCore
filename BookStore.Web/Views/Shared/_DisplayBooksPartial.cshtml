@@ -7,8 +7,9 @@
 
 <div class="col card-wrapper">    
     <div class="card">
-        <img src="@photoPath" class="card-img-top imageThumbnail" alt="" asp-append-version="true">
-
+        <a  asp-controller="Book" asp-action="BookDetails" asp-route-id="@Model.Id">
+            <img src="@photoPath" class="card-img-top imageThumbnail" alt="" asp-append-version="true">
+        </a>
         <div class="card-body">
             <div>
                 <a class="card-title" asp-controller="Book" asp-action="BookDetails" asp-route-id="@Model.Id">@Model.Title</a><br />

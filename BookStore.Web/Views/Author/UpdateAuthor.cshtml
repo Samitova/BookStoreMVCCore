@@ -2,8 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit Author";
-    var photoPath = $"/pictures/uploads/authors/{Model.PhotoPath}";
-    Model.OldPhotoPath = Model.PhotoPath;
+    var photoPath = $"/pictures/uploads/authors/{Model.PhotoPath}";   
 }
 
 <div class="container">
@@ -18,8 +17,7 @@
             <form enctype="multipart/form-data" asp-action="UpdateAuthor" method="post">
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="Timestamp"/>
-                <input type="hidden" asp-for="PhotoPath"/>
-                <input type="hidden" asp-for="OldPhotoPath" />
+                <input type="hidden" asp-for="PhotoPath"/>                
                
                 <div asp-validation-summary="All" class="text-danger"></div>
 
