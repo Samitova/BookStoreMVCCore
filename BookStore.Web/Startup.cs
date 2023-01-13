@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SmartBreadcrumbs.Extensions;
 using System;
 using System.Reflection;
@@ -36,7 +37,8 @@ namespace BookStore.Web
             services.AddScoped<IFileService, FilesService>();
             services.AddScoped<IShopManager, ShopManager>();
             services.AddAutoMapper(typeof(Startup));
-            services.AddControllersWithViews();
+            services.AddMvc();
+            //services.AddControllersWithViews();
             services.AddDistributedMemoryCache();   
             services.AddSession(options => { 
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
@@ -64,16 +66,18 @@ namespace BookStore.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSession();
+            app.UseCookiePolicy();           
             app.UseRouting();
-
+            //app.UseCors();
+            app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

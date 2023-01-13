@@ -9,17 +9,17 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace BookStore.Web.Controllers
-{    
+{
+    [Breadcrumb(Title = "ViewData.Title")]
     public class CartController : Controller
     {
-        private readonly IBookManager _bookManager;
+        private readonly IShopManager _shopManager;
 
-        public CartController(BookManager bookManager)
+        public CartController(IShopManager shopManager)
         {
-            _bookManager = bookManager;
+            _shopManager = shopManager;
         }
-
-        [Breadcrumb(Title = "ViewData.Title")]
+        
         public IActionResult Index()
         {
             ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Book", SearchText = "" };
@@ -36,7 +36,8 @@ namespace BookStore.Web.Controllers
             return View(cartItems);
         }
 
-        //GET Cart/AddToCart/Id       
+        //GET Cart/AddToCart/Id
+        [HttpGet]
         public async Task<IActionResult> AddToCartPartial(int id)
         {
             CartVM cartItems;
@@ -44,7 +45,7 @@ namespace BookStore.Web.Controllers
                 cartItems = new CartVM();
 
             CartItem cartItem = new CartItem();
-            var book = await _bookManager.GetBookByIdAsync(id);
+            var book = await _shopManager.BookManager.GetBookByIdAsync(id);
             var productInCart = cartItems.Items.FirstOrDefault(x => x.BookId == id);
 
             if (productInCart == null)
@@ -84,6 +85,8 @@ namespace BookStore.Web.Controllers
             CartItem cartItem = cartItems.Items.FirstOrDefault(x => x.BookId == bookId);
 
             cartItem.Quantity++;
+            cartItems.TotalAmount++;
+            cartItems.TotalPrice += cartItem.Price;
 
             HttpContext.Session.SetObject("Cart", cartItems);
 
@@ -101,14 +104,17 @@ namespace BookStore.Web.Controllers
 
             CartItem cartItem = cartItems.Items.FirstOrDefault(x => x.BookId == bookId);
 
+            cartItems.TotalAmount--;
+            cartItems.TotalPrice -= cartItem.Price;
             if (cartItem.Quantity > 1)
             {
                 cartItem.Quantity--;
+                
             }
             else
             {
                 cartItem.Quantity = 0;
-                cartItems.Items.Remove(cartItem);
+                cartItems.Items.Remove(cartItem);               
             }
 
             HttpContext.Session.SetObject("Cart", cartItems);
@@ -118,13 +124,15 @@ namespace BookStore.Web.Controllers
         }
 
         // GET: Cart/RemoveProduct       
-        public void RemoveProduct(int bookId)
+        public void RemoveProduct(int bookId, int bookQuantity)
         {
             CartVM cartItems;
             if (!HttpContext.Session.TryGetObject("Cart", out cartItems))
                 cartItems = new CartVM();
 
             CartItem cartItem = cartItems.Items.FirstOrDefault(x => x.BookId == bookId);
+            cartItems.TotalAmount-=bookQuantity;
+            cartItems.TotalPrice -= cartItem.Price*bookQuantity;
             cartItems.Items.Remove(cartItem);
             HttpContext.Session.SetObject("Cart", cartItems);
         }

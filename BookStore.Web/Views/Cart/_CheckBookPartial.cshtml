@@ -3,11 +3,11 @@
 <div class="row" id="book@(Model.BookId)">
     <div class="col-xl-8 d-flex">
         <div class="col-sm-3 text-center">
-            <img src="/pictures/uploads/books/@Model.BookId/thumbs/@Model.Image" width="110" height="180" class="" alt="..." asp-append-version="true">
+            <img src="/pictures/uploads/books/@Model.Image" width="110" height="180" class="" alt="..." asp-append-version="true">
         </div>
         <div class="col-sm-9">
-            <a class="order-details-book-title" asp-action="BookDetails" asp-route-id="@Model.BookId">@Model.Title</a><br />
-            <a class="order-details-author" asp-action="AuthorDetails" asp-route-id="@Model.AuthorId">@Model.AuthorName</a>
+            <a class="order-details-book-title" asp-controller="Book" asp-action="BookDetails" asp-route-id="@Model.BookId">@Model.Title</a><br />
+            <a class="order-details-author" asp-controller="Author" asp-action="AuthorDetails" asp-route-id="@Model.AuthorId">@Model.AuthorName</a>
             <div class="availiable-quantaty">In stock @Model.AvaliableQuantaty item(s)</div>
         </div>
     </div>

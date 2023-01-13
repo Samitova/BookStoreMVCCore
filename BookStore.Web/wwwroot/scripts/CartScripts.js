@@ -48,6 +48,10 @@ $(function () {
             var gt = parseFloat($("div.total-amount").text());
             var grandtotal = ((gt + data.price).toFixed(2)) + "$";
 
+            var cartcount = parseInt($("span.cart-count").text());
+
+            $("span.cart-count").text(cartcount+1);
+            $("span.cart-price").text(grandtotal);
             $("div.total-amount").text(grandtotal);
         });
     });
@@ -87,6 +91,10 @@ $(function () {
                     var gt = parseFloat($("div.total-amount").text());
                     var grandtotal = (gt - data.price).toFixed(2) + "$";
 
+                    var cartcount = parseInt($("span.cart-count").text());
+
+                    $("span.cart-count").text(cartcount - 1);
+                    $("span.cart-price").text(grandtotal);
                     $("div.total-amount").text(grandtotal);
                 }
         });
@@ -104,9 +112,10 @@ $(function () {
 
         var id = $(this).data("id");
         var url = "/cart/RemoveProduct";
+        var quantity = parseInt($("div.qty" + id).text());
 
         $.get(url,
-            { bookId: id },
+            { bookId: id, bookQuantity: quantity },
             function (data) {
                 location.reload();
             });

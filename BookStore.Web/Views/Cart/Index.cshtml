@@ -30,8 +30,8 @@ else
                 @foreach (var item in Model.Items)
                 {
                     <div class="summary-item">
-                        <div class="summary-book-qty@(item.BookId)">@item.Title</div>
-                        <div class="summary-item-price amount@(item.BookId)">@item.Price $</div>
+                        <div class="summary-book-qty@(item.BookId)">@item.Quantity x @item.Title</div>
+                        <div class="summary-item-price amount@(item.BookId)">@(item.Price*item.Quantity) $</div>
                     </div>
                 }
                 <hr />
