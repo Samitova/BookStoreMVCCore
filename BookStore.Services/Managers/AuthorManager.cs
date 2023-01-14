@@ -21,7 +21,7 @@ namespace BookStore.Services.Managers
             _mapper = mapper;
         }
 
-        public void AddAuthor(AuthorVM author)
+        public void AddAuthor(AuthorViewModel author)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace BookStore.Services.Managers
             }           
         }
 
-        public void UpdateAuthor(AuthorVM author)
+        public void UpdateAuthor(AuthorViewModel author)
         {
             try
             {
@@ -57,28 +57,28 @@ namespace BookStore.Services.Managers
             }                        
         }
 
-        public async Task<IEnumerable<AuthorVM>> GetAllAuthorsAsync()
+        public async Task<IEnumerable<AuthorViewModel>> GetAllAuthorsAsync()
         {
             IEnumerable<Author> authorsList = await _repository.Authors.GetAllAsync(orderBy: x => x.OrderBy(y => y.FullName));
-            return _mapper.Map<IEnumerable<AuthorVM>>(authorsList);
+            return _mapper.Map<IEnumerable<AuthorViewModel>>(authorsList);
         }
 
-        public AuthorVM GetAuthorById(int id)
+        public AuthorViewModel GetAuthorById(int id)
         {
             Author author =  _repository.Authors.GetById(id);
-            return _mapper.Map<AuthorVM>(author);
+            return _mapper.Map<AuthorViewModel>(author);
         }
 
-        public async Task<AuthorVM> GetAuthorByIdAsync(int? id)
+        public async Task<AuthorViewModel> GetAuthorByIdAsync(int? id)
         {
             Author author = await _repository.Authors.GetByIdAsync(id);           
-            return _mapper.Map<AuthorVM>(author);
+            return _mapper.Map<AuthorViewModel>(author);
         }
 
-        public async Task<AuthorVM> GetAuthorWithBooksAsync(int id, SortModel sortModel)
+        public async Task<AuthorViewModel> GetAuthorWithBooksAsync(int id, SortModel sortModel)
         {
             Author author = await _repository.Authors.GetByIdAsync(id);
-            AuthorVM authorVM = _mapper.Map<AuthorVM>(author);
+            AuthorViewModel authorVM = _mapper.Map<AuthorViewModel>(author);
             authorVM.Books = SortService.SortBooks(authorVM.Books, sortModel);
             return authorVM;
         }

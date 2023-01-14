@@ -7,7 +7,7 @@ using BookStore.DataAccess.Models;
 
 namespace BookStore.ViewModelData
 {
-    public class BookCommentVM : BaseEntity
+    public class BookCommentViewModel : BaseEntity
     {
         [Required]
         public string Comment { get; set; }

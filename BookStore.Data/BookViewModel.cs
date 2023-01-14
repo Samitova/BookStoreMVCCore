@@ -9,9 +9,9 @@ using BookStore.ViewModelData.Attributes;
 
 namespace BookStore.ViewModelData
 {
-    public class BookVM : BaseEntity
+    public class BookViewModel : BaseEntity
     {
-        public BookVM()
+        public BookViewModel()
         { }
 
         [Required]
@@ -81,7 +81,7 @@ namespace BookStore.ViewModelData
         [OrderKey("rating")]
         public double RateValue { get; set; }
         public int RateCount { get; set; }
-        public ICollection<BookCommentVM> Comments { get; set; }
+        public ICollection<BookCommentViewModel> Comments { get; set; }
 
         public ICollection<ProgressBarVM> ProgressBar { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; }

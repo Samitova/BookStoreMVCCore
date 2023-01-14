@@ -2,6 +2,7 @@
 using BookStore.Services.Managers;
 using BookStore.Services.ShopService.SearchService;
 using BookStore.ViewModelData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 namespace BookStore.Web.Controllers
 {
     [Breadcrumb(Title = "ViewData.Title")]
+    [AllowAnonymous]
     public class CartController : Controller
     {
         private readonly IShopManager _shopManager;
@@ -19,14 +21,14 @@ namespace BookStore.Web.Controllers
         {
             _shopManager = shopManager;
         }
-        
+      
         public IActionResult Index()
         {
             ViewData["searchBar"] = new SearchBar() { Action = "Index", Controler = "Book", SearchText = "" };
 
-            CartVM cartItems;
+            CartViewModel cartItems;
             if (!HttpContext.Session.TryGetObject("Cart", out cartItems))
-                cartItems = new CartVM();
+                cartItems = new CartViewModel();
 
             if (cartItems.Items.Count == 0)
             {
@@ -37,12 +39,12 @@ namespace BookStore.Web.Controllers
         }
 
         //GET Cart/AddToCart/Id
-        [HttpGet]
+        [HttpGet]        
         public async Task<IActionResult> AddToCartPartial(int id)
         {
-            CartVM cartItems;
+            CartViewModel cartItems;
             if (!HttpContext.Session.TryGetObject("Cart", out cartItems))
-                cartItems = new CartVM();
+                cartItems = new CartViewModel();
 
             CartItem cartItem = new CartItem();
             var book = await _shopManager.BookManager.GetBookByIdAsync(id);
@@ -77,9 +79,9 @@ namespace BookStore.Web.Controllers
         // GET: Cart/IncrementProduct       
         public JsonResult IncrementProduct(int bookId)
         {
-            CartVM cartItems;
+            CartViewModel cartItems;
             if (!HttpContext.Session.TryGetObject("Cart", out cartItems))
-                cartItems = new CartVM();
+                cartItems = new CartViewModel();
 
 
             CartItem cartItem = cartItems.Items.FirstOrDefault(x => x.BookId == bookId);
@@ -98,9 +100,9 @@ namespace BookStore.Web.Controllers
         // GET: Cart/DecrementProduct       
         public JsonResult DecrementProduct(int bookId)
         {
-            CartVM cartItems;
+            CartViewModel cartItems;
             if (!HttpContext.Session.TryGetObject("Cart", out cartItems))
-                cartItems = new CartVM();
+                cartItems = new CartViewModel();
 
             CartItem cartItem = cartItems.Items.FirstOrDefault(x => x.BookId == bookId);
 
@@ -126,9 +128,9 @@ namespace BookStore.Web.Controllers
         // GET: Cart/RemoveProduct       
         public void RemoveProduct(int bookId, int bookQuantity)
         {
-            CartVM cartItems;
+            CartViewModel cartItems;
             if (!HttpContext.Session.TryGetObject("Cart", out cartItems))
-                cartItems = new CartVM();
+                cartItems = new CartViewModel();
 
             CartItem cartItem = cartItems.Items.FirstOrDefault(x => x.BookId == bookId);
             cartItems.TotalAmount-=bookQuantity;

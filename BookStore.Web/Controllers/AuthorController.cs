@@ -6,6 +6,7 @@ using BookStore.Services.ShopService.PaginationService;
 using BookStore.Services.ShopService.SearchService;
 using BookStore.Services.ShopService.SortingService;
 using BookStore.ViewModelData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace BookStore.Web.Controllers
 {
-    [Breadcrumb("Authors")]
+    [Breadcrumb("Authors")]    
     public class AuthorController : Controller
     {
         private readonly Dictionary<string, string> sortedProperties = new Dictionary<string, string>()
@@ -48,7 +49,7 @@ namespace BookStore.Web.Controllers
                 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<AuthorVM> authorsList = await _shopManager.AuthorManager.GetAllAuthorsAsync();
+            IEnumerable<AuthorViewModel> authorsList = await _shopManager.AuthorManager.GetAllAuthorsAsync();
             return View(authorsList);
         }
 
@@ -56,12 +57,12 @@ namespace BookStore.Web.Controllers
         [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult CreateAuthor(int? id)
         {
-            AuthorVM author = new AuthorVM();           
+            AuthorViewModel author = new AuthorViewModel();           
             return View(author);           
         }
 
         [HttpPost]       
-        public IActionResult CreateAuthor(AuthorVM author)
+        public IActionResult CreateAuthor(AuthorViewModel author)
         {
             if (!ModelState.IsValid)
             {
@@ -101,7 +102,7 @@ namespace BookStore.Web.Controllers
         [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> UpdateAuthor(int? id)
         {
-            AuthorVM author = await _shopManager.AuthorManager.GetAuthorByIdAsync(id);
+            AuthorViewModel author = await _shopManager.AuthorManager.GetAuthorByIdAsync(id);
             if (author == null)
                 return NotFound();
             else
@@ -111,7 +112,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpPost]       
-        public IActionResult UpdateAuthor(AuthorVM author)
+        public IActionResult UpdateAuthor(AuthorViewModel author)
         {
             if (!ModelState.IsValid)
             {
@@ -160,7 +161,7 @@ namespace BookStore.Web.Controllers
         [ValidateAntiForgeryToken]       
         public async Task<IActionResult> DeleteAuthorPost(int id)
         {
-            AuthorVM author = await _shopManager.AuthorManager.GetAuthorByIdAsync(id);
+            AuthorViewModel author = await _shopManager.AuthorManager.GetAuthorByIdAsync(id);
 
             try
             {
@@ -180,7 +181,7 @@ namespace BookStore.Web.Controllers
         public async Task<IActionResult> AuthorDetails(int id, int PageSize, int CurrentPage = 1, string SortExpression = "")
         {
             NavigationService navigationService = new NavigationService();
-            AuthorVM author = new AuthorVM();
+            AuthorViewModel author = new AuthorViewModel();
 
             PageSize = PaginationService.ProccessPageSize(PageSize, this.HttpContext);
             SortModel sortModel = SortService.SetSortModel("AuthorDetails", SortExpression, sortedProperties);
@@ -188,7 +189,7 @@ namespace BookStore.Web.Controllers
 
             if (id == 0)
             {
-                author = JsonConvert.DeserializeObject<AuthorVM>(HttpContext.Session.GetString("Author"));
+                author = JsonConvert.DeserializeObject<AuthorViewModel>(HttpContext.Session.GetString("Author"));
                 author.Books = SortService.SortBooks(author.Books, sortModel);
             }
             else

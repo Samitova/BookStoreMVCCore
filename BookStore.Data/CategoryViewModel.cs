@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BookStore.ViewModelData
 {
-    public class CategoryVM : BaseEntity
+    public class CategoryViewModel : BaseEntity
     {
         public Category Category { get; set; } = new Category();
         public IEnumerable<Category> Categories { get; set; } = new List<Category>();

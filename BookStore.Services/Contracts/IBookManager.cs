@@ -10,11 +10,11 @@ namespace BookStore.Services.Contracts
 {
     public interface IBookManager
     {
-        void AddBook(BookVM book);
-        void UpdateBook(BookVM book);
+        void AddBook(BookViewModel book);
+        void UpdateBook(BookViewModel book);
         void DeleteBook(int id);        
-        Task<IEnumerable<BookVM>> GetAllBooksAsync(string SearchText = "", int? categoryId = null);
-        Task<BookVM> GetBookByIdAsync(int id);               
+        Task<IEnumerable<BookViewModel>> GetAllBooksAsync(string SearchText = "", int? categoryId = null);
+        Task<BookViewModel> GetBookByIdAsync(int id);               
         Task AddBookComment(BookComment bookComment);       
     }
 }

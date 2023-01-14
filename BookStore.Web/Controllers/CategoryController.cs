@@ -3,6 +3,7 @@ using BookStore.DataAccess.Models;
 using BookStore.Services.Contracts;
 using BookStore.Services.ShopService.SearchService;
 using BookStore.ViewModelData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace BookStore.Web.Controllers
 {
-    [Breadcrumb("Categories")]
+    [Breadcrumb("Categories")]    
     public class CategoryController : Controller
     {
         private readonly IShopManager _shopManager;
@@ -32,13 +33,13 @@ namespace BookStore.Web.Controllers
 
         public IActionResult Index()
         {
-            CategoryVM categoryVM = GetTreeVeiwCategories();
+            CategoryViewModel categoryVM = GetTreeVeiwCategories();
             return View(categoryVM);
         }
-
-        public CategoryVM GetTreeVeiwCategories()
+        
+        public CategoryViewModel GetTreeVeiwCategories()
         {
-            CategoryVM categoryVM = new CategoryVM();
+            CategoryViewModel categoryVM = new CategoryViewModel();
             categoryVM.Categories = _shopManager.CategoryManager.GetSubCategories(0);
 
             foreach (var category in categoryVM.Categories)
@@ -47,7 +48,7 @@ namespace BookStore.Web.Controllers
             }
             return categoryVM;
         }
-
+        
         private void BuildSubCategory(Category rootCategory)
         {
             List<Category> categories = _shopManager.CategoryManager.GetSubCategories(rootCategory.Id).ToList();
@@ -66,7 +67,7 @@ namespace BookStore.Web.Controllers
         [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> CreateCategory(int id)
         {
-            CategoryVM categoryVM = new CategoryVM();
+            CategoryViewModel categoryVM = new CategoryViewModel();
             categoryVM.Categories = await _shopManager.CategoryManager.GetAllCategoriesAsync();               
 
             ViewBag.categories = categoryVM.Categories.Select(i => new SelectListItem()
@@ -78,7 +79,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateCategory(CategoryVM categoryVM)
+        public IActionResult CreateCategory(CategoryViewModel categoryVM)
         {
             if (ModelState.IsValid)
             {
@@ -102,7 +103,7 @@ namespace BookStore.Web.Controllers
         [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> UpdateCategory(int id)
         {
-            CategoryVM categoryVM = new CategoryVM();
+            CategoryViewModel categoryVM = new CategoryViewModel();
             categoryVM.Categories = await _shopManager.CategoryManager.GetAllCategoriesAsync();
 
             var excludedCategoryId = new List<int> { id };
@@ -123,7 +124,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateCategory(CategoryVM categoryVM)
+        public IActionResult UpdateCategory(CategoryViewModel categoryVM)
         {
             if (ModelState.IsValid)
             {

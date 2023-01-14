@@ -8,12 +8,12 @@ namespace BookStore.Services.Contracts
 {
     public interface IAuthorManager
     {
-        AuthorVM GetAuthorById(int id);
-        Task<AuthorVM> GetAuthorByIdAsync(int? id);
-        Task<AuthorVM> GetAuthorWithBooksAsync(int id, SortModel sortModel);
-        Task<IEnumerable<AuthorVM>> GetAllAuthorsAsync();
+        AuthorViewModel GetAuthorById(int id);
+        Task<AuthorViewModel> GetAuthorByIdAsync(int? id);
+        Task<AuthorViewModel> GetAuthorWithBooksAsync(int id, SortModel sortModel);
+        Task<IEnumerable<AuthorViewModel>> GetAllAuthorsAsync();
         void DeleteAuthor(int id);
-        void AddAuthor(AuthorVM author);
-        void UpdateAuthor(AuthorVM author);
+        void AddAuthor(AuthorViewModel author);
+        void UpdateAuthor(AuthorViewModel author);
     }
 }

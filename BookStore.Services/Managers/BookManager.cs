@@ -22,7 +22,7 @@ namespace BookStore.Services.Managers
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<BookVM>> GetAllBooksAsync(string SearchText = "", int? categoryId = null)
+        public async Task<IEnumerable<BookViewModel>> GetAllBooksAsync(string SearchText = "", int? categoryId = null)
         {
             IEnumerable<Book> booksList = new List<Book>();
 
@@ -38,14 +38,14 @@ namespace BookStore.Services.Managers
                 booksList = await SearchBooksByQuaryAsync(SearchText);
             }
 
-            return _mapper.Map<IEnumerable<BookVM>>(booksList);
+            return _mapper.Map<IEnumerable<BookViewModel>>(booksList);
         }
-        public async Task<BookVM> GetBookByIdAsync(int id)
+        public async Task<BookViewModel> GetBookByIdAsync(int id)
         {
             Book book = await _repository.Books.GetBookByIdAsync(id);
             if (book != null)
             {
-                BookVM resultBook = _mapper.Map<BookVM>(book);                
+                BookViewModel resultBook = _mapper.Map<BookViewModel>(book);                
                 CalculateProgressBar(resultBook);
                 return resultBook;
             }
@@ -70,7 +70,7 @@ namespace BookStore.Services.Managers
             _repository.Books.Update(book);
         }
 
-        public void AddBook(BookVM book)
+        public void AddBook(BookViewModel book)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace BookStore.Services.Managers
             }           
         }
 
-        public void UpdateBook(BookVM book)
+        public void UpdateBook(BookViewModel book)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace BookStore.Services.Managers
 
             return books;
         }
-        private void CalculateProgressBar(BookVM resultBook)
+        private void CalculateProgressBar(BookViewModel resultBook)
         {
             int rateCount = resultBook.Comments.Count;
             resultBook.ProgressBar = new List<ProgressBarVM>();

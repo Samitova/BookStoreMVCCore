@@ -1,11 +1,11 @@
 ﻿using BookStore.DataAccess.Models;
 using BookStore.Services.Contracts;
-using BookStore.Services.Managers;
 using BookStore.Services.ShopService;
 using BookStore.Services.ShopService.PaginationService;
 using BookStore.Services.ShopService.SearchService;
 using BookStore.Services.ShopService.SortingService;
 using BookStore.ViewModelData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,16 +16,14 @@ using SmartBreadcrumbs.Attributes;
 using SmartBreadcrumbs.Nodes;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static System.Reflection.Metadata.BlobBuilder;
 
 
 namespace BookStore.Web.Controllers
 {    
-    [DefaultBreadcrumb("Home")]
+    [DefaultBreadcrumb("Home")]   
     public class BookController : Controller
     {
         private readonly Dictionary<string, string> sortedProperties = new Dictionary<string, string>()
@@ -57,9 +55,10 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Index(int PageSize, string SortExpression = "", string SearchText = "", int CurrentPage = 1)
         {            
-            IEnumerable<BookVM> books = new List<BookVM>();
+            IEnumerable<BookViewModel> books = new List<BookViewModel>();
             NavigationService navigationService = new NavigationService();
             string oldSearchText = "";
             if (SearchText == null)
@@ -92,7 +91,7 @@ namespace BookStore.Web.Controllers
             }
             else
             {
-                books = JsonConvert.DeserializeObject<PaginatedList<BookVM>>(HttpContext.Session.GetString("Books"));
+                books = JsonConvert.DeserializeObject<PaginatedList<BookViewModel>>(HttpContext.Session.GetString("Books"));
                 books = SortService.SortBooks(books, sortModel);
             }
 
@@ -103,11 +102,12 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> BrowseCategory(int categoryId, int PageSize, string SortExpression = "", int CurrentPage = 1)
         {
-            IEnumerable<BookVM> books = new List<BookVM>();
+            IEnumerable<BookViewModel> books = new List<BookViewModel>();
             NavigationService navigationService = new NavigationService();
-            CategoryVM categoryVM = new CategoryVM();
+            CategoryViewModel categoryVM = new CategoryViewModel();
 
             PageSize = PaginationService.ProccessPageSize(PageSize, this.HttpContext);
 
@@ -135,24 +135,26 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> BookDetails(int id)
         {            
-            BookVM book = await _shopManager.BookManager.GetBookByIdAsync(id);
+            BookViewModel book = await _shopManager.BookManager.GetBookByIdAsync(id);
             if (book == null)
             {
                 Response.StatusCode = 404;
                 return View("BookNotFound", id);
             }
             return View(book);
-        }       
+        }
 
+        [AllowAnonymous]
         public async Task<IActionResult> AddBookComment(BookComment bookComment)
         {
             if (string.IsNullOrEmpty(bookComment.PublisherName))
                 bookComment.PublisherName = "Anonimus";
             await _shopManager.BookManager.AddBookComment(bookComment);
-            BookVM book = await _shopManager.BookManager.GetBookByIdAsync(bookComment.BookId);
+            BookViewModel book = await _shopManager.BookManager.GetBookByIdAsync(bookComment.BookId);
             var breadcrumbNode = new MvcBreadcrumbNode("BrowseCategory", "Book", book.Title);
             ViewData["BreadcrumbNode"] = breadcrumbNode;           
             return View("BookDetails", book);
@@ -165,13 +167,13 @@ namespace BookStore.Web.Controllers
         [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> CreateBook(int? id)
         {
-            BookVM book = new BookVM();
+            BookViewModel book = new BookViewModel();
             await SetBookFields(book);
             return View(book);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBook(BookVM book)
+        public async Task<IActionResult> CreateBook(BookViewModel book)
         {
             if (!ModelState.IsValid)
             {
@@ -216,7 +218,7 @@ namespace BookStore.Web.Controllers
         [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> UpdateBook(int id)
         {
-            BookVM book = new BookVM();
+            BookViewModel book = new BookViewModel();
             book = await _shopManager.BookManager.GetBookByIdAsync(id);
             if (book == null)
                 return NotFound();
@@ -228,7 +230,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateBook(BookVM book)
+        public async Task<IActionResult> UpdateBook(BookViewModel book)
         {
             if (!ModelState.IsValid)
             {
@@ -309,7 +311,7 @@ namespace BookStore.Web.Controllers
         #region PrivateFunction
         private void SetCategories()
         {
-            CategoryVM categoryVM = new CategoryVM();
+            CategoryViewModel categoryVM = new CategoryViewModel();
             bool isCategoryIdExists = HttpContext.Session.TryGetValue("CategoryId", out byte[] _);
             if (!isCategoryIdExists) 
             {
@@ -342,7 +344,7 @@ namespace BookStore.Web.Controllers
 
             ViewData["BreadcrumbNode"] = node;           
         }
-        private async Task SetBookFields(BookVM book)
+        private async Task SetBookFields(BookViewModel book)
         {
             book.Categories = (await _shopManager.CategoryManager.GetAllCategoriesAsync()).Select(i => new SelectListItem()
             {

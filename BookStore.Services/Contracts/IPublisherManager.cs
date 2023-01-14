@@ -9,11 +9,11 @@ namespace BookStore.Services.Contracts
 {
     public interface IPublisherManager
     {
-        PublisherVM GetPublisherById(int id);
-        Task<PublisherVM> GetPublisherByIdAsync(int? id);
-        Task<IEnumerable<PublisherVM>> GetAllPublishersAsync();
+        PublisherViewModel GetPublisherById(int id);
+        Task<PublisherViewModel> GetPublisherByIdAsync(int? id);
+        Task<IEnumerable<PublisherViewModel>> GetAllPublishersAsync();
         void DeletePublisher(int id);
-        void AddPublisher(PublisherVM publisher);
-        void UpdatePublisher(PublisherVM publisher);
+        void AddPublisher(PublisherViewModel publisher);
+        void UpdatePublisher(PublisherViewModel publisher);
     }
 }

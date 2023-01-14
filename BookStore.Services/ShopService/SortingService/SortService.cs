@@ -10,9 +10,9 @@ namespace BookStore.Services.ShopService.SortingService
 {
     public static class SortService
     {
-        public static IEnumerable<BookVM> SortBooks(IEnumerable<BookVM> books, SortModel sortModel)
+        public static IEnumerable<BookViewModel> SortBooks(IEnumerable<BookViewModel> books, SortModel sortModel)
         {
-            Type type = typeof(BookVM);
+            Type type = typeof(BookViewModel);
             foreach (PropertyInfo prop in type.GetProperties())
             {
                 if (prop.GetCustomAttribute<OrderKeyAttribute>()?.Key == sortModel.SortedProperty)

@@ -1,6 +1,4 @@
-﻿@using BookStore.Services.ShopService.SearchService
-@using BookStore.ViewModelData
-@using BookStore.Web
+﻿@inject SignInManager<IdentityUser> signInManager;
 
 @{
     SearchBar searchBar = (SearchBar)ViewData["SearchBar"];
@@ -8,9 +6,9 @@
     { 
         searchBar = new SearchBar() { Action = "Index", Controler = "Book", SearchText = "" };
     }
-    CartVM cart;
-    if (!Context.Session.TryGetObject<CartVM>("Cart", out cart))
-        cart = new CartVM();
+    CartViewModel cart;
+    if (!Context.Session.TryGetObject<CartViewModel>("Cart", out cart))
+        cart = new CartViewModel();
 }
 
 
@@ -55,12 +53,26 @@
 
                     <div class="col-md-auto bg-dark  p-md-2 pr-md-4  p-lg-4 d-flex justify-content-center">
                         <ul class="navbar-nav top-navbar flex-row">
-                            <li class="nav-item ml-3">
-                                <a class="nav-link"  asp-controller="Book" asp-action="Index">Books</a>
-                            </li>
-                            <li class="nav-item ml-3">
-                                <a class="nav-link"  asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>   
+                            @if (signInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item ml-3">
+                                    <form method="post" asp-action="logout" asp-controller="account">
+                                        <button type="submit" class="nav-link btn-link btn" style="width:auto;">
+                                            Logout @User.Identity.Name
+                                        </button>
+                                    </form>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item ml-3">
+                                    <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+                                </li>
+                                <li class="nav-item ml-3">
+                                    <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                                </li>
+                            }                            
+                           
                             <li class="nav-item ajaxcart ml-3 mr-3">
                                 <partial name="/Views/Cart/_CartPartial.cshtml" model="@cart" />
                             </li>
@@ -111,7 +123,9 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>    
+    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>   
     <script src="~/js/site.js" asp-append-version="true"></script>   
     @RenderSection("Scripts", required: false)
    

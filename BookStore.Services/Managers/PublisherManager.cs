@@ -23,7 +23,7 @@ namespace BookStore.Services.Managers
             _mapper = mapper;
         }
 
-        public void AddPublisher(PublisherVM publisher)
+        public void AddPublisher(PublisherViewModel publisher)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace BookStore.Services.Managers
             }            
         }
 
-        public void UpdatePublisher(PublisherVM publisher)
+        public void UpdatePublisher(PublisherViewModel publisher)
         {
             try
             {
@@ -59,22 +59,22 @@ namespace BookStore.Services.Managers
             }            
         }
 
-        public async Task<IEnumerable<PublisherVM>> GetAllPublishersAsync()
+        public async Task<IEnumerable<PublisherViewModel>> GetAllPublishersAsync()
         {
             IEnumerable<Publisher> publishersList = await _repository.Publishers.GetAllAsync(orderBy: x => x.OrderBy(y => y.PublisherName));
-            return _mapper.Map<IEnumerable<PublisherVM>>(publishersList);
+            return _mapper.Map<IEnumerable<PublisherViewModel>>(publishersList);
         }
 
-        public PublisherVM GetPublisherById(int id)
+        public PublisherViewModel GetPublisherById(int id)
         {
             Publisher publisher =  _repository.Publishers.GetById(id);
-            return _mapper.Map<PublisherVM>(publisher);
+            return _mapper.Map<PublisherViewModel>(publisher);
         }
 
-        public async Task<PublisherVM> GetPublisherByIdAsync(int? id)
+        public async Task<PublisherViewModel> GetPublisherByIdAsync(int? id)
         {
             Publisher publisher = await _repository.Publishers.GetByIdAsync(id);
-            return _mapper.Map<PublisherVM>(publisher);
+            return _mapper.Map<PublisherViewModel>(publisher);
         }
     }
 }

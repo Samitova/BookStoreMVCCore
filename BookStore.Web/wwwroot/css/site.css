@@ -630,6 +630,19 @@ span.loader {
     color: #fff;
 }
 
+.sort-item-add {
+    border: 2px solid #248a87;
+    background: #248a87;
+}
+
+.sort-item-add a {
+    color: #fff;
+}
+
+.sort-item-add a:hover {
+    background: #2aa29e;
+}
+
 .sort-item-main {
     border: 2px solid #a8811a;
     background: #a8811a;
@@ -1146,14 +1159,18 @@ form .rate-btn button {
 }
 
 .edit-btn {
-    font-size: 12px;
-    background: #a8811a;
-    color: #fff !important;
-    width: 80px;
-    font-weight: bold;
-    margin-right: 5px;
     height: 30px;
-    margin: 5px;
+    width: 90px;
+    background: #a8811a;
+    color: #fff;    
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    border: none; 
 }
 
 .edit-btn:hover {
@@ -1162,13 +1179,18 @@ form .rate-btn button {
 }
 
 .delete-btn {
-    font-size: 12px;
-    background: #343a40;
-    color: #fff !important;
-    width: 80px;
-    font-weight: bold;
     height: 30px;
-    margin: 5px;
+    width: 90px;
+    background: #343a40;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    border: none;
 }
 
 .delete-btn:hover {

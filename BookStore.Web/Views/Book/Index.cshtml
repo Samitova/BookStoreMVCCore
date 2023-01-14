@@ -1,13 +1,10 @@
-﻿@using BookStore.Services.ShopService
-@using BookStore.Services.ShopService.SortingService
-@using BookStore.ViewModelData
-@model List<BookVM>
+﻿@model List<BookViewModel>
 
 @{
     ViewData["Title"] = "Books";    
     NavigationService navigationService = (NavigationService)ViewData["NavigationService"];  
     SortModel sortModel = (SortModel)ViewData["SortModel"];
-    CategoryVM categories = (CategoryVM)ViewData["Categories"];
+    CategoryViewModel categories = (CategoryViewModel)ViewData["Categories"];
 }
 
 <div class="container-fluid main-container">
@@ -136,11 +133,12 @@
         @if (Model.Count > 0)
         {
             <div class="sort-table-wrapper ml-1">
-                <nav class="navbar navbar-expand-lg  justify-content-end">
-                    <a asp-controller="Book" asp-action="CreateBook" class="add-btn" id="0">Create New Book</a>
-
+                <nav class="navbar navbar-expand-lg  justify-content-end">     
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
+                            <li class="sort-item sort-item-add">
+                                <a asp-action="CreateBook" asp-route-sortExpression="">ADD NEW BOOK</a>
+                            </li>
                             <li class="sort-item sort-item-main">
                                 <a asp-action="Index" asp-route-sortExpression="">ALL</a>
                             </li>

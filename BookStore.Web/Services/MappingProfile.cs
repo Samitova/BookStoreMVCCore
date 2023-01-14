@@ -8,14 +8,14 @@ namespace BookStore.Web.Services
     {
         public MappingProfile()
         {
-            CreateMap<Book, BookVM>();
-            CreateMap<BookVM, Book>();
-            CreateMap<Author, AuthorVM>();
-            CreateMap<AuthorVM, Author>();
-            CreateMap<BookComment, BookCommentVM>();
-            CreateMap<BookCommentVM, BookComment>();
-            CreateMap<Publisher, PublisherVM>();
-            CreateMap<PublisherVM, Publisher>();
+            CreateMap<Book, BookViewModel>();
+            CreateMap<BookViewModel, Book>();
+            CreateMap<Author, AuthorViewModel>();
+            CreateMap<AuthorViewModel, Author>();
+            CreateMap<BookComment, BookCommentViewModel>();
+            CreateMap<BookCommentViewModel, BookComment>();
+            CreateMap<Publisher, PublisherViewModel>();
+            CreateMap<PublisherViewModel, Publisher>();
         }
     }
 }

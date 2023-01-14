@@ -5,6 +5,7 @@ using BookStore.Services.Contracts;
 using BookStore.Services.Managers;
 using BookStore.Services.ShopService.SearchService;
 using BookStore.ViewModelData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SmartBreadcrumbs.Attributes;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace BookStore.Web.Controllers
 {
-    [Breadcrumb("Publishers")]
+    [Breadcrumb("Publishers")]    
     public class PublisherController : Controller
     {
         private readonly IShopManager _shopManager;
@@ -32,7 +33,7 @@ namespace BookStore.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<PublisherVM> publishersList = await _shopManager.PublisherManager.GetAllPublishersAsync();
+            IEnumerable<PublisherViewModel> publishersList = await _shopManager.PublisherManager.GetAllPublishersAsync();
             return View(publishersList);
         }
 
@@ -40,7 +41,7 @@ namespace BookStore.Web.Controllers
         [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> CreateUpdatePublisher(int? id)
         {
-            PublisherVM publisher = new PublisherVM();
+            PublisherViewModel publisher = new PublisherViewModel();
             if (id == null || id == 0)
             {
                 return View(publisher);
@@ -58,7 +59,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUpdatePublisher(PublisherVM publisherVM)
+        public IActionResult CreateUpdatePublisher(PublisherViewModel publisherVM)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +97,7 @@ namespace BookStore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePublisherPost(int id)
         {
-            PublisherVM publisher = await _shopManager.PublisherManager.GetPublisherByIdAsync(id);
+            PublisherViewModel publisher = await _shopManager.PublisherManager.GetPublisherByIdAsync(id);
             if (publisher == null)
             {
                 return NotFound();

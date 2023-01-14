@@ -4,9 +4,11 @@ using BookStore.DataAccess.Repositories;
 using BookStore.Services.Contracts;
 using BookStore.Services.Managers;
 using BookStore.Services.ShopService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +41,10 @@ namespace BookStore.Web
             services.AddScoped<IFileService, FilesService>();
             services.AddScoped<IShopManager, ShopManager>();
             services.AddAutoMapper(typeof(Startup));
-            services.AddMvc();
+            services.AddMvc(options=> {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
             //services.AddControllersWithViews();
             services.AddDistributedMemoryCache();   
             services.AddSession(options => { 

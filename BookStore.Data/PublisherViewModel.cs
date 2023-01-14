@@ -7,7 +7,7 @@ using System.Text;
 
 namespace BookStore.ViewModelData
 {
-    public class PublisherVM : BaseEntity
+    public class PublisherViewModel : BaseEntity
     {
         [Required]
         [DisplayName("Publisher Name")]
