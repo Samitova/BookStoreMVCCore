@@ -43,9 +43,14 @@ namespace BookStore.Services.Managers
         public async Task<BookVM> GetBookByIdAsync(int id)
         {
             Book book = await _repository.Books.GetBookByIdAsync(id);
-            BookVM resultBook = _mapper.Map<BookVM>(book);
-            CalculateProgressBar(resultBook);
-            return resultBook;
+            if (book != null)
+            {
+                BookVM resultBook = _mapper.Map<BookVM>(book);                
+                CalculateProgressBar(resultBook);
+                return resultBook;
+            }
+            else 
+                return null;            
         }        
        
         public async Task AddBookComment(BookComment bookComment)
@@ -98,8 +103,7 @@ namespace BookStore.Services.Managers
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
-            }
-            
+            }            
         }
 
         #region privateMethods

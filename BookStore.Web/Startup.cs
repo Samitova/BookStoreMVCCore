@@ -6,11 +6,11 @@ using BookStore.Services.Managers;
 using BookStore.Services.ShopService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using SmartBreadcrumbs.Extensions;
 using System;
 using System.Reflection;
@@ -31,6 +31,8 @@ namespace BookStore.Web
         {
             services.AddDbContextPool<BookStoreContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<BookStoreContext>();
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
@@ -67,6 +69,7 @@ namespace BookStore.Web
             else
             {
                 app.UseExceptionHandler("/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

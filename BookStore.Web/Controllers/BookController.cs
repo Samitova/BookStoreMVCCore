@@ -58,7 +58,7 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index(int PageSize, string SortExpression = "", string SearchText = "", int CurrentPage = 1)
-        {    
+        {            
             IEnumerable<BookVM> books = new List<BookVM>();
             NavigationService navigationService = new NavigationService();
             string oldSearchText = "";
@@ -137,8 +137,13 @@ namespace BookStore.Web.Controllers
         [HttpGet]
         [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> BookDetails(int id)
-        {
+        {            
             BookVM book = await _shopManager.BookManager.GetBookByIdAsync(id);
+            if (book == null)
+            {
+                Response.StatusCode = 404;
+                return View("BookNotFound", id);
+            }
             return View(book);
         }       
 

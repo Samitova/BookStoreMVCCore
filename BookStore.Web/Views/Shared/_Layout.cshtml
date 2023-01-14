@@ -4,6 +4,10 @@
 
 @{
     SearchBar searchBar = (SearchBar)ViewData["SearchBar"];
+    if (searchBar == null)
+    { 
+        searchBar = new SearchBar() { Action = "Index", Controler = "Book", SearchText = "" };
+    }
     CartVM cart;
     if (!Context.Session.TryGetObject<CartVM>("Cart", out cart))
         cart = new CartVM();
