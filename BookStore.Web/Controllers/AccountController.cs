@@ -34,11 +34,16 @@ namespace BookStore.Web.Controllers
         {
             if (ModelState.IsValid)
             { 
-                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                IdentityUser user = new IdentityUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
-                { 
+                {
+                    if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("ListUsers", "Administration");
+                    }
+                   
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("index", "book");
                 }
@@ -60,14 +65,15 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login()
-        {            
+        public IActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel model, string ReturnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -75,9 +81,9 @@ namespace BookStore.Web.Controllers
 
                 if (result.Succeeded)
                 {
-                    if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
-                        return Redirect(ReturnUrl);
+                        return Redirect(returnUrl);
                     }
                     else
                     {
@@ -103,6 +109,13 @@ namespace BookStore.Web.Controllers
             {
                 return Json($"Email {email} is already in use");
             }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
     }

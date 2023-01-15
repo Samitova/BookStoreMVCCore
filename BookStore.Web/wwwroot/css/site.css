@@ -110,7 +110,7 @@ body {
 /*--------------------------------------For open-closw sidebar--------------------------------------*/
 
 .main-container {
-    background:#fff;    
+    background: #fff;
 }
 
 #side-nav {
@@ -277,7 +277,7 @@ hr.a-color {
     font-weight: bold;
     text-decoration: none;
     border: 0;
-    cursor: pointer;
+    cursor: pointer;    
  }
 
 .backhref:hover,
@@ -376,11 +376,11 @@ li.breadcrumb-item.active {
 }
 
 /*-----------------------------------------*/
-.card {
+.bookcard {
     height: 550px;
-    width: 300px;
-    min-width: 250px;
-    border: none;
+    width: 250px;
+    min-width: 200px;
+    border: none;    
     margin-left: auto;
     margin-right: auto;
 }
@@ -394,14 +394,24 @@ li.breadcrumb-item.active {
 }
 
 .card-header {
-    height: 4fv0px;
+    height: 40px;
     color: #a8811a;
     background: #faf7ef;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #a8811a;   
-    
+    /*margin-bottom: 10px;*/
+    border-bottom: 1px solid #a8811a;
 }
 
+.card-footer {
+    height: 60px;
+    color: #a8811a;
+    background: #faf7ef;
+    border-top: 1px solid #a8811a;   
+}
+
+.card {
+    margin-bottom: 20px;
+    border: 1px solid #a8811a;
+}
 
 .vl {
     border-left: 3px solid #eee;
@@ -411,6 +421,13 @@ li.breadcrumb-item.active {
 .card-title {
     color: #000;
     font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.card-item {
+    color: #000;
+    font-size: 12px;
     font-weight: bold;
     text-decoration: none;
 }
@@ -446,9 +463,7 @@ li.breadcrumb-item.active {
     text-decoration: none;
 }
 
-.card-img-top {
-    margin-left: auto;
-    margin-right: auto;
+.card-img-top {    
     margin-top: 10px;
 }
 
@@ -747,20 +762,20 @@ span.loader {
 
 .book-deteils-item span,
 .book-deteils-annotation {
-        font-size: 14px;
-        font-weight: normal;
+    font-size: 14px;
+    font-weight: normal;
 }
 
 /*-------------------------------------------------*/
-    .rating-container {
-        background: #faf7ef;
-        width: 100%;
-        padding: 50px 0 50px 0;
-        margin: 0 0 80px 100px;
-        border: none;
-        border-radius: 10px;
-        font-size: 14px;
-    }
+.rating-container {
+    background: #faf7ef;
+    width: 100%;
+    padding: 50px 0 50px 0;
+    margin: 0 0 80px 100px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+}
 
 .comment-container {
     width: 100%;
@@ -769,6 +784,11 @@ span.loader {
     border: none;
     font-size: 14px;
     border-bottom: 2px solid #eee;
+}
+
+.container {
+    padding-top:10px;
+  
 }
 
 .star-widgett input {
@@ -1083,9 +1103,9 @@ form .rate-btn button {
     margin-top: 10px;
     height: 35px;
     background: #faf7ef;
-    border: 1px solid #c1b8b8;
+    border: 1px solid #a8811a;    
     font-weight: bold;
-    font-size: 14px;    
+    font-size: 14px;
 }
 
 .category-table-item {
@@ -1175,6 +1195,7 @@ form .rate-btn button {
 
 .edit-btn:hover {
     background: #c49927;
+    color: #fff;
     cursor: pointer;
 }
 
@@ -1195,6 +1216,7 @@ form .rate-btn button {
 
 .delete-btn:hover {
     background: #c1252c;
+    color: #fff;
     cursor: pointer;
 }
 
