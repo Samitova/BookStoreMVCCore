@@ -1,7 +1,7 @@
 ﻿using BookStore.DataAccess.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
+using System.Linq;
 
 namespace BookStore.DataAccess.DataContext
 {
@@ -15,5 +15,14 @@ namespace BookStore.DataAccess.DataContext
         public BookStoreContext(DbContextOptions<BookStoreContext> options)
             : base(options)
         { }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            foreach (var forignKey in builder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys()))
+            {
+                forignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+        }
     }
 }

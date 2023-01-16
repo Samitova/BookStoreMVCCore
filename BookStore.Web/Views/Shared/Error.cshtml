@@ -1,16 +1,45 @@
-﻿@model ErrorViewModel
-
-@{
+﻿@{
     ViewData["Title"] = "Error";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
-
-@if (Model.ShowRequestId)
+@if (ViewBag.ErrorTitle == null)
 {
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
+    <div class="container">
+        <div class="product-card" style="width:500px;">
+            <div class="text-uppercase text-center alert alert-danger">
+                <h5>Error</h5>
+            </div>
+            <div class="col align-content-center">
+                <div class="form-group">
+                    <p>Error occured while processing you request.</p>
+                    <p>The support team is already notified and we are working on the fix.</p>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <a asp-controller="Book" asp-action="Index">Click here to navigate to home page</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
-
+else
+{
+    <div class="container">
+        <div class="product-card" style="width:500px;">
+            <div class="text-uppercase text-center  alert-danger">
+                <h5>@ViewBag.ErroeTitle</h5>
+            </div>
+            <div class="col align-content-center">
+                <div class="form-group">
+                    <h6 class="text-danger">@ViewBag.ErrorMessage</h6>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <a asp-controller="Book" asp-action="Index">Click here to navigate to home page</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

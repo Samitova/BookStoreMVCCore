@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -14,11 +16,14 @@ namespace BookStore.Web.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILogger<AdministrationController> _logger;
 
-        public AdministrationController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public AdministrationController(RoleManager<IdentityRole> roleManager,  
+            UserManager<IdentityUser> userManager, ILogger<AdministrationController> logger)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -296,15 +301,26 @@ namespace BookStore.Web.Controllers
             }
             else
             {
-                var result = await _roleManager.DeleteAsync(role);
+                try
+                {
+                    var result = await _roleManager.DeleteAsync(role);
 
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("ListRoles", "Administration");
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ListRoles", "Administration");
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
                 }
-                foreach (var error in result.Errors)
+                catch (DbUpdateException ex)
                 {
-                    ModelState.AddModelError("", error.Description);
+                    _logger.LogError($"Error deleting role {role.Name}. {ex}");
+                    ViewBag.ErrorTitle = $"{role.Name} role is in use";
+                    ViewBag.ErrorMessage = $"{role.Name} role cannot be deleted as there are users in this role"+
+                        $"If you want to delete this role, please remove the users from the role and try again";
+                    return View("Error");
                 }
             }
             return View("ListRoles", "Administration");
