@@ -46,7 +46,8 @@ namespace BookStore.Web.Controllers
             ViewData["SearchBar"] = new SearchBar() { Action = "Index", Controler = "Author", SearchText = "" };
             _uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "pictures\\uploads\\authors\\");
         }
-                
+
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             IEnumerable<AuthorViewModel> authorsList = await _shopManager.AuthorManager.GetAllAuthorsAsync();

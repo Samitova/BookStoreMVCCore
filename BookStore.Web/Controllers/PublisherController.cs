@@ -31,6 +31,7 @@ namespace BookStore.Web.Controllers
             ViewData["SearchBar"] = new SearchBar() { Action = "Index", Controler = "Publisher", SearchText = "" };
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             IEnumerable<PublisherViewModel> publishersList = await _shopManager.PublisherManager.GetAllPublishersAsync();

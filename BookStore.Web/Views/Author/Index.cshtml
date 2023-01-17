@@ -1,16 +1,19 @@
 ﻿@model IEnumerable<AuthorViewModel>
+@inject SignInManager<IdentityUser> signInManager;
 
 @{
-    ViewData["Title"] = "Authors";    
+    ViewData["Title"] = "Authors";
 }
 
 <div class="container">
     <p class="text-center cat-header">Authors</p>
 
-    <p>
-        <a asp-controller="Author" asp-action="CreateAuthor" class="add-btn" id="0">Create New Author</a>
-    </p>
-
+    @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+    {
+        <p>
+            <a asp-controller="Author" asp-action="CreateAuthor" class="add-btn" id="0">Create New Author</a>
+        </p>
+    }
     @if (TempData["success"] != null)
     {
         <div class="alert alert-success alert-msg">
@@ -30,8 +33,11 @@
                 <div class="col category-table-item">
                     Biography
                 </div>
-                <div class="col category-table-item">
-                </div>
+                @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                {
+                    <div class="col category-table-item">
+                    </div>
+                }
             </div>
         </li>
         @foreach (var item in Model)
@@ -47,10 +53,13 @@
                     <div class="col category-table-item">
                         @item.Biography
                     </div>
-                    <div class="col category-edit-group">                       
-                        <a class="btn edit-btn" asp-controller="Author" asp-action="UpdateAuthor" asp-route-id="@item.Id">Edit</a>
-                        <a class="btn delete-btn" asp-controller="Author" asp-action="DeleteAuthor" asp-route-id="@item.Id">Delete</a>
-                    </div>
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <div class="col category-edit-group">                       
+                            <a class="btn edit-btn" asp-controller="Author" asp-action="UpdateAuthor" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn delete-btn" asp-controller="Author" asp-action="DeleteAuthor" asp-route-id="@item.Id">Delete</a>
+                        </div>
+                    }
                 </div>
             </li>
         }

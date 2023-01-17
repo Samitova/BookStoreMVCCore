@@ -1,4 +1,5 @@
 ﻿@model List<BookViewModel>
+@inject SignInManager<IdentityUser> signInManager;
 
 @{
     ViewData["Title"] = "Books";    
@@ -136,9 +137,12 @@
                 <nav class="navbar navbar-expand-lg  justify-content-end">     
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
-                            <li class="sort-item sort-item-add">
-                                <a asp-action="CreateBook" asp-route-sortExpression="">ADD NEW BOOK</a>
-                            </li>
+                            @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                            {
+                                <li class="sort-item sort-item-add">
+                                    <a asp-action="CreateBook" asp-route-sortExpression="">ADD NEW BOOK</a>
+                                </li>
+                            }
                             <li class="sort-item sort-item-main">
                                 <a asp-action="Index" asp-route-sortExpression="">ALL</a>
                             </li>

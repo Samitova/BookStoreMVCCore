@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<PublisherViewModel>
+@inject SignInManager<IdentityUser> signInManager;
 
 @{
     ViewData["Title"] = "Publishers";
@@ -7,10 +8,12 @@
 <div class="container">   
     <p class="text-center cat-header">Publishers</p>
 
-    <p>
-        <a asp-area="Admin" asp-controller="Publisher" asp-action="CreateUpdatePublisher" class="add-btn" id="0">Create New Publisher</a>
-    </p>
-
+    @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+    {
+        <p>
+            <a asp-area="Admin" asp-controller="Publisher" asp-action="CreateUpdatePublisher" class="add-btn" id="0">Create New Publisher</a>
+        </p>
+    }
     @if (TempData["success"] != null)
     {
         <div class="alert alert-success alert-msg">
@@ -30,8 +33,11 @@
                 <div class="col category-table-item">
                     Phone
                 </div>
-                <div class="col category-table-item">
-                </div>
+                 @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                 {
+                    <div class="col category-table-item">
+                    </div>
+                 }
             </div>           
         </li>
         @foreach (var item in Model)
@@ -47,12 +53,15 @@
                      <div class="col category-table-item">
                         @item.Phone
                     </div>
-                    <div class="col category-edit-group">
-                        <a class="btn edit-btn" asp-area="Admin" asp-controller="Publisher"
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <div class="col category-edit-group">
+                            <a class="btn edit-btn" asp-area="Admin" asp-controller="Publisher"
                        asp-action="CreateUpdatePublisher" asp-route-id="@item.Id">Edit</a>
-                        <a class="btn delete-btn" asp-area="Admin" asp-controller="Publisher"
+                            <a class="btn delete-btn" asp-area="Admin" asp-controller="Publisher"
                        asp-action="DeletePublisher" asp-route-id="@item.Id">Delete</a>
-                    </div>                    
+                        </div>
+                    }
                 </div>              
             </li>           
         }

@@ -239,11 +239,11 @@ hr.a-color {
     padding-right:5px;
 }
 
-    .subcategories-item a:hover {
-        border: 3px solid #31b9b5;
-        text-decoration: none;
-        color: #000;
-    }
+.subcategories-item a:hover {
+    border: 3px solid #31b9b5;
+    text-decoration: none;
+    color: #000;
+}
 
 .category-header {
     background: #faf7ef;
@@ -1111,17 +1111,14 @@ form .rate-btn button {
 .category-table-item {
     display: inline;
     padding-top: 7px;
-    margin-left: 20px;  
+    margin-left: 20px;    
 }
 
-.category-table-li {
-    /*border: 1px solid #c1b8b8;*/
+.category-table-li {    
     margin-top:10px;
 }
 
 .subcategory-table-li {
-   /* border: 1px solid #c1b8b8;*/
-   
     margin: 5px 0  5px 5px;
 }
 

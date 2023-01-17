@@ -7,6 +7,7 @@ using BookStore.Services.ShopService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -33,8 +34,10 @@ namespace BookStore.Web
         {
             services.AddDbContextPool<BookStoreContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<BookStoreContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+                options.SignIn.RequireConfirmedEmail=true;})
+                .AddEntityFrameworkStores<BookStoreContext>()
+                .AddDefaultTokenProviders();
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
@@ -45,6 +48,23 @@ namespace BookStore.Web
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = new PathString("/Administration/AccessDenied"); 
+            });
+
+            services.AddAuthorization(options => 
+            {
+                options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role", "true"));
+
+                options.AddPolicy("EditRolePolicy", policy => policy.RequireAssertion(context =>
+                    context.User.IsInRole("Admin") &&
+                    context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true") ||
+                    context.User.IsInRole("Super Admin")
+                ));
+            });
+
             //services.AddControllersWithViews();
             services.AddDistributedMemoryCache();   
             services.AddSession(options => { 

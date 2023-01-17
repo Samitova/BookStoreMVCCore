@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using SmartBreadcrumbs.Extensions;
+using NLog.Extensions.Logging;
 
 namespace BookStore.Web
 {
@@ -23,7 +24,14 @@ namespace BookStore.Web
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+                .ConfigureLogging((hostingContext, loggin) =>
+                {
+                    loggin.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    loggin.AddConsole();
+                    loggin.AddDebug();
+                    loggin.AddEventSourceLogger();
+                    loggin.AddNLog();
+                }).ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });
