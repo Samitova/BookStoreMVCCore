@@ -55,6 +55,9 @@
                         <ul class="navbar-nav top-navbar flex-row">
                             @if (signInManager.IsSignedIn(User))
                             {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Account" asp-action="ChangePassword">Password</a>
+                                </li>
                                 <li class="nav-item ml-3">
                                     <form method="post" asp-action="logout" asp-controller="account">
                                         <button type="submit" class="nav-link btn-link btn" style="width:auto;">
