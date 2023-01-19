@@ -4,6 +4,7 @@ using BookStore.DataAccess.Repositories;
 using BookStore.Services.Contracts;
 using BookStore.Services.Managers;
 using BookStore.Services.ShopService;
+using BookStore.Web.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -82,6 +83,8 @@ namespace BookStore.Web
                 options.ActiveLiClasses = "breadcrumb-item active";
                 options.SeparatorElement = "<li class=\"separator\">/</li>";
             });
+
+            services.AddSingleton<DataProtectionPurposeStrings>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

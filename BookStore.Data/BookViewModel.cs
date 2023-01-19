@@ -9,10 +9,12 @@ using BookStore.ViewModelData.Attributes;
 
 namespace BookStore.ViewModelData
 {
-    public class BookViewModel : BaseEntity
+    public class BookViewModel
     {
         public BookViewModel()
         { }
+        public string Id { get; set; }
+        public string EncryptedId { get; set; }
 
         [Required]
         [MaxLength(50), MinLength(2)]
@@ -26,6 +28,8 @@ namespace BookStore.ViewModelData
         [DisplayName("Author")]
         [Range(1, int.MaxValue, ErrorMessage = "Please choose the author")]
         public int AuthorId { get; set; }
+
+        public string AuthorEncryptedId { get; set; }
 
         [MaxLength(50)]
         [OrderKey("author")]
@@ -81,6 +85,10 @@ namespace BookStore.ViewModelData
         [OrderKey("rating")]
         public double RateValue { get; set; }
         public int RateCount { get; set; }
+
+        [Timestamp]
+        public byte[] Timestamp { get; set; }
+
         public ICollection<BookCommentViewModel> Comments { get; set; }
 
         public ICollection<ProgressBarVM> ProgressBar { get; set; }

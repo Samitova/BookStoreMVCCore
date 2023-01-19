@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,7 +55,7 @@ namespace BookStore.Web.Controllers
             {
                 cartItems.Items.Add(new CartItem
                 {
-                    BookId = book.Id,
+                    BookId = id,
                     Title = book.Title,
                     AuthorName = book.AuthorFullName,
                     AuthorId = book.AuthorId,

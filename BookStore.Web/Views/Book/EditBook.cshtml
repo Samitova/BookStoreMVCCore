@@ -12,11 +12,11 @@
                 <h5>Edit Book</h5>
             </div>
 
-            <form class="d-flex" enctype="multipart/form-data" asp-action="UpdateBook">
+            <form class="d-flex" enctype="multipart/form-data" asp-action="EditBook" method="post">
                 <div class="col-9">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="row">
-                        <input type="hidden" asp-for="@Model.Id" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="row">                       
+                        <input type="hidden" asp-for="@Model.EncryptedId" />
                         <input type="hidden" asp-for="@Model.Timestamp" />
                         <input type="hidden" asp-for="@Model.RateCount" />
                         <input type="hidden" asp-for="@Model.RateValue" />

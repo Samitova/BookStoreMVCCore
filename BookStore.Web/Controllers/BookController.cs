@@ -5,13 +5,16 @@ using BookStore.Services.ShopService.PaginationService;
 using BookStore.Services.ShopService.SearchService;
 using BookStore.Services.ShopService.SortingService;
 using BookStore.ViewModelData;
+using BookStore.Web.Security;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SmartBreadcrumbs.Attributes;
 using SmartBreadcrumbs.Nodes;
 using System;
@@ -32,14 +35,18 @@ namespace BookStore.Web.Controllers
 
         private readonly IShopManager _shopManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IFileService _fileService;
+        private readonly IFileService _fileService;        
+        private readonly IDataProtector _dataProtector;
         private string _uploadsFolder;
 
-        public BookController(IShopManager shopManager, IWebHostEnvironment webHostEnvironment, IFileService fileService)
+        public BookController(IShopManager shopManager, IWebHostEnvironment webHostEnvironment, 
+                              IFileService fileService, IDataProtectionProvider dataProtectionProvider,
+                              DataProtectionPurposeStrings dataProtectionPurposeStrings)
         {
             _shopManager = shopManager;
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
+            _dataProtector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.BookIdRouteValue);
         }
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -85,7 +92,13 @@ namespace BookStore.Web.Controllers
             if (!isBooksInSession || isBooksInSession && oldSearchText != SearchText || isBooksInSession && SearchText == "")
             {
                 books =await _shopManager.BookManager.GetAllBooksAsync(SearchText);
-                books = SortService.SortBooks(books, sortModel);               
+                books = SortService.SortBooks(books, sortModel).Select(e=>
+                {
+                    e.EncryptedId = _dataProtector.Protect(e.Id.ToString());
+                    e.AuthorEncryptedId = _dataProtector.Protect(e.AuthorId.ToString());
+                    return e;
+                }); 
+                
                 HttpContext.Session.SetString("Books", JsonConvert.SerializeObject(books));
                 HttpContext.Session.SetString("SearchText", SearchText);
             }
@@ -124,7 +137,12 @@ namespace BookStore.Web.Controllers
             HttpContext.Session.SetInt32("CategoryId", categoryId);
 
             books = await _shopManager.BookManager.GetAllBooksAsync(categoryId: categoryId);
-            books = SortService.SortBooks(books, sortModel);
+            books = SortService.SortBooks(books, sortModel).Select(e =>
+            {
+                e.EncryptedId = _dataProtector.Protect(e.Id.ToString());
+                e.AuthorEncryptedId = _dataProtector.Protect(e.AuthorId.ToString());
+                return e;
+            });
 
             var categoryBreadcrumbNode = new MvcBreadcrumbNode("BrowseCategory", "Book", categoryVM.Category.CategoryName);
             BuildBreadcrumbNodeCategoteryTree(categoryVM.Category, categoryBreadcrumbNode);
@@ -137,14 +155,16 @@ namespace BookStore.Web.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Breadcrumb(Title = "ViewData.Title")]
-        public async Task<IActionResult> BookDetails(int id)
-        {            
-            BookViewModel book = await _shopManager.BookManager.GetBookByIdAsync(id);
+        public async Task<IActionResult> BookDetails(string id)
+        {     
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
+            BookViewModel book = await _shopManager.BookManager.GetBookByIdAsync(decryptedId);
             if (book == null)
             {
                 Response.StatusCode = 404;
-                return View("BookNotFound", id);
+                return View("BookNotFound", decryptedId);
             }
+            book.EncryptedId = id;
             return View(book);
         }
 
@@ -216,10 +236,12 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [Breadcrumb(Title = "ViewData.Title")]
-        public async Task<IActionResult> UpdateBook(int id)
+        public async Task<IActionResult> EditBook(string id)
         {
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
             BookViewModel book = new BookViewModel();
-            book = await _shopManager.BookManager.GetBookByIdAsync(id);
+            book = await _shopManager.BookManager.GetBookByIdAsync(decryptedId);
+            book.EncryptedId = id;
             if (book == null)
                 return NotFound();
             else
@@ -230,11 +252,12 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateBook(BookViewModel book)
-        {
+        public async Task<IActionResult> EditBook(BookViewModel book)
+        {           
+            book.Id = _dataProtector.Unprotect(book.EncryptedId);
             if (!ModelState.IsValid)
             {
-                await SetBookFields(book);
+                await SetBookFields(book);                
                 return View(book);
             }
             if (book.BookImage != null && book.BookImage.Length > 0)
@@ -256,7 +279,7 @@ namespace BookStore.Web.Controllers
             book.PublisherName = _shopManager.PublisherManager.GetPublisherById(book.PublisherId)?.PublisherName;
 
             try
-            {
+            {             
                 _shopManager.BookManager.UpdateBook(book);
                 TempData["success"] = "Book was updated successfuly";
                 return RedirectToAction("Index");
@@ -271,9 +294,10 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [Breadcrumb(Title = "ViewData.Title")]
-        public async Task<IActionResult> DeleteBook(int id)
-        {           
-            var book = await _shopManager.BookManager.GetBookByIdAsync(id);
+        public async Task<IActionResult> DeleteBook(string id)
+        {
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
+            var book = await _shopManager.BookManager.GetBookByIdAsync(decryptedId);
             if (book == null)
             {
                 return NotFound();
@@ -283,9 +307,10 @@ namespace BookStore.Web.Controllers
 
         [HttpPost, ActionName("DeleteBook")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteBookPost(int id)
+        public async Task<IActionResult> DeleteBookPost(string id)
         {
-            var book = await _shopManager.BookManager.GetBookByIdAsync(id);
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
+            var book = await _shopManager.BookManager.GetBookByIdAsync(decryptedId);
             if (book == null)
             {
                 return NotFound();
@@ -293,7 +318,7 @@ namespace BookStore.Web.Controllers
 
             try
             {
-                _shopManager.BookManager.DeleteBook(id);
+                _shopManager.BookManager.DeleteBook(decryptedId);
                 _fileService.DeleteFile(book.PhotoPath, _uploadsFolder);
                 TempData["success"] = $"Book \"{book.Title}\" was deleted successfuly";
                 return RedirectToAction("Index");

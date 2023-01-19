@@ -1,4 +1,5 @@
 ﻿@model BookViewModel
+@inject SignInManager<IdentityUser> signInManager;
 
 @{
     ViewData["Title"] = Model.Title;
@@ -42,20 +43,25 @@
                 <div class="price-item-main d-inline">@Model.Price $</div>
             </div>
 
-            <div class="addtocart-cover">
-                <div class="ajaxmsg" id="ajaxmsg_@Model.Id">
-                    Book was added to your cart
+            @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+
+                <div class="product-edit-group">
+                    <a class="btn edit-btn" asp-controller="Book"
+                   asp-action="EditBook" asp-route-id="@Model.EncryptedId">Edit</a>
+                    <a class="btn delete-btn" asp-controller="Book"
+                   asp-action="DeleteBook" asp-route-id="@Model.EncryptedId">Delete</a>
                 </div>
-                <a href="#" class="addtocart" id="@Model.Id">ADD TO CART</a>
-            </div>
-
-            <div class="product-edit-group">
-                <a class="btn edit-btn" asp-controller="Book"
-                   asp-action="UpdateBook" asp-route-id="@Model.Id">Edit</a>
-                <a class="btn delete-btn" asp-controller="Book"
-                   asp-action="DeleteBook" asp-route-id="@Model.Id">Delete</a>
-            </div>
-
+            }
+            else
+            {
+                <div class="addtocart-cover">
+                    <div class="ajaxmsg" id="ajaxmsg_@Model.Id">
+                        Book was added to your cart
+                    </div>
+                    <a href="#" class="addtocart" id="@Model.Id">ADD TO CART</a>
+                </div>
+            }
         </div>               
     </div>  
     <div class="row w-75 mx-auto">

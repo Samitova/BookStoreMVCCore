@@ -6,7 +6,9 @@ using BookStore.Services.ShopService.PaginationService;
 using BookStore.Services.ShopService.SearchService;
 using BookStore.Services.ShopService.SortingService;
 using BookStore.ViewModelData;
+using BookStore.Web.Security;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +18,7 @@ using SmartBreadcrumbs.Attributes;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BookStore.Web.Controllers
@@ -32,14 +35,17 @@ namespace BookStore.Web.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFileService _fileService;
         private readonly IShopManager _shopManager;
+        private readonly IDataProtector _dataProtector;
 
-        public AuthorController(IShopManager shopManager, IWebHostEnvironment webHostEnvironment, IFileService fileService)
+        public AuthorController(IShopManager shopManager, IWebHostEnvironment webHostEnvironment, IFileService fileService,
+                                IDataProtectionProvider dataProtectionProvider, DataProtectionPurposeStrings dataProtectionPurposeStrings)
         {
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
             _shopManager = shopManager;
+            _dataProtector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.BookIdRouteValue);
         }
-        
+
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
@@ -50,7 +56,11 @@ namespace BookStore.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<AuthorViewModel> authorsList = await _shopManager.AuthorManager.GetAllAuthorsAsync();
+            IEnumerable<AuthorViewModel> authorsList = (await _shopManager.AuthorManager.GetAllAuthorsAsync()).Select(e => {
+                e.EncryptedId = _dataProtector.Protect(e.Id.ToString());
+                return e;
+            });          
+
             return View(authorsList);
         }
 
@@ -101,9 +111,10 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [Breadcrumb(Title = "ViewData.Title")]
-        public async Task<IActionResult> UpdateAuthor(int? id)
+        public async Task<IActionResult> EditAuthor(string id)
         {
-            AuthorViewModel author = await _shopManager.AuthorManager.GetAuthorByIdAsync(id);
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
+            AuthorViewModel author = await _shopManager.AuthorManager.GetAuthorByIdAsync(decryptedId);
             if (author == null)
                 return NotFound();
             else
@@ -113,7 +124,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpPost]       
-        public IActionResult UpdateAuthor(AuthorViewModel author)
+        public IActionResult EditAuthor(AuthorViewModel author)
         {
             if (!ModelState.IsValid)
             {
@@ -135,6 +146,7 @@ namespace BookStore.Web.Controllers
 
             try
             {
+                author.Id = _dataProtector.Unprotect(author.Id);
                 _shopManager.AuthorManager.UpdateAuthor(author);
                 TempData["success"] = "Author was updated successfuly";
                 return RedirectToAction("Index");
@@ -148,9 +160,10 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [Breadcrumb(Title = "ViewData.Title")]
-        public async Task<IActionResult> DeleteAuthor(int id)
+        public async Task<IActionResult> DeleteAuthor(string id)
         {
-            var author = await _shopManager.AuthorManager.GetAuthorByIdAsync(id);
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
+            var author = await _shopManager.AuthorManager.GetAuthorByIdAsync(decryptedId);
             if (author == null)
             {
                 return NotFound();
@@ -160,13 +173,13 @@ namespace BookStore.Web.Controllers
 
         [HttpPost, ActionName("DeleteAuthor")]
         [ValidateAntiForgeryToken]       
-        public async Task<IActionResult> DeleteAuthorPost(int id)
+        public async Task<IActionResult> DeleteAuthorPost(string id)
         {
-            AuthorViewModel author = await _shopManager.AuthorManager.GetAuthorByIdAsync(id);
-
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
+            AuthorViewModel author = await _shopManager.AuthorManager.GetAuthorByIdAsync(decryptedId);
             try
             {
-                _shopManager.AuthorManager.DeleteAuthor(id);
+                _shopManager.AuthorManager.DeleteAuthor(decryptedId);
                 _fileService.DeleteFile(author.PhotoPath, _uploadsFolder);
                 TempData["success"] = $"Book \"{author.FullName}\" was deleted successfuly";
                 return RedirectToAction("Index");
@@ -179,7 +192,7 @@ namespace BookStore.Web.Controllers
         }
 
         [Breadcrumb(Title = "ViewData.Title")]
-        public async Task<IActionResult> AuthorDetails(int id, int PageSize, int CurrentPage = 1, string SortExpression = "")
+        public async Task<IActionResult> AuthorDetails(string id, int PageSize, int CurrentPage = 1, string SortExpression = "")
         {
             NavigationService navigationService = new NavigationService();
             AuthorViewModel author = new AuthorViewModel();
@@ -188,14 +201,20 @@ namespace BookStore.Web.Controllers
             SortModel sortModel = SortService.SetSortModel("AuthorDetails", SortExpression, sortedProperties);
             ViewData["SortModel"] = sortModel;
 
-            if (id == 0)
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
+            if (decryptedId == 0)
             {
                 author = JsonConvert.DeserializeObject<AuthorViewModel>(HttpContext.Session.GetString("Author"));
                 author.Books = SortService.SortBooks(author.Books, sortModel);
             }
             else
             {
-                author = await _shopManager.AuthorManager.GetAuthorWithBooksAsync(id, sortModel);
+                author = (await _shopManager.AuthorManager.GetAuthorWithBooksAsync(decryptedId, sortModel));
+                author.Books = author.Books.Select(e => 
+                {
+                    e.EncryptedId = _dataProtector.Protect(e.Id.ToString());
+                    return e;
+                });
                 HttpContext.Session.SetString("Author", JsonConvert.SerializeObject(author));
             }
 

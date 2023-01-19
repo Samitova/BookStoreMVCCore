@@ -8,6 +8,9 @@ namespace BookStore.DataAccess.Models
     public class Book : BaseEntity
     {
         #region Properties
+        [NotMapped]
+        public string EncryptedId { get; set; }
+
         [Required]
         [MaxLength(50), MinLength(2)]       
         public string Title { get; set; }
