@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace BookStore.DataAccess.Models
@@ -16,6 +17,9 @@ namespace BookStore.DataAccess.Models
 
         [MaxLength(50)]
         public string Phone { get; set; }
+
+        [NotMapped]
+        public string EncryptedId { get; set; }
 
     }
 }

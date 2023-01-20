@@ -11,7 +11,7 @@
     @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
     {
         <p>
-            <a asp-controller="Publisher" asp-action="CreateUpdatePublisher" class="add-btn" id="0">Create New Publisher</a>
+            <a asp-controller="Publisher" asp-action="CreatePublisher" class="add-btn">Create New Publisher</a>
         </p>
     }
     @if (TempData["success"] != null)
@@ -56,10 +56,10 @@
                     @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
                         <div class="col category-edit-group">
-                            <a class="btn edit-btn" asp-area="Admin" asp-controller="Publisher"
-                       asp-action="CreateUpdatePublisher" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn delete-btn" asp-area="Admin" asp-controller="Publisher"
-                       asp-action="DeletePublisher" asp-route-id="@item.Id">Delete</a>
+                            <a class="btn edit-btn" asp-controller="Publisher"
+                       asp-action="EditPublisher" asp-route-id="@item.EncryptedId">Edit</a>
+                            <a class="btn delete-btn"  asp-controller="Publisher"
+                       asp-action="DeletePublisher" asp-route-id="@item.EncryptedId">Delete</a>
                         </div>
                     }
                 </div>              

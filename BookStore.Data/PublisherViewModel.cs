@@ -7,8 +7,14 @@ using System.Text;
 
 namespace BookStore.ViewModelData
 {
-    public class PublisherViewModel : BaseEntity
+    public class PublisherViewModel
     {
+        public string Id { get; set; }
+        public string EncryptedId { get; set; }
+
+        [Timestamp]
+        public byte[] Timestamp { get; set; }
+
         [Required]
         [DisplayName("Publisher Name")]
         public string PublisherName { get; set; }
