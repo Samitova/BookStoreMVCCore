@@ -22,5 +22,8 @@ namespace BookStore.DataAccess.Models
 
         [NotMapped]
         public List<Category> SubCategory {get; set;} = new List<Category>();
+
+        [NotMapped]
+        public string EncryptedId { get; set; }
     }
 }

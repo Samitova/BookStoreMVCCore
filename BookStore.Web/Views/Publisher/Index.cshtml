@@ -11,7 +11,7 @@
     @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
     {
         <p>
-            <a asp-area="Admin" asp-controller="Publisher" asp-action="CreateUpdatePublisher" class="add-btn" id="0">Create New Publisher</a>
+            <a asp-controller="Publisher" asp-action="CreateUpdatePublisher" class="add-btn" id="0">Create New Publisher</a>
         </p>
     }
     @if (TempData["success"] != null)

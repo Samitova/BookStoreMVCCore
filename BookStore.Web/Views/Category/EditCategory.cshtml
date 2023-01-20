@@ -14,12 +14,13 @@
 <div class="container">
     <div class="product-card" style="width:500px;">
         <div class="card-header text-uppercase text-center">
-            <h5>Update Category</h5>
+            <h5>Edit Category</h5>
         </div>
 
         <div class="col align-content-center">
-            <form asp-action="UpdateCategory" method="post">
-                <input type="hidden" asp-for="Category.Id"/>
+            <form asp-action="EditCategory" method="post">    
+                <input type="hidden" asp-for="Category.Id" />
+                <input type="hidden" asp-for="Category.EncryptedId" />
                 <input type="hidden" asp-for="Category.Timestamp" />
                 <div asp-validation-summary="All" class="text-danger"></div>
 

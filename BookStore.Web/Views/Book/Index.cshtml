@@ -28,7 +28,7 @@
                             {
                                 <li class="list-inline-item">
                                     <div class="subcategories-item justify-content-lg-start">
-                                        <a asp-controller="Book" asp-action="BrowseCategory" asp-route-categoryId="@item.Id"><i class="@item.IconPath"></i> @item.CategoryName</a>
+                                        <a asp-controller="Book" asp-action="BrowseCategory" asp-route-categoryId="@item.EncryptedId"><i class="@item.IconPath"></i> @item.CategoryName</a>
                                     </div>
                                 </li>
                             }

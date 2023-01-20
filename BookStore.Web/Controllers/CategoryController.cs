@@ -3,7 +3,9 @@ using BookStore.DataAccess.Models;
 using BookStore.Services.Contracts;
 using BookStore.Services.ShopService.SearchService;
 using BookStore.ViewModelData;
+using BookStore.Web.Security;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,9 +22,12 @@ namespace BookStore.Web.Controllers
     public class CategoryController : Controller
     {
         private readonly IShopManager _shopManager;
-        public CategoryController(IShopManager shopManager)
+        private readonly IDataProtector _dataProtector;
+        public CategoryController(IShopManager shopManager, IDataProtectionProvider dataProtectionProvider,
+                              DataProtectionPurposeStrings dataProtectionPurposeStrings)
         {
             _shopManager = shopManager;
+            _dataProtector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.BookIdRouteValue);
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -34,6 +39,11 @@ namespace BookStore.Web.Controllers
         public IActionResult Index()
         {
             CategoryViewModel categoryVM = GetTreeVeiwCategories();
+            categoryVM.Categories = categoryVM.Categories.Select(e =>
+            {
+                e.EncryptedId = _dataProtector.Protect(e.Id.ToString());
+                return e;
+            });
             return View(categoryVM);
         }
         
@@ -41,6 +51,11 @@ namespace BookStore.Web.Controllers
         {
             CategoryViewModel categoryVM = new CategoryViewModel();
             categoryVM.Categories = _shopManager.CategoryManager.GetSubCategories(0);
+            categoryVM.Categories = categoryVM.Categories.Select(e =>
+            {
+                e.EncryptedId = _dataProtector.Protect(e.Id.ToString());
+                return e;
+            });
 
             foreach (var category in categoryVM.Categories)
             {
@@ -51,9 +66,13 @@ namespace BookStore.Web.Controllers
         
         private void BuildSubCategory(Category rootCategory)
         {
-            List<Category> categories = _shopManager.CategoryManager.GetSubCategories(rootCategory.Id).ToList();
-           
-            if (categories.Count > 0)
+            IEnumerable<Category> categories = _shopManager.CategoryManager.GetSubCategories(rootCategory.Id).Select(e =>
+            {
+                e.EncryptedId = _dataProtector.Protect(e.Id.ToString());
+                return e;
+            });       
+
+            if (categories.ToList().Count > 0)
             {
                 foreach (var subCategory in categories)
                 {
@@ -101,12 +120,13 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [Breadcrumb(Title = "ViewData.Title")]
-        public async Task<IActionResult> UpdateCategory(int id)
+        public async Task<IActionResult> EditCategory(string id)
         {
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
             CategoryViewModel categoryVM = new CategoryViewModel();
             categoryVM.Categories = await _shopManager.CategoryManager.GetAllCategoriesAsync();
 
-            var excludedCategoryId = new List<int> { id };
+            var excludedCategoryId = new List<int> { decryptedId };
             var filteredCategories = categoryVM.Categories.Where(i => !excludedCategoryId.Contains(i.Id));
 
             ViewBag.categories = filteredCategories.Select(i =>            
@@ -116,7 +136,7 @@ namespace BookStore.Web.Controllers
                     Value = i.Id.ToString()
                 });
            
-            categoryVM.Category = _shopManager.CategoryManager.GetCategoryById(id);
+            categoryVM.Category = _shopManager.CategoryManager.GetCategoryById(decryptedId);
             if (categoryVM.Category == null)
                 return NotFound();
             else
@@ -124,7 +144,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateCategory(CategoryViewModel categoryVM)
+        public IActionResult EditCategory(CategoryViewModel categoryVM)
         {
             if (ModelState.IsValid)
             {
@@ -145,9 +165,10 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [Breadcrumb(Title = "ViewData.Title")]
-        public IActionResult DeleteCategory(int id)
+        public IActionResult DeleteCategory(string id)
         {
-            var category = _shopManager.CategoryManager.GetCategoryById(id);
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
+            var category = _shopManager.CategoryManager.GetCategoryById(decryptedId);
             if (category == null)
             {
                 return NotFound();
@@ -157,16 +178,17 @@ namespace BookStore.Web.Controllers
 
         [HttpPost, ActionName("DeleteCategory")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteCategoryPost(int id)
+        public IActionResult DeleteCategoryPost(string id)
         {
-            var category = _shopManager.CategoryManager.GetCategoryById(id);
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
+            var category = _shopManager.CategoryManager.GetCategoryById(decryptedId);
             if (category == null)
             {
                 return NotFound();
             }
             try
             {
-                _shopManager.CategoryManager.DeleteCategory(id);
+                _shopManager.CategoryManager.DeleteCategory(decryptedId);
                 TempData["success"] = $"BrowseCategory \"{category.CategoryName}\" was deleted successfuly";
                 return RedirectToAction("Index");
             }

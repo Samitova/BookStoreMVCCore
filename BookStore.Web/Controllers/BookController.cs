@@ -116,7 +116,7 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> BrowseCategory(int categoryId, int PageSize, string SortExpression = "", int CurrentPage = 1)
+        public async Task<IActionResult> BrowseCategory(string categoryId, int PageSize, string SortExpression = "", int CurrentPage = 1)
         {
             IEnumerable<BookViewModel> books = new List<BookViewModel>();
             NavigationService navigationService = new NavigationService();
@@ -127,16 +127,17 @@ namespace BookStore.Web.Controllers
             SortModel sortModel = SortService.SetSortModel("BrowseCategory", SortExpression, sortedProperties);
             ViewData["SortModel"] = sortModel;
 
-            if (categoryId == 0)
+            int decryptedCategoryId = Convert.ToInt32(_dataProtector.Unprotect(categoryId));
+            if (decryptedCategoryId == 0)
             {
-                categoryId = (int)HttpContext.Session.GetInt32("CategoryId");
+                decryptedCategoryId = (int)HttpContext.Session.GetInt32("CategoryId");
             }
 
-            categoryVM.Categories =  _shopManager.CategoryManager.GetSubCategories(categoryId);
-            categoryVM.Category = _shopManager.CategoryManager.GetCategoryById(categoryId);
-            HttpContext.Session.SetInt32("CategoryId", categoryId);
+            categoryVM.Categories =  _shopManager.CategoryManager.GetSubCategories(decryptedCategoryId);
+            categoryVM.Category = _shopManager.CategoryManager.GetCategoryById(decryptedCategoryId);
+            HttpContext.Session.SetInt32("CategoryId", decryptedCategoryId);
 
-            books = await _shopManager.BookManager.GetAllBooksAsync(categoryId: categoryId);
+            books = await _shopManager.BookManager.GetAllBooksAsync(categoryId: decryptedCategoryId);
             books = SortService.SortBooks(books, sortModel).Select(e =>
             {
                 e.EncryptedId = _dataProtector.Protect(e.Id.ToString());
@@ -340,14 +341,23 @@ namespace BookStore.Web.Controllers
             bool isCategoryIdExists = HttpContext.Session.TryGetValue("CategoryId", out byte[] _);
             if (!isCategoryIdExists) 
             {
-                categoryVM.Categories = _shopManager.CategoryManager.GetSubCategories(0);
+                categoryVM.Categories = _shopManager.CategoryManager.GetSubCategories(0).Select(e =>
+                {
+                    e.EncryptedId = _dataProtector.Protect(e.Id.ToString());
+                    return e;
+                }); ;
             }          
             else 
             {
                 int id = (int)HttpContext.Session.GetInt32("CategoryId");
-                categoryVM.Categories = _shopManager.CategoryManager.GetSubCategories(id);
+                categoryVM.Categories = _shopManager.CategoryManager.GetSubCategories(id).Select(e =>
+                {
+                    e.EncryptedId = _dataProtector.Protect(e.Id.ToString());
+                    return e;
+                }); ;
 
                 categoryVM.Category = _shopManager.CategoryManager.GetCategoryById(id);
+                categoryVM.Category.EncryptedId = _dataProtector.Protect(categoryVM.Category.Id.ToString());
             }
             ViewData["Categories"] = categoryVM;           
         }
@@ -362,7 +372,7 @@ namespace BookStore.Web.Controllers
             {
                 var parentCategory = _shopManager.CategoryManager.GetCategoryById(category.ParentId);
                 var parentCategoryBreadcrumbNode = new MvcBreadcrumbNode("BrowseCategory", "Book", parentCategory.CategoryName);
-                parentCategoryBreadcrumbNode.RouteValues = new { categoryId = parentCategory.Id };
+                parentCategoryBreadcrumbNode.RouteValues = new { categoryId = _dataProtector.Protect(parentCategory.Id.ToString())};
                 node.Parent = parentCategoryBreadcrumbNode;
                 BuildBreadcrumbNodeCategoteryTree(parentCategory, parentCategoryBreadcrumbNode);
             }
