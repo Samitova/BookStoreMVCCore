@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SmartBreadcrumbs.Attributes;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 namespace BookStore.Web.Controllers
 {
     [Authorize(Roles ="Admin")]
+    [Breadcrumb("Administration")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -28,7 +30,13 @@ namespace BookStore.Web.Controllers
             _logger = logger;
         }
 
+        public IActionResult Index()
+        {
+            return RedirectToAction("ListUsers");
+        }
+
         [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult ListRoles()
         {
             var roles = _roleManager.Roles;
@@ -36,6 +44,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult ListUsers()
         {
             var users = _userManager.Users;
@@ -43,7 +52,8 @@ namespace BookStore.Web.Controllers
         }
 
 
-        [HttpGet]       
+        [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult CreateRole()
         {
             return View();
@@ -74,6 +84,7 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [Authorize(Policy ="EditRolePolicy")]
+        [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> EditRole(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
@@ -130,6 +141,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> EditUsersInRole(string roleId)
         {
             ViewBag.RoleId = roleId;   
@@ -208,6 +220,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> EditUser(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -327,6 +340,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> ManageUserRoles(string userId)
         {
             ViewBag.UserId = userId;
@@ -391,6 +405,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> ManageUserClaims(string userId)
         {
             ViewBag.UserId = userId;
@@ -458,6 +473,7 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult AccessDenied()
         {
             return View();

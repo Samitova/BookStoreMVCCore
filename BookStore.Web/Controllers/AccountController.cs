@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SmartBreadcrumbs.Attributes;
 using System;
 using System.Threading.Tasks;
 
 namespace BookStore.Web.Controllers
 {
+    [Breadcrumb("Account")]
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -28,6 +30,7 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult Register()
         {
             return View();
@@ -70,6 +73,7 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Breadcrumb(Title = "ViewData.Title")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             if (userId == null || token == null)
@@ -102,6 +106,7 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -140,7 +145,8 @@ namespace BookStore.Web.Controllers
             return View(model);
         }
 
-        [HttpGet]        
+        [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult ChangePassword()
         {
             return View();
@@ -175,6 +181,7 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult ForgotPassword()
         {            
             return View();
@@ -205,6 +212,7 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult ResetPassword(string email, string token)
         {
             if (email == null || token == null)
