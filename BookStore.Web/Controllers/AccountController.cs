@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SmartBreadcrumbs.Attributes;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BookStore.Web.Controllers
@@ -23,9 +24,13 @@ namespace BookStore.Web.Controllers
             _signInManager = signInManager;
             _logger = logger;
         }
-        public IActionResult Index()
-        {
-            return View();
+        public async Task<IActionResult> Index()
+        {            
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            UserDetailsViewModel model = new UserDetailsViewModel();
+            model.Email = user.Email;
+            model.UserName = user.UserName;
+            return View(model);
         }
 
         [HttpGet]
@@ -153,7 +158,7 @@ namespace BookStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangePasswordAsync(ChangePasswordViewModel model)
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (ModelState.IsValid)
             {

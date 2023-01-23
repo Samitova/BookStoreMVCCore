@@ -405,7 +405,7 @@ li.breadcrumb-item.active {
     height: 60px;
     color: #a8811a;
     background: #faf7ef;
-    border: 1px solid #a8811a;   
+    border-top: 1px solid #a8811a;   
 }
 
 .card {

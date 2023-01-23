@@ -1,0 +1,27 @@
+﻿@model UserDetailsViewModel
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header text-center">
+            <h5>User Details</h5>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <p class="form-control">@Model.UserName</p>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <p class="form-control">@Model.Email</p>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a class="btn edit-btn" style="width:auto;" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
+            <a class="btn delete-btn" asp-controller="Book" asp-action="Index">Home</a>
+        </div>
+    </div>
+</div>
