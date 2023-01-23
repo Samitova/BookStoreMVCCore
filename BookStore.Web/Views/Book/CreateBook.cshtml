@@ -6,22 +6,26 @@
 }
 
 <div class="container">
-    <div class="col-11 mx-auto accept-policy p-o">
-        <div class="product-card">
-            <div class="card-header text-uppercase text-center">
-                <h5>Create Book</h5>
-            </div>
-            <form class="d-flex" enctype="multipart/form-data" asp-action="CreateBook">
-                <div class="col-9">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="row">
-                        <input type="hidden" asp-for="@Model.Id" />
-                        <input type="hidden" asp-for="@Model.Timestamp" />
-                        <input type="hidden" asp-for="@Model.RateCount" />
-                        <input type="hidden" asp-for="@Model.RateValue" />
-                        <input type="hidden" asp-for="@Model.SoldCopies" />
-                        <input type="hidden" asp-for="@Model.PhotoPath" />
-
+    <div class="product-card">
+        <div class="card-header text-center">
+            <h5>Create Book</h5>
+        </div>
+        <form enctype="multipart/form-data" asp-action="CreateBook" method="post">                     
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="card-body">
+                <div class="col d-block">
+                    <div class="form-group">
+                        <img id="BookImagePrv" src="@photoPath" alt="Book Image Preview" class="image-preview"></img>
+                        <div class="custom-file">
+                            <input asp-for="BookImage" class="custom-file-input" id="BookImageInput" value="@Model.PhotoPath" placeholder="Select file..."
+                                   onchange="document.getElementById('BookImagePrv').src = window.URL.createObjectURL(this.files[0])" />
+                            <label asp-for="BookImage" class="custom-file-label"></label>
+                        </div>
+                        <span asp-validation-for="BookImage" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col d-block">                    
+                    <div class="row"> 
                         <div class="form-group col-6">
                             <label asp-for="Title" class="control-label"></label>
                             <input asp-for="Title" class="form-control" />
@@ -32,7 +36,6 @@
                             <input asp-for="ISBN" class="form-control" />
                             <span asp-validation-for="ISBN" class="text-danger"></span>
                         </div>
-
                         <div class="form-group col-6">
                             <label asp-for="AuthorId" class="control-label"></label>
                             <select class="form-control" asp-for="AuthorId" asp-items="@Model.Authors">
@@ -40,7 +43,6 @@
                             </select>
                             <span asp-validation-for="AuthorId" class="text-danger"></span>
                         </div>
-
                         <div class="form-group col-6">
                             <label asp-for="PublisherId" class="control-label"></label>
                             <select class="form-control" asp-for="PublisherId" asp-items="@Model.Publishers">
@@ -48,7 +50,6 @@
                             </select>
                             <span asp-validation-for="PublisherId" class="text-danger"></span>
                         </div>
-
                         <div class="form-group col-6">
                             <label asp-for="CategoryId" class="control-label">Category</label>
                             <select class="form-control" asp-for="CategoryId" asp-items="@Model.Categories">
@@ -56,7 +57,6 @@
                             </select>
                             <span asp-validation-for="CategoryId" class="text-danger"></span>
                         </div>
-
                         <div class="form-group col-6">
                             <label asp-for="Genre" class="control-label"></label>
                             <select class="form-control" asp-for="Genre" asp-items="@Html.GetEnumSelectList<Genre>()">
@@ -64,7 +64,6 @@
                             </select>
                             <span asp-validation-for="Genre" class="text-danger"></span>
                         </div>
-
                         <div class="form-group col-6">
                             <label asp-for="CoverType" class="control-label"></label>
                             <select class="form-control" asp-for="CoverType" asp-items="@Html.GetEnumSelectList<CoverType>()">
@@ -72,7 +71,6 @@
                             </select>
                             <span asp-validation-for="CoverType" class="text-danger"></span>
                         </div>
-
                         <div class="form-group col-6">
                             <label asp-for="YearOfIssue" class="control-label"></label>
                             <input asp-for="YearOfIssue" class="form-control" />
@@ -83,7 +81,6 @@
                             <input asp-for="Price" class="form-control" />
                             <span asp-validation-for="Price" class="text-danger"></span>
                         </div>
-
                         <div class="form-group col-6">
                             <label asp-for="NumberOfPage" class="control-label"></label>
                             <input asp-for="NumberOfPage" class="form-control" />
@@ -100,24 +97,14 @@
                             <span asp-validation-for="AvaliableQuantaty" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="add-btn" />
-                        <a class="backhref" asp-action="Index">Back to List</a>
-                    </div>
                 </div>
-                <div class="col-3">
-                    <div class="form-group">
-                        <img id="BookImagePrv" src="@photoPath" alt="Book Image Preview" class="image-preview"></img>
-                        <div class="custom-file">
-                            <input asp-for="BookImage" class="custom-file-input" id="BookImageInput" value="@Model.PhotoPath" placeholder="Select file..."
-                                   onchange="document.getElementById('BookImagePrv').src = window.URL.createObjectURL(this.files[0])" />
-                            <label asp-for="BookImage" class="custom-file-label"></label>
-                        </div>
-                        <span asp-validation-for="BookImage" class="text-danger"></span>
-                    </div>
-                </div>
-            </form>
-        </div>
+            </div>
+
+            <div class="card-footer">
+                <input type="submit" value="Create" class="btn add-btn" />
+                <a class="btn return-btn" asp-controller="Book" asp-action="Index">Cancel</a>
+            </div>
+        </form>
     </div>
 </div>
 

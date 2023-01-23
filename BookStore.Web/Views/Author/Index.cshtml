@@ -11,7 +11,7 @@
     @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
     {
         <p>
-            <a asp-controller="Author" asp-action="CreateAuthor" class="add-btn">Create New Author</a>
+            <a asp-controller="Author" asp-action="CreateAuthor" class="btn add-btn" style="width:auto;">Add New Author</a>
         </p>
     }
     @if (TempData["success"] != null)

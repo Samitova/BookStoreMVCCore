@@ -385,8 +385,7 @@ li.breadcrumb-item.active {
     margin-right: auto;
 }
 .product-card {
-    margin:10px 0 100px 0;    
-    padding: 0px 0 20px 0;
+    margin:10px 0 100px 0; 
     width: 100%;
     border: 1px solid #a8811a;    
     margin-left: auto;
@@ -1153,19 +1152,17 @@ form .rate-btn button {
 
 .add-btn {
     height: 30px;
-    width: 200px;    
+    width: 100px;    
     background: #248a87;
-    color: #fff;
-    padding: 3px 10px 5px 10px;
+    color: #fff;    
     border-radius: 5px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     margin-top: 10px;
     margin-bottom: 10px;
     text-align: center;
-    border: none;
-    display: block;
+    border: none;    
 }
 
 .add-btn:hover {
@@ -1177,7 +1174,7 @@ form .rate-btn button {
 
 .edit-btn {
     height: 30px;
-    width: 90px;
+    width: 100px;
     background: #a8811a;
     color: #fff;    
     border-radius: 5px;
@@ -1198,7 +1195,7 @@ form .rate-btn button {
 
 .delete-btn {
     height: 30px;
-    width: 90px;
+    width: 100px;
     background: #343a40;
     color: #fff;
     border-radius: 5px;
@@ -1213,6 +1210,48 @@ form .rate-btn button {
 
 .delete-btn:hover {
     background: #c1252c;
+    color: #fff!important;
+    cursor: pointer;
+}
+
+.return-btn {
+    height: 30px;
+    width: 100px;
+    background: #343a40;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    border: none;
+}
+
+.return-btn:hover {
+    background: #505860;
+    color: #fff;
+    cursor: pointer;
+}
+
+.alrt-btn {
+    height: 30px;
+    width: 100px;
+    background: #c1252c;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    border: none;
+}
+
+.alrt-btn:hover {
+    background: #d7324b;
     color: #fff;
     cursor: pointer;
 }

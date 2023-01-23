@@ -5,21 +5,17 @@
     var photoPath = $"/pictures/uploads/authors/{Model.PhotoPath}";   
 }
 
-<div class="container">
+<div class="container">    
     <div class="product-card" style="width:500px;">
-
-        <div class="card-header text-uppercase text-center">
+        <div class="card-header text-center">
             <h5>Edit Author</h5>
         </div>
-
-        <div class="col align-content-center">
-            <form enctype="multipart/form-data" asp-action="EditAuthor" method="post">
-                <input type="hidden" asp-for="Id" />
-                <input type="hidden" asp-for="Timestamp"/>
-                <input type="hidden" asp-for="PhotoPath"/>                
-               
-                <div asp-validation-summary="All" class="text-danger"></div>
-
+        <form enctype="multipart/form-data" asp-action="EditAuthor" method="post">
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="Timestamp"/>
+            <input type="hidden" asp-for="PhotoPath"/>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="card-body">
                 <div class="form-group">
                     <img id="ImagePrv" src="@photoPath" alt="Book Image Preview" class="author-image mb-2"></img>
                     <div class="custom-file">
@@ -39,16 +35,13 @@
                     <label asp-for="Biography" class="control-label"></label>
                     <textarea asp-for="Biography" class="form-control"></textarea>
                     <span asp-validation-for="Biography" class="text-danger"></span>
-                </div>              
-
-                <div class="form-group">                   
-                    <input type="submit" value="Update" class="add-btn"/>                    
                 </div>
-            </form>
-            <div>
-                <a class="backhref" asp-controller="Author" asp-action="Index">Back to List</a>
             </div>
-        </div>
+            <div class="card-footer">
+                <input type="submit" value="Edit" class="btn edit-btn" />
+                <a class="btn return-btn" asp-controller="Author" asp-action="Index">Cancel</a>
+            </div>
+        </form>
     </div>
 </div>
 
