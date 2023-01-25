@@ -45,7 +45,7 @@
             <li class="category-table-li">
                 <div class="row">
                     <div class="col category-table-item">
-                        @item.PublisherName
+                        <a class="publisher-index-link" asp-controller="Publisher" asp-action="PublisherDetails" asp-route-id="@item.EncryptedId"> @item.PublisherName</a>
                     </div>
                     <div class="col category-table-item">
                         @item.City

@@ -51,7 +51,7 @@ namespace BookStore.ViewModelData
         [DisplayName("Publisher")]
         [Range(1, int.MaxValue, ErrorMessage = "Please choose the publisher")]
         public int PublisherId { get; set; }
-
+        public string PublisherEncryptedId { get; set; }
         public string PublisherName { get; set; }
 
         [Required]

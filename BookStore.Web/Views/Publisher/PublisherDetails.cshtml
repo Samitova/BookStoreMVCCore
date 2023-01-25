@@ -1,0 +1,22 @@
+﻿@model PublisherViewModel
+
+@{
+    ViewData["Title"] = "Publisher Details";
+}
+
+<div class="container">
+    <div class="product-card" style="width:500px;">
+        <div class="card-header text-center">
+            <h5>Publisher Details</h5>
+        </div>
+        <div class="card-body">
+            <p>Publisher Name: <span>@Model.PublisherName</span></p>
+            <p>City: <span>@Model.City</span></p>
+            <p>Phone: <span>@Model.Phone</span></p>
+        </div>
+        <div class="card-footer">
+            <a class="btn edit-btn" asp-controller="Publisher" asp-action="EditPublisher" asp-route-id="@Model.EncryptedId">Edit</a>
+            <a class="btn return-btn" asp-controller="Publisher" asp-action="Index">Return</a>
+        </div>
+    </div>
+</div>

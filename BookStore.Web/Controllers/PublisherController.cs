@@ -57,6 +57,16 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [Breadcrumb(Title = "ViewData.Title")]
+        public async Task<IActionResult> PublisherDetails(string id)
+        {
+            int decryptedId = Convert.ToInt32(_dataProtector.Unprotect(id));
+            var publisher = await _shopManager.PublisherManager.GetPublisherByIdAsync(decryptedId);
+            publisher.EncryptedId = id;
+            return View(publisher);
+        }
+
+        [HttpGet]
+        [Breadcrumb(Title = "ViewData.Title")]
         public IActionResult CreatePublisher()
         {
             PublisherViewModel publisher = new PublisherViewModel();

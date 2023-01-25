@@ -101,6 +101,7 @@ namespace BookStore.Web.Controllers
                 {
                     e.EncryptedId = _dataProtector.Protect(e.Id.ToString());
                     e.AuthorEncryptedId = _dataProtector.Protect(e.AuthorId.ToString());
+                    e.PublisherEncryptedId = _dataProtector.Protect(e.PublisherId.ToString());
                     return e;
                 }); 
                 
@@ -171,6 +172,8 @@ namespace BookStore.Web.Controllers
                 return View("BookNotFound", decryptedId);
             }
             book.EncryptedId = id;
+            book.AuthorEncryptedId = _dataProtector.Protect(book.AuthorId.ToString());
+            book.PublisherEncryptedId = _dataProtector.Protect(book.PublisherId.ToString());
             return View(book);
         }
 

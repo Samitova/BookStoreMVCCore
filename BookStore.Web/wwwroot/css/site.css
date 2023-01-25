@@ -756,13 +756,15 @@ span.loader {
 }
 
 
-.author-index-link {
+.author-index-link,
+.publisher-index-link {
     font-size: 14px;
     font-weight: bold;
     color: #000;
 }
 
-.author-index-link:hover {
+.author-index-link:hover,
+.publisher-index-link:hover {
     color: #e2c76f;
     text-decoration: none;
 }
