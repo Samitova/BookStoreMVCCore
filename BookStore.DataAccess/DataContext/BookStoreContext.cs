@@ -1,7 +1,10 @@
 ﻿using BookStore.DataAccess.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Linq;
+using System.Reflection.Emit;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookStore.DataAccess.DataContext
 {
@@ -15,14 +18,19 @@ namespace BookStore.DataAccess.DataContext
         public BookStoreContext(DbContextOptions<BookStoreContext> options)
             : base(options)
         { }
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
 
-            foreach (var forignKey in builder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys()))
-            {
+            foreach (var forignKey in modelBuilder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys()))
+            {               
                 forignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            modelBuilder.Entity<BookComment>()
+                        .HasOne(b => b.Book)
+                        .WithMany(a => a.Comments)
+                        .IsRequired()
+                        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

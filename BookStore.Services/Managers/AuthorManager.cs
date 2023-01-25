@@ -4,6 +4,7 @@ using BookStore.DataAccess.Models;
 using BookStore.Services.Contracts;
 using BookStore.Services.ShopService.SortingService;
 using BookStore.ViewModelData;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,10 +52,18 @@ namespace BookStore.Services.Managers
             {
                 _repository.Authors.Delete(id);
             }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new DbUpdateConcurrencyException(ex.Message, ex);
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DbUpdateException(ex.Message, ex);
+            }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
-            }                        
+                throw new Exception(ex.Message, ex);
+            }
         }
 
         public async Task<IEnumerable<AuthorViewModel>> GetAllAuthorsAsync()

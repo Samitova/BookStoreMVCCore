@@ -13,7 +13,7 @@
         <form asp-action="DeleteBook" asp-controller="Book" method="post">
             <input type="hidden" asp-for="@Model.Id" />
             <input type="hidden" asp-for="@Model.Timestamp" />
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="card-body">
                 <div class="row w-75 mx-auto">
                     <div class="col-md text-center">

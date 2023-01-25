@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SmartBreadcrumbs.Attributes;
 using System;
 using System.Collections.Generic;
@@ -22,11 +24,13 @@ namespace BookStore.Web.Controllers
     public class CategoryController : Controller
     {
         private readonly IShopManager _shopManager;
+        private readonly ILogger<AdministrationController> _logger;
         private readonly IDataProtector _dataProtector;
         public CategoryController(IShopManager shopManager, IDataProtectionProvider dataProtectionProvider,
-                              DataProtectionPurposeStrings dataProtectionPurposeStrings)
+                              DataProtectionPurposeStrings dataProtectionPurposeStrings, ILogger<AdministrationController> logger)
         {
             _shopManager = shopManager;
+            _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.BookIdRouteValue);
         }
 
@@ -105,7 +109,7 @@ namespace BookStore.Web.Controllers
                 try
                 {
                     _shopManager.CategoryManager.AddCategory(categoryVM.Category);
-                    TempData["success"] = "BrowseCategory was created successfuly";
+                    TempData["success"] = $"{categoryVM.Category} was created successfuly";
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -185,18 +189,26 @@ namespace BookStore.Web.Controllers
             if (category == null)
             {
                 return NotFound();
-            }
+            }        
             try
             {
                 _shopManager.CategoryManager.DeleteCategory(decryptedId);
                 TempData["success"] = $"BrowseCategory \"{category.CategoryName}\" was deleted successfuly";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index"); ;
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError($"Error deleting category {category.CategoryName}. {ex}");
+                ViewBag.ErrorTitle = $"{category.CategoryName} category is in use";
+                ViewBag.ErrorMessage = $"{category.CategoryName} category cannot be deleted as there are book with this category. " +
+                    $"If you want to delete this category, please remove all books with this category and try again";
+                return View("Error");
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
-                return View(category);
-            }           
+                _logger.LogError($"Error deleting category {category.CategoryName}. {ex}");
+                return View("Error");
+            }
         }
     }
 }

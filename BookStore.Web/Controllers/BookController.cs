@@ -13,16 +13,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SmartBreadcrumbs.Attributes;
 using SmartBreadcrumbs.Nodes;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
 
 namespace BookStore.Web.Controllers
 {    
@@ -35,17 +37,20 @@ namespace BookStore.Web.Controllers
 
         private readonly IShopManager _shopManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IFileService _fileService;        
+        private readonly IFileService _fileService;
+        private readonly ILogger<AdministrationController> _logger;
         private readonly IDataProtector _dataProtector;
         private string _uploadsFolder;
 
         public BookController(IShopManager shopManager, IWebHostEnvironment webHostEnvironment, 
                               IFileService fileService, IDataProtectionProvider dataProtectionProvider,
-                              DataProtectionPurposeStrings dataProtectionPurposeStrings)
+                              DataProtectionPurposeStrings dataProtectionPurposeStrings, 
+                              ILogger<AdministrationController> logger)
         {
             _shopManager = shopManager;
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
+            _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.BookIdRouteValue);
         }
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -323,13 +328,17 @@ namespace BookStore.Web.Controllers
                 _fileService.DeleteFile(book.PhotoPath, _uploadsFolder);
                 TempData["success"] = $"Book \"{book.Title}\" was deleted successfuly";
                 return RedirectToAction("Index");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                return View(book);
-            }
+            }          
+            catch (DbUpdateException ex)
+            {                
+                _logger.LogError($"Error deleting book {book.Title}. {ex}");
+                ViewBag.ErrorTitle = $"{book.Title} book is in use";
+                ViewBag.ErrorMessage = $"{book.Title} book cannot be deleted as there are users in this role" +
+                    $"If you want to delete this book, please remove the users from the role and try again";
+                return View("Error");
+            } 
         }
+
         #endregion
 
         //*******************************************************************************************

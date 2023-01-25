@@ -5,6 +5,7 @@ using BookStore.Services.Contracts;
 using BookStore.Services.ShopService.SortingService;
 using BookStore.ViewModelData;
 using BookStore.ViewModelData.Attributes;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace BookStore.Services.Managers
 {
+    
     public class BookManager:IBookManager
     {
         private readonly IRepositoryWrapper _repository;
@@ -20,12 +22,12 @@ namespace BookStore.Services.Managers
         {
             _repository = repositoryWrapper;
             _mapper = mapper;
-        }
+        }       
 
         public async Task<IEnumerable<BookViewModel>> GetAllBooksAsync(string SearchText = "", int? categoryId = null)
         {
             IEnumerable<Book> booksList = new List<Book>();
-
+           
             if (string.IsNullOrEmpty(SearchText))
             {
                 if (categoryId == null)
@@ -48,7 +50,7 @@ namespace BookStore.Services.Managers
                 BookViewModel resultBook = _mapper.Map<BookViewModel>(book);                
                 CalculateProgressBar(resultBook);
                 return resultBook;
-            }
+            }            
             else 
                 return null;            
         }        
@@ -100,10 +102,18 @@ namespace BookStore.Services.Managers
             {
                 _repository.Books.Delete(id);
             }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new DbUpdateConcurrencyException(ex.Message, ex);
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DbUpdateException(ex.Message, ex);
+            }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
-            }            
+                throw new Exception(ex.Message, ex);
+            }
         }
 
         #region privateMethods

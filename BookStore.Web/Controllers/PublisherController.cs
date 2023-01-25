@@ -3,6 +3,7 @@ using BookStore.DataAccess.Contracts;
 using BookStore.DataAccess.Models;
 using BookStore.Services.Contracts;
 using BookStore.Services.Managers;
+using BookStore.Services.ShopService;
 using BookStore.Services.ShopService.SearchService;
 using BookStore.ViewModelData;
 using BookStore.Web.Security;
@@ -10,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SmartBreadcrumbs.Attributes;
 using System;
 using System.Collections.Generic;
@@ -23,12 +26,15 @@ namespace BookStore.Web.Controllers
     public class PublisherController : Controller
     {
         private readonly IShopManager _shopManager;
+        private readonly ILogger<AdministrationController> _logger;
         private readonly IDataProtector _dataProtector;
 
         public PublisherController(IShopManager shopManager, IDataProtectionProvider dataProtectionProvider,
-                              DataProtectionPurposeStrings dataProtectionPurposeStrings)
+                              DataProtectionPurposeStrings dataProtectionPurposeStrings,
+                              ILogger<AdministrationController> logger)
         {
             _shopManager = shopManager;
+            _logger = logger;
             _dataProtector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.BookIdRouteValue);
         }
 
@@ -119,10 +125,25 @@ namespace BookStore.Web.Controllers
             {
                 return NotFound();
             }
-
-            _shopManager.PublisherManager.DeletePublisher(decryptedId);
-            TempData["success"] = $"Publisher \"{publisher.PublisherName}\" was deleted successfuly";
-            return RedirectToAction("Index");
+            try
+            {
+                _shopManager.PublisherManager.DeletePublisher(decryptedId);
+                TempData["success"] = $"Publisher \"{publisher.PublisherName}\" was deleted successfuly";
+                return RedirectToAction("Index");
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError($"Error deleting publisher {publisher.PublisherName}. {ex}");
+                ViewBag.ErrorTitle = $"{publisher.PublisherName} publisher is in use";
+                ViewBag.ErrorMessage = $"{publisher.PublisherName} publisher cannot be deleted as there are book with this publisher. " +
+                    $"If you want to delete this publisher, please remove all books with this publisher and try again";
+                return View("Error");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error deleting category {publisher.PublisherName}. {ex}");
+                return View("Error");
+            }
         }
     }
 }

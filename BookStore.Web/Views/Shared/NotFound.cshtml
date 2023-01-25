@@ -4,17 +4,16 @@
 
 <div class="container">
     <div class="product-card" style="width:500px;">
-        <div class="text-uppercase text-center alert alert-danger">
-            <h5>404 Not Found Error</h5>
+        <div class="card-header text-center">
+            <h5> 404 Not Found Error</h5>
         </div>
-        <div class="col align-content-center">
-            <div class="form-group ">
-                @ViewBag.ErrorMessage
-            </div>
-
+        <div class="card-body">
             <div class="form-group">
-                <a asp-controller="Book" asp-action="Index">Click here to navigate to home page</a>
+                <h6>@ViewBag.ErrorMessage</h6>
             </div>
+        </div>
+        <div class="card-footer">
+            <a class="btn return-btn" asp-controller="Book" asp-action="Index">Return Home</a>
         </div>
     </div>
 </div>

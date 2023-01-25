@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SmartBreadcrumbs.Attributes;
 using System;
@@ -34,14 +36,17 @@ namespace BookStore.Web.Controllers
 
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFileService _fileService;
+        private readonly ILogger<AdministrationController> _logger;
         private readonly IShopManager _shopManager;
         private readonly IDataProtector _dataProtector;
 
         public AuthorController(IShopManager shopManager, IWebHostEnvironment webHostEnvironment, IFileService fileService,
-                                IDataProtectionProvider dataProtectionProvider, DataProtectionPurposeStrings dataProtectionPurposeStrings)
+                                IDataProtectionProvider dataProtectionProvider, DataProtectionPurposeStrings dataProtectionPurposeStrings,
+                                ILogger<AdministrationController> logger)
         {
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
+            _logger = logger;
             _shopManager = shopManager;
             _dataProtector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.BookIdRouteValue);
         }
@@ -184,10 +189,13 @@ namespace BookStore.Web.Controllers
                 TempData["success"] = $"Book \"{author.FullName}\" was deleted successfuly";
                 return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
-                ModelState.AddModelError("", ex.Message);
-                return View(author);
+                _logger.LogError($"Error deleting author {author.FullName}. {ex}");
+                ViewBag.ErrorTitle = $"{author.FullName} is in use";
+                ViewBag.ErrorMessage = $"{author.FullName} author cannot be deleted as there are book with this author. \n" +
+                    $"If you want to delete this author, please remove all books with this author and try again";
+                return View("Error");
             }
         }
 

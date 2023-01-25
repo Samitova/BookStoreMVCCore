@@ -60,11 +60,22 @@ namespace BookStore.DataAccess.Repositories
                 Delete(entityToDelete);
                 SaveChanges();               
             }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new DbUpdateConcurrencyException(ex.Message, ex);
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DbUpdateException(ex.Message, ex);
+            }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("The association between entity types"))
+                {
+                    throw new DbUpdateException(ex.Message, ex);
+                }
                 throw new Exception(ex.Message, ex);
             }
-            
         }
 
         public void Delete(T entity)
@@ -78,10 +89,18 @@ namespace BookStore.DataAccess.Repositories
                 _table.Remove(entity);
                 SaveChanges();               
             }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new DbUpdateConcurrencyException(ex.Message, ex);
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DbUpdateException(ex.Message, ex);
+            }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message, ex);
-            }           
+            }
         }
 
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
