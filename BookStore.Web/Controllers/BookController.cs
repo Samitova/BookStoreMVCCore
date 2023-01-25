@@ -122,6 +122,14 @@ namespace BookStore.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Breadcrumb(Title = "ViewData.Title")]
+        public IActionResult Filltering()
+        {
+            return View ();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> BrowseCategory(string categoryId, int PageSize, string SortExpression = "", int CurrentPage = 1)
         {
             IEnumerable<BookViewModel> books = new List<BookViewModel>();
