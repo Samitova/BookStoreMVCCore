@@ -45,10 +45,14 @@
             <li class="category-table-li">
                 <div class="row">
                     <div class="col category-table-item">
-                        <img src="~/pictures/uploads/authors/@item.PhotoPath" class="author-image" alt="" asp-append-version="true">
+                        <a asp-controller="Author" asp-action="AuthorDetails" asp-route-id="@item.EncryptedId">
+                            <img src="~/pictures/uploads/authors/@item.PhotoPath" class="author-image" alt="" asp-append-version="true">
+                        </a>
                     </div>
                     <div class="col category-table-item">
-                        <a>@item.FullName</a>
+                        <a class="author-index-link" asp-controller="Author" asp-action="AuthorDetails" asp-route-id="@item.EncryptedId">
+                             @item.FullName
+                         </a>                        
                     </div>
                     <div class="col category-table-item">
                         @item.Biography

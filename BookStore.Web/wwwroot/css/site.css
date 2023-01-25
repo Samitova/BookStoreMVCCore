@@ -749,7 +749,20 @@ span.loader {
     color: #c39d1d;
 }
 
-.book-deteils-link:hover {
+.book-deteils-link:hover,
+.author-deteils-link:hover {
+    color: #e2c76f;
+    text-decoration: none;
+}
+
+
+.author-index-link {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+}
+
+.author-index-link:hover {
     color: #e2c76f;
     text-decoration: none;
 }
